@@ -1,0 +1,11 @@
+﻿Number,Label,Description
+1,PCIe,Connection to the server
+2,Ext1,Not in use
+3,Ext2,Not in use
+4,USB,2 USB 3.0 ports. Server connects to the **lower** one
+5,LAN,Not in use
+6,Aux1,External trigger input
+7,Aux2,Not in use
+8,External clocl,"External clock reference (10,100,1000 MHz)"
+9,Sync,Not in use
+10,Line,Power inlet and switch

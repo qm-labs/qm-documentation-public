@@ -1,0 +1,5 @@
+﻿OPX ports,Analog outputs,Analog inputs,Digital outputs,External trigger
+Voltage settings, ±0.5 V or 4 dBm, ±0.5 V or 4 dBm,3.3 V (LVTTL) ,3.3V (LVTTL)
+Bandwidth,±350 MHz,±350 MHz,pulse width > 2ns,pulse width > 4ns
+Resolution,16 bit DAC,12 bit ADC,1 bit,1 bit
+Impedance,50 Ω,50 Ω,High Z,High Z

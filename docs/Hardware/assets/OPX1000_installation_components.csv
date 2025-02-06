@@ -1,0 +1,9 @@
+﻿Component name,Quantity,Notes
+OPX1000 controllers,$N_{opx1000}$,"-"
+OPX1000 Power cables,2 * $N_{opx1000}$,"-"
+Router,1,"Optional, Supplied by QM"
+Ethernet RJ45 cables,$N_{opx1000} + 1$,"3m, Cat 5e"
+QSync RJ45 cables,$N_{opx1000} - 1$,"**Only for a Multi-OPX1000 system**, 1m, Cat 6"
+Router power supply,1,"-"
+Clock SMA cables,$N_{opx1000} - 1$,"**Only for a Multi-OPX1000 system**, Identical Cables"
+Optical cables,$2 * N_{opx1000}$,**Only for a Multi-OPX1000 system**

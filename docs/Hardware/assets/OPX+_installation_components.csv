@@ -1,0 +1,12 @@
+﻿Component name,Quantity,Notes
+OPX+ controllers,$N_{opx+}$,"-"
+OPX Power cables,$N_{opx+}$,"-"
+Router,1,"Optional, Supplied by QM"
+Ethernet RJ45 cables,$1 + N_{opx+}$,"-"
+Router power supply,1,"-"
+SMA cables,$2 * N_{opx+} - 1$,"**Only for a Multi-OPX+ system**, Identical Cables"
+DC Blocks,$N_{opx+} - 1$,"**Only for a Multi-OPX+ system**, Identical Cables"
+Optical cables,$6 * N_{opx+}$,**Only for a Multi-OPX+ system**
+OPT,1,**Only for a Multi-OPX+ system**
+OPT Power cables,1,**Only for a Multi-OPX+ system**
+USB cable (OPT to main OPX+),1,**Only for a Multi-OPX+ system**

@@ -1,0 +1,5 @@
+﻿ ,LO,Synth, Clock in, Clock out,IF LO,Dig & Aux & Qsync
+Function, External LO signal input, Internal synthesizer output,Clock input,Clock output,External low frequency LO,Future features
+Frequency range,2-18 GHz,2-18 GHz,"10, 100, 1000 MHz",1 Ghz,±350 MHz,-
+Power rating,12-15 dBm,12-15 dBm,Up to 0 dBm,0 dBm,10 dBm,-
+Impedance,50 Ω,50 Ω,50 Ω,50 Ω,50 Ω,-

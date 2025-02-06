@@ -1,0 +1,14 @@
+﻿Number,Label,Description
+1,GND,Grounding pin 
+2,Clock in 1/2,Clock input - Can be either 10 MHz or 2 GHz 
+3,Clock out 1/2/3/4,Clock output - Outputs 2 GHz or 1 GHz clock at -4 dBm
+4,Fan 1/2/3/4/5/6,Chassis temperature stabilization fans
+5,12 VDC in,12 V DC input 
+6,PS - 1/2/3,Power supplies of the OPX1000
+7,Service USB 1/2,Reserved for QM technicians
+8,User USB,Reserved for future features
+9,Ext Trig 1/2,External trigger
+10,1 GbE 1/2,LAN port for network connection
+11,100 GbE,QSFP28 port
+12,Qsync 1/2/3/4,Used for Qsync between chassis for multi-chassis sync
+13,Comm 1/2/3/4,MPO-8 port for multi-chassis communication

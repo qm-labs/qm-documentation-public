@@ -1,0 +1,14 @@
+﻿Number,Label,Description
+1,LAN,LAN port for network connection to router
+2,Ground symbol,Chassis earth ground
+3,OPC Com.,Inter-OPX optical connectivity (for a multi-OPX system)
+4,Reset,Factory reset (currently disabled)
+5,None,2 USB ports
+6,Clock in,"External clock reference (10,100,1000 MHz)"
+7,100GBE,Not in use
+8,Sync,Sync from OPT (for a multi-OPX system)
+9,Ext. trig (3.3V)*,External trigger
+10,Digital Ext.,Connection for OPD - digital input/output extension
+11,AUX 1 (1.8V)*, QSync
+12,AUX 2 (1.8V)*, QSync
+13,Line,Power inlet and switch

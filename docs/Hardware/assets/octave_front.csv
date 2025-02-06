@@ -1,0 +1,5 @@
+﻿ ,RF Outputs (RF 1-5),RF Inputs (RF 1/2 in),Digital Inputs (Trig 1-5),IF Inputs (I/Q 1-5),IF Outputs (IF out 1/2)
+Power rating,-40 to +10 dBm,-40 to -20 dBm,3.3V (LVTTL), ±0.5 V or 4 dBm, ±0.5 V or 4 dBm
+Bandwidth,±350 MHz,±350 MHz,pulse width > 4ns,±350 MHz,±350 MHz
+Impedance,50 Ω,50 Ω,High Z,50 Ω,50 Ω
+Frequency range,2-18 GHz,2-18 GHz,-,±350 MHz,±350 MHz

@@ -1,0 +1,4 @@
+﻿LF-FEM ,Analog Outputs,Analog Inputs,Digital Outputs
+Voltage settings,"Direct Mode: ±0.5 V (4 dBm), Amplified Mode: ±2.5 V (18 dBm)	",±0.5 V (4 dBm),3.3 V or 5 V
+Resolution,16 bit DAC,12 bit ADC,1 bit
+Impedance,50 Ω,50 Ω,High - Z
