@@ -30,8 +30,7 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
     5. Repeat for all FEMs, also install the provided blank FEMs in any remaining empty slots.
 
         !!! Note
-            Turning on the system without all the FEM installed can cause the system to overheat, which will increase fan speed and can cause the system to shut down to protect itself from damage.
-   
+            Turning on the system without all the FEMs installed, or the blank FEMs, can cause the system to overheat, which will increase fan speed and can cause the system to shut down to protect itself from damage.
 4. Determine your [network configuration](network_and_router.md#network-overview-and-configuration).
 5. Connect the system:
     1. If there is more than one OPX1000:
@@ -78,6 +77,18 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
 
     If multiple PSUs are used, they must be connected to separate wall outlets, as each PSU can carry up to 10A.
     It is also possible to obtain power source redundancy by connecting the PSUs to different power grids.
+
+!!! Important Safety Information
+    The electrical connection must be made in accordance with the National Electrical Code (NEC) and/or the Standard for Electrical Connections (SEC), as applicable. 
+    Failure to follow these guidelines may result in equipment damage, safety hazards, or voiding of the warranty.
+
+!!! Important Safety Information
+    The system has a dedicated ground post that should be tightened to the infrastructure ground post. 
+    Unconnected ground cable may cause permanent system damage.
+
+!!! Important Safety Information
+    CAUTION! Shock hazard. System has multiple AC power sources, disconnect all power sources before servicing the system!
+
 
 ### Required components for the installation
 

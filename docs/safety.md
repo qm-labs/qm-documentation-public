@@ -7,12 +7,14 @@
     Before using this product, please read and understand all safety instructions. Failure to follow these instructions may result in injury or damage to the equipment.
 
     1. Power
+        - The electrical connection must be made in accordance with the National Electrical Code (NEC) and/or the Standard for Electrical Connections (SEC), as applicable. Failure to follow these guidelines may result in equipment damage, safety hazards, or voiding of the warranty.
         - Only use the power supply provided with the product or one that meets the manufacturer's specifications.
         - Do not use damaged power cords or adapters.
         - Do not overload electrical outlets.
-        - Please use standard power connectors to ensure the devices are grounded. Some devices have an additional designated grounding pin that can be used.
+        - The device must be grounded through the power cables, the use of the power outlets without ground pin or ungrounded cables are strictly forbidden. Devices with an additional designated grounding point must be connected to the facility ground, the use of QM provided grounding cable is recommended. Unconnected ground cable may cause permanent system damage.
+        - Caution! Some devices have multiple power sources. Disconnect all power sources before servicing the system!
     2. Environment
-        - Do not expose the product to extreme temperatures or humidity.
+        - Do not expose the product to the conditions beyond those defined in the spec.
         - Do not use the product in areas with excessive dust or debris.
         - Do not expose the product to direct sunlight or other heat sources.
         - Do not use the product near water or in wet conditions.
@@ -43,12 +45,14 @@
     Avant d’utiliser ce produit, assurez vous d’avoir lu et compris toutes les consignes de sécurité. Le non respect de ces instructions peut entrainer le disfonctionnement ou l’endommagement du produit.
 
     1. Alimentation électrique
+        - La connexion électrique doit être effectuée conformément au Code National de l’Electricité (NEC) et/ou aux normes de connexion électrique (SEC), selon le cas. Le non-respect de ces directives peut entraîner des dommages matériels, des risques pour la sécurité ou l’annulation de la garantie.
         - Utiliser uniquement la source d’alimentation fournie avec le produit, ou une correspondant aux spécifications du fabricant.
         - Ne pas utiliser de câbles d’alimentation ou d’adapteurs endommagés.
         - Ne pas surcharger les prises électriques.
-        - Veuillez utiliser des câbles d'alimentation standards pour assurer la bonne mise à la terre des instruments. Certains appareils sont dotés d'une prise de terre additionnelle qui peut être utilisée.
+        - L’appareil doit être mis à la terre via les câbles d’alimentation, l’utilisation de prises sans broche de terre ou de câbles non mis à la terre est strictement interdite. Les appareils avec un point de mise à la terre désigné doivent être connectés à la terre de l’installation, l’utilisation du câble de mise à la terre fourni par QM est recommandée. Un câble de terre non connecté peut causer des dommages permanents au système.
+        - Attention! Certains appareils ont plusieurs sources d'alimentation. Déconnectez toutes les sources d'alimentation avant de procéder à la maintenance du système!
     2. Environnement
-        - Ne pas exposer le produit à des températures ou niveaux d’humidité extrêmes.
+        - Ne pas exposer le produit à des conditions dépassant celles définies dans les spécifications.
         - Ne pas utiliser le produit dans des zones excessivement poussiéreuses ou encombrées.
         - Ne pas exposer le produit directement à la lumière du soleil ou à d’autres sources de chaleur.
         - Ne pas utiliser le produit proche de l’eau ou s’il est mouillé.

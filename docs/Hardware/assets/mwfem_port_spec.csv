@@ -1,5 +1,5 @@
 ﻿MW-FEM ,Analog Outputs,Analog Inputs,Digital Outputs
-Output Power,"-41 dBm to 10 dBm","-41 dBm to -10 dBm",3.3 V or 5 V
-"Bandwidth	","Normal Mode: 800 MHz, Double-Rate Mode: 1.6 GHz","Normal Mode: 800 MHz, Double-Rate Mode: 1.6 GHz",1 GSa/s
+Max Power,"-11 dBm to 16 dBm","-42 dBm to -10 dBm",3.3 V
+Bandwidth,"800 MHz","800 MHz",1 GSa/s
 Resolution,16 bit DAC,12 bit ADC,1 bit
 Impedance,50 Ω,50 Ω,High - Z

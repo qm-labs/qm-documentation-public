@@ -185,8 +185,8 @@ Read more about the configuration in the [configuration section](./config.md).
                  'time_of_flight': 180,
                  'smearing': 0,
                  'outputs': {
-                     'out1': ('con1', 1)
-                     'out2': ('con1', 2)
+                     'out1': ('con1', 1),
+                     'out2': ('con1', 2),
                  }
 
              },

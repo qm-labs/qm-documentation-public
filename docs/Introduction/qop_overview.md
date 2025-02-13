@@ -75,7 +75,7 @@ This flow can be seen in the figure below.
 
 The first step in executing a program is writing a configuration file and a QUA program in your lab pc.
 When executing it, the program is sent to the SOM inside the OPX+. The compiler, inside the SOM, is responsible for converting the QUA into low-level instructions
-and sending them to the FPGA. Inside the FPGA are 18 pulse processors designed to generate pulses which are then modulated by the internal oscillators.
+and sending them to the FPGA. Inside the FPGA are multiple cores designed to generate pulses which are then modulated by the internal oscillators.
 The pulses are converted to analog signals using DACs and output through the front panel's analog ports.
 
 ### QPU to PC Flow
