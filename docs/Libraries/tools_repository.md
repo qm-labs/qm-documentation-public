@@ -13,7 +13,6 @@ pip install --upgrade qualang-tools
 ```
 
 !!! Note
-
     Some of the tools require the installation of additional packages.
     Please see the readme of the [QUA tools repository](https://github.com/qua-platform/py-qua-tools) for more information.
 

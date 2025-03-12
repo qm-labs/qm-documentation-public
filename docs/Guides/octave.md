@@ -472,7 +472,7 @@ It is possible to change the LO source and LO frequency by the {{f("qm.octave.qm
 
     ```
 
-    !!! warning
+    !!! Warning
         LO source number must correspond to the up converter module number.
     
     !!! Note
@@ -534,7 +534,7 @@ It is also possible to change the output mode using the command {{f("qm.octave.q
 
     ```
 
-!!! warning
+!!! Warning
     Don't forget to connect the OPX's digital output to the relevant Trig port (as can be seen in the [octave front panel](../Hardware/octave.md#octave-front-panel)). Moreover, it's important to calibrate the digital output's `delay` and `buffer` parameters. 
 
 ##### Calibrating the Digital Pulse
@@ -552,7 +552,7 @@ There is an intrinsic delay between the time that the digital pulse arrives at t
         The suggested parameters are: `delay` = 87 ns, `buffer`  = 15 ns.
 
     
-!!! warning
+!!! Warning
     These parameters may vary between different ports due to small intrinsic cable differences inside the octave and different external cables between the octave and the OPX. 
 
 

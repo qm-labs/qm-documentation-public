@@ -58,7 +58,7 @@ Left/right bitshifts and bitwise AND, OR, and XOR are supported.
 
 Boolean operations can be used, but using the operators below ('&', '|', etc) and not with the Pythonic operators ('AND', 'OR', etc)
 
-!!! warning
+!!! Warning
     Attempting to use Pythonic operators on QUA variables, or attempting to evaluate QUA variables directly
     (for example, in a Pythonic '`if`' statement), would result in an error.
 

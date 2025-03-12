@@ -18,7 +18,7 @@ The dependency can be summarized as follows:
 4. We can create a dependency between different elements via the {{f("qm.qua._dsl.align")}} command. Whenever elements are 'aligned', the execution of operations that come **after** the alignment is dependent on the operations that come before.
 
 !!! Note
-    Each element has its own [thread](features.md#threads), unless defined otherwise. If elements do share threads, they are dependent on each other as in case 3 above.
+    Each element has its own [core](features.md#cores-and-oscillators), unless defined otherwise. If elements do share cores, they are dependent on each other as in case 3 above.
 
 ## The Align Command
 
@@ -125,8 +125,8 @@ with strict_timing_():
 
 ### Deterministic Vs. non-Deterministic Align
 
-Generally, an align command requires the passage of information from one thread to the other. When a thread reaches its last instruction before an alignment,
-it sends a signal to all the other threads that participate in the alignment, also known as a "hardware sync".
+Generally, an align command requires the passage of information from one core to the other. When a core reaches its last instruction before an alignment,
+it sends a signal to all the other cores that participate in the alignment, also known as a "hardware sync".
 This passage of information takes several clock cycles and introduces gaps to the pulse sequence.
 In cases where the duration of the operation on all the elements is known during compilation (Deterministic case),
 the compiler optimizes the sequence and replaces the hardware sync with precalculated wait commands for each element.
@@ -229,7 +229,7 @@ If we zoom in to the area where one element ends and the other starts, we can se
 
 !!! Note
     When playing two elements with align command in the non-deterministic case, there is a few cycles delay between the pulses.
-    Since in the non-deterministic case it takes few cycles to pass the information from one thread to the other.
+    Since in the non-deterministic case it takes few cycles to pass the information from one core to the other.
 
 ### Example #5
 

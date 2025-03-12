@@ -11,18 +11,18 @@ or 2 GSa/s, by setting the config field `sampling_rate` of an output/input port 
 
 * When the output port is set to `1e9`, which is the default value, the samples are generated at 1 GSa/s and the PPU upsamples the output from 1 GSa/s to 2 GSa/s at which the DACs operate. This is controlled by an additional field `upsampling_mode`:
     - `mw` - In this mode, the upsampling is done by passing the 1 GSa/s samples through a 14-taps Dolph-Chebyshev filter which is optimized to reduce spurs and produce clean MW signals. This is the recommended mode whenever the output is expected to have an intermediate frequency larger than 100 MHz.
-    - `pulsed` - In this mode, the upsampling is done by passing the 1 GSa/s samples through a 2 taps moving average filter which is optimized to produce clean step responses. This is the recommended mode whenever the output is **not** expected to have an intermediate frequency.
+    - `pulse` - In this mode, the upsampling is done by passing the 1 GSa/s samples through a 2 taps moving average filter which is optimized to produce clean step responses. This is the recommended mode whenever the output is **not** expected to have an intermediate frequency.
 * When the output port is set to `2e9`, the samples are generated at 2 GSa/s and the PPU passes them directly to the DACs.
 
 This has the following implications: 
 
 * Any element using an output port set to `1e9` will be limited to a frequency of 500 MHz, and the waveforms' sampling rate is limited to `1e9`.
 * Any measurement done on an input port set to `1e9` will produce an ADC stream at `1e9` and the demodulation will be limited to 500 MHz.
-* Any element using an output port set to `2e9` will consume double the amount of threads.
+* Any element using an output port set to `2e9` will consume double the amount of cores.
 
 !!! Note
     If an element is using output ports set to `1e9`, and input ports set to `2e9`, it will also consume double the 
-    amount of threads.
+    amount of cores.
 
 ### Output Mode
 The analog outputs can operate in one of two modes, set in the config at the output port using the field `output_mode`:
@@ -55,7 +55,7 @@ Resetting the phase is achieved using the command, {{f("qm.qua._dsl.reset_global
 [//]: # ()
 [//]: # (* An output port set to `2e9` can only have a single upconverter.)
 
-[//]: # (* Any element using an output port set to `2e9` will consume double the amount of threads.)
+[//]: # (* Any element using an output port set to `2e9` will consume double the amount of cores.)
 
 [//]: # (* Any element using an output port set to `1e9` will be limited to a frequency of 500 MHz, and the waveforms' sampling rate is limited to `1e9`.)
 
@@ -66,7 +66,7 @@ Resetting the phase is achieved using the command, {{f("qm.qua._dsl.reset_global
 
 [//]: # (    If an element is using output ports set to `1e9`, and input ports set to `2e9`, it will also consume double the )
 
-[//]: # (    amount of threads.)
+[//]: # (    amount of cores.)
 
 ### Bands
 Each analog port must specify the `band` at which it operates in the config, the supported bands are:
@@ -102,9 +102,14 @@ Each analog input port must define a `downconverter_frequency` field with a freq
 
 ### Output Power
 
-The analog output power is defined using the field `full_scale_power_dbm`, which can be set between `-41` and `10` dBm 
+The analog output power is defined using the field `full_scale_power_dbm`, which can be set between `-11` and `16` dBm 
 with a 3 dB granularity.
 This will set the power delivered to a 50 ohm load when the waveform is set to full scale (`[-1, 1]`).
+
+!!! Note
+    For best analog performance, it is recommended to work with the `full_scale_power_dbm` set to a value between 1 and 10 dBm.
+    This will produce the best SNR with the best SFDR.
+    Going above 10 dBm will start to degrade the SFDR, while going below 1 dBm will degrade the SNR. 
 
 !!! Note
     To calculate the voltage that will be seen on a scope set to 50 ohm, first convert the power to voltage:

@@ -71,96 +71,98 @@ Currently, the version value must be set to 1.
 
 ### Controllers
 
-=== "OPX1000 - LF"
+=== "OPX1000"
 
-    The controller's dictionary sets the input and output ports of the control hardware (i.e., your OPX).
-    We define and configure the ports that participate in the quantum machine for every controller and Front End Module (FEM).
-    In the example below, we use 1 analog outputs, 1 analog inputs, and 1 digital output of an LF-FEM situated in slot 1 of the controller.
-    
-    ```python
-    'controllers': {
-        'con1': {
-            'type':'opx1000',
-            'fems':
-                1 :{
-                    'type': 'LF',
-                    'analog_outputs': {
-                        1: {
-                            'offset': 0.0,
-                            'sampling_rate': 2e9, # Default sampling rate is 1e9
-                            'output_mode': 'amplified', # Default output_mode is 'direct'
-                            'upsampling_mode': 'pulse', # Default is 'mw'
-                        },   
-                    },
-                        'digital_outputs': {
-                            1: {}
-                    },
-                    'analog_inputs': {
-                        1: {
-                            'offset': 0.0,
-                            'sampling_rate': 2e9, # Default sampling rate is 1e9
-                            'gain_db': -3
-                        }, 
-                }
-            }
-        }
-    },
-    ```
-    
-    #### Analog Outputs
-    
-    Each analog output port is defined with a `key:item` pair, where the key is the port number and the item is a Python dictionary
-    holding some port-specific configuration. We can set an `'offset'`, a `'filter'`, `'delay'` to the port in units of ns.
-    Moreover, we can define LF-FEM specific parameters such as `'sampling_rate'`, `'output_mode'`, and `'upsampling_mode'`.
-    For more information on the FEM-specific parameters, please refer to the [FEMs guide]().
+    === "LF-FEM"
 
-    For more information on the `filter` capabilities, please refer to the [Guide on output filters](../Guides/output_filter.md).
-    
-
-=== "OPX1000 - MW"
-
-    The controller's dictionary sets the input and output ports of the control hardware (i.e., your OPX).
-    We define and configure the ports that participate in the quantum machine for every controller and Front End Module (FEM).
-    In the example below, we use 1 analog outputs, 1 analog inputs, and 1 digital output of an MW-FEM situated in slot 2 of the controller.
-    
-    ```python
-    'controllers': {
-        'con1': {
-            'type':'opx1000',
-            'fems':
-                2 :{
-                    'type': 'MW',
-                    'analog_outputs': {
-                        1: {
-                            'sampling_rate': 2e9, # Default sampling rate is 1e9
-                            'band': 2, 
-                            'full_scale_power_dbm': 10,  # Default is -10
-                            'upconverters': {
-                                1: {'frequency': 5e9},
-                                2: {'frequency': 6e9},
-                            },
-                            # 'upconverter_frequency': 5e9  # if only one upconverter is used this can replace 'upconverters'.
+        The controller's dictionary sets the input and output ports of the control hardware (i.e., your OPX).
+        We define and configure the ports that participate in the quantum machine for every controller and Front End Module (FEM).
+        In the example below, we use 1 analog outputs, 1 analog inputs, and 1 digital output of an LF-FEM situated in slot 1 of the controller.
+        
+        ```python
+        'controllers': {
+            'con1': {
+                'type':'opx1000',
+                'fems':
+                    1 :{
+                        'type': 'LF',
+                        'analog_outputs': {
+                            1: {
+                                'offset': 0.0,
+                                'sampling_rate': 2e9, # Default sampling rate is 1e9
+                                'output_mode': 'amplified', # Default output_mode is 'direct'
+                                'upsampling_mode': 'pulse', # Default is 'mw'
+                            },   
                         },
-
-                    },
-                    'digital_outputs': {
-                        1: {}
-                    },
-                    "analog_inputs": {
-                        1: {"sampling_rate": 1e9, "band": 2, "downconverter_frequency": 5e9},
+                            'digital_outputs': {
+                                1: {}
+                        },
+                        'analog_inputs': {
+                            1: {
+                                'offset': 0.0,
+                                'sampling_rate': 2e9, # Default sampling rate is 1e9
+                                'gain_db': -3
+                            }, 
                     }
                 }
             }
-        }
-    },
-    ```
+        },
+        ```
+        
+        #### Analog Outputs
+        
+        Each analog output port is defined with a `key:item` pair, where the key is the port number and the item is a Python dictionary
+        holding some port-specific configuration. We can set an `'offset'`, a `'filter'`, `'delay'` to the port in units of ns.
+        Moreover, we can define LF-FEM specific parameters such as `'sampling_rate'`, `'output_mode'`, and `'upsampling_mode'`.
+        For more information on the FEM-specific parameters, please refer to the [FEMs guide]().
     
-    #### Analog Outputs
+        For more information on the `filter` capabilities, please refer to the [Guide on output filters](../Guides/output_filter.md).
+        
     
-    Each analog output port is defined with a `key:item` pair, where the key is the port number and the item is a Python dictionary
-    holding some port-specific configuration. We can set an `'offset'`, `'delay'` to the port in units of ns.
-    Moreover, we can define MW-FEM specific parameters such as `'sampling_rate'`, `'band'`, `'full_scale_power_dbm'` and `'upconverters'`.
-    For more information on the FEM-specific parameters, please refer to the [FEMs guide]().
+    === "MW-FEM"
+    
+        The controller's dictionary sets the input and output ports of the control hardware (i.e., your OPX).
+        We define and configure the ports that participate in the quantum machine for every controller and Front End Module (FEM).
+        In the example below, we use 1 analog outputs, 1 analog inputs, and 1 digital output of an MW-FEM situated in slot 2 of the controller.
+        
+        ```python
+        'controllers': {
+            'con1': {
+                'type':'opx1000',
+                'fems':
+                    2 :{
+                        'type': 'MW',
+                        'analog_outputs': {
+                            1: {
+                                'sampling_rate': 2e9, # Default sampling rate is 1e9
+                                'band': 2, 
+                                'full_scale_power_dbm': 10,  # Default is -11
+                                'upconverters': {
+                                    1: {'frequency': 5e9},
+                                    2: {'frequency': 6e9},
+                                },
+                                # 'upconverter_frequency': 5e9  # if only one upconverter is used this can replace 'upconverters'.
+                            },
+    
+                        },
+                        'digital_outputs': {
+                            1: {}
+                        },
+                        "analog_inputs": {
+                            1: {"sampling_rate": 1e9, "band": 2, "downconverter_frequency": 5e9},
+                        }
+                    }
+                }
+            }
+        },
+        ```
+        
+        #### Analog Outputs
+        
+        Each analog output port is defined with a `key:item` pair, where the key is the port number and the item is a Python dictionary
+        holding some port-specific configuration. We can set an `'offset'`, `'delay'` to the port in units of ns.
+        Moreover, we can define MW-FEM specific parameters such as `'sampling_rate'`, `'band'`, `'full_scale_power_dbm'` and `'upconverters'`.
+        For more information on the FEM-specific parameters, please refer to the [FEMs guide]().
     
 
 === "OPX+"
@@ -227,7 +229,6 @@ Within each element's dictionary, we set the input and output parameters, we map
 - LF FEM-using Element
 
 !!! Note
-
     It is not possible to define an element which has inputs and outputs from different controllers or FEMs.
 
 #### Mixed Inputs Element
@@ -490,7 +491,7 @@ Each mixer instance contains a list of dictionaries for the [correction matrix](
 
 ### Oscillators
 
-{{ requirement("OPX+", "2.0") }} {{ requirement("QUA", "0.3.4") }}
+{{ requirement("OPX+", "2.0") }}
 
 In the oscillators section, we can specifically define oscillators that can be shared between elements.
 When multiple elements share an oscillator, then any operation on that oscillator (frequency, frame or correction changes)
@@ -530,4 +531,4 @@ instead of declaring an `intermediate_frequency`. For example:
 
 ## Further details
 
-You can find a `beta` tool detailing [the complete config specification](../API_references/config_spec.md).
+You can find [the complete config specification here](../API_references/config_spec.md).

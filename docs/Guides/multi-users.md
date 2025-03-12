@@ -19,7 +19,7 @@ but would like to share the QOP. For example, it can be helpful when several set
 In that case, each setup will have its unique configuration, and define its own `qm`.
 
 Once the multiple `qms` are open, the users can simultaneously and seamlessly execute programs on their `qm`, as long as there are enough resources.
-That means, for example, that the total number of [threads](features.md#threads) in use across all programs can't exceed the total number of threads in the system.
+That means, for example, that the total number of [cores](features.md#cores-and-oscillators) in use across all programs can't exceed the total number of cores in the system.
 
 To use multiple `qms` simultaneously, each `qm` needs to have a unique configuration and they should not share ports.
 By default, opening a `qm` closes any existing `qms`.
@@ -64,7 +64,7 @@ To enable port sharing, you need to add `"shareable": True` in the port's dictio
 !!! Note
     Port sharing is possible between any number of multiple `qms`.
 
-!!! warning
+!!! Warning
     Sharing ports mean that one `qm` could interfere with the experiment running in another `qm`
     in multiple ways:
 

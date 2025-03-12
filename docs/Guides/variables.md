@@ -14,7 +14,7 @@ To create an integer variable we {{f("qm.qua._dsl.declare")}} as follows:
 i = declare(int)  # creates a variable named "i" of type integer
 ```
 
-!!! warning
+!!! Warning
     If assigning a value outside the range, the variable will overflow. When a variable overflows, the value will "wrap around". For example:
 
     ```python

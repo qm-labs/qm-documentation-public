@@ -13,6 +13,104 @@ _FEM_MIN_SLOT = 1
 _FEM_MAX_SLOT = 8
 
 
+class QOPVersion:
+    """
+    Represents a Quantum Orchestration Platform (QOP) version.
+
+    Args:
+        name (str): The name of the version.
+
+    Attributes:
+        name (str): The name of the version.
+        major (int): The major version number.
+        minor (int): The minor version number.
+        patch (int): The patch version number.
+    """
+
+    def __init__(self, name: str):
+        """
+        Initialize a QmSaasInstanceVersion instance.
+
+        Args:
+            name (str): The name of the version in the format 'vX_Y_Z'.
+        """
+
+        self._name = name
+        pattern = re.compile("v(\\d+)_(\\d+)_(\\d+)")
+        match = pattern.match(name)
+        self._major = int(match.group(1))
+        self._minor = int(match.group(2))
+        self._patch = int(match.group(3))
+
+    def __str__(self):
+        """
+        Return the string representation of the version.
+
+        Returns:
+            str: The name of the version.
+        """
+        return self._name
+
+    def __gt__(self, other) -> bool:
+        """
+        Compare if this version is greater than another version.
+
+        Args:
+            other (QOPVersion): The other version to compare against.
+
+        Returns:
+            True if this version is greater, False otherwise.
+        """
+        if not isinstance(other, QOPVersion):
+            return NotImplemented
+        if self.major != other.major:
+            return self.major > other.major
+        if self.minor != other.minor:
+            return self.minor > other.minor
+        return self.patch > other.patch
+
+    @property
+    def major(self) -> int:
+        """
+        Get the major version number.
+
+        Returns:
+            The major version number.
+        """
+        return self._major
+
+    @property
+    def minor(self) -> int:
+        """
+        Get the minor version number.
+
+        Returns:
+            The minor version number.
+        """
+        return self._minor
+
+    @property
+    def patch(self) -> int:
+        """
+        Get the patch version number.
+
+        Returns:
+            The patch version number.
+        """
+        return self._patch
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the version.
+
+        Returns:
+            The name of the version.
+        """
+        return self._name
+
+
+@deprecation.deprecated(details="QoPVersion is deprecated and `QoPVersion.latest` might not give the latest version. Use `QOPVersion` returned by `QmSaas.versions()` or `QmSaas.latest_version()` instead.")
 class QoPVersion(Enum):
     """
     An enum containing the available Quantum Orchestration Platform (QoP) versions.
@@ -44,7 +142,12 @@ class QoPVersion(Enum):
     def patch(self):
         return self._patch
 
-    latest = "v3_2_0"
+    @property
+    def as_version(self) -> QOPVersion:
+        return QOPVersion(self._value_)
+
+    latest = "v3_2_4"
+    v3_2_4 = "v3_2_4"
     v3_2_0 = "v3_2_0"
 
     v3_1_0 = "v3_1_0"
@@ -171,20 +274,30 @@ class QmSaasInstance:
     A simulator instance on the cloud platform.
     """
 
-    def __init__(self, client: Client, version: QoPVersion, cluster_config=None, auto_cleanup: bool = True, log: logging.Logger = None):
+    def __init__(self, client: Client, version: any, cluster_config: ClusterConfig = None, auto_cleanup: bool = True, log: logging.Logger = None):
         """
         Create a simulator instance on the cloud platform.
 
         Args:
-            client: The client to use for the simulator instance
-            version: The QoP version to use for the simulator instance
-            cluster_config: The cluster configuration for the simulator instance for QoP v3.x.x
-            auto_cleanup: If true (default), automatically delete the simulator instance when the context manager exits
+            client (Client): The client to use for the simulator instance
+            version (QoPVersion|QOPVersion|str): The version to use for the simulator instance
+            cluster_config (ClusterConfig): The cluster configuration for the simulator instance for QoP v3.x.x
+            auto_cleanup (bool): If true (default), automatically delete the simulator instance when the context manager exits
                           otherwise it will be left running until it timeouts or is manually closed.
-            log: The logger to use for logging messages. If not provided, a default logger will be used.
+            log (logging.Logger): The logger to use for logging messages. If not provided, a default logger will be used.
         """
+        if isinstance(version, QOPVersion):
+            normalized_version = version
+        elif isinstance(version, type(QoPVersion.latest)):  # ugly hack because of decorator wrapping the class
+            normalized_version = version.as_version
+        elif isinstance(version, str):
+            normalized_version = QOPVersion(version)
+        else:
+            raise ValueError("Parameter 'version' has invalid type")
+
+        self._version = normalized_version
+
         self._client = client
-        self._version = version
         self._cluster_config = cluster_config
         self._spawned = False
         self._auto_cleanup = auto_cleanup
@@ -236,12 +349,12 @@ class QmSaasInstance:
         self._id = None
         self._token = None
 
-    def _create_simulator(self, version: QoPVersion, cluster_config=None):
+    def _create_simulator(self, version: QOPVersion, cluster_config: ClusterConfig = None):
         if version is None:
             raise ValueError("Version must be provided")
 
         self._log.debug(f"Creating simulator with version {self._version}")
-        response = self._client.launch_simulator(version.value, cluster_config.to_dict() if cluster_config else {})
+        response = self._client.launch_simulator(version.name, cluster_config.to_dict() if cluster_config else {})
 
         self._id = response["id"]
         self._token = response["token"]
@@ -359,7 +472,7 @@ class QmSaasInstance:
         return self._spawned
 
     @property
-    def cluster_config(self):
+    def cluster_config(self) -> dict:
         """
         Get the cluster configuration.
 
@@ -412,16 +525,19 @@ class QmSaas:
             log=self.log
         )
 
-    def simulator(self, version: QoPVersion = QoPVersion.latest, cluster_config=None) -> QmSaasInstance:
+    def simulator(self, version: any, cluster_config: ClusterConfig = None) -> QmSaasInstance:
         """
         Create a simulator instance on the cloud platform.
 
         Args:
-            version: The QoP version to use for the simulator instance. Defaults to the latest version
+            version: The QOP version to use for the simulator instance. Defaults to the latest version
             cluster_config: The cluster configuration for the simulator instance for QoP v3.x.x
         """
         if cluster_config is not None and version.major != 3:
             raise ValueError("Cluster configuration is only supported for QoP v3.x.x")
+
+        if version is None:
+            version = self.latest_version()
 
         return QmSaasInstance(
             client=self._client,
@@ -437,8 +553,33 @@ class QmSaas:
         """
         self._client.close_all_simulators()
 
+    def versions(self) -> list[QOPVersion]:
+        """
+        Get the available QoP versions.
+
+        Returns:
+            List of available QoP versions.
+        """
+        versions = self._client.versions()
+        return [QOPVersion(version) for version in versions]
+
+    def latest_version(self) -> QOPVersion:
+        """
+        Get latest available QoP version.
+
+        Returns:
+            Latest QoP version.
+        """
+        latest = None
+        for version in self.versions():
+            if latest is None:
+                latest = version
+            elif version > latest:
+                latest = version
+        return latest
+
     @property
-    def port(self):
+    def port(self) -> int:
         """
         Get the port of the endpoint of the cloud platform api
 
@@ -448,7 +589,7 @@ class QmSaas:
         return self._client.port
 
     @property
-    def host(self):
+    def host(self) -> str:
         """
         Get the host of the endpoint of the cloud platform api
 

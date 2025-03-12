@@ -7,7 +7,7 @@ The simulator returns the samples that will be played to the analog and digital 
 
 !!!Note "OPX1000 MW-FEM"
     
-    {{ requirement("QOP", "3.0") }}{{ requirement("QUA", "1.2") }}
+    {{ requirement("QOP", "3.0") }}
 
     Simulation of MW signals from a MW-FEM returns a complex signal of the I and Q quadratures, before the upconversion to GHz freuqency.
 

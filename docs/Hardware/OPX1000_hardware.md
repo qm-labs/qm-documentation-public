@@ -36,7 +36,7 @@ The values it can take, in 1 dB granularity, are:
 * LF-FEM: -3 to 29 dB
 * MW-FEM: 0 to 32 dB
 
-!!! warning
+!!! Warning
     When the gain on the LF-FEM input is set to max attenuation, -3 dB, the maximal power that can be input to the ADC without significant distortion is 7 dBm.
 
     **Please avoid exceeding 4 dBm (0.5 V) on LF-FEM input & -10 dBm on MW-FEM input without attenuation. This may damage the controller.**

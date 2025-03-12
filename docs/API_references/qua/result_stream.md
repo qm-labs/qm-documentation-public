@@ -7,9 +7,9 @@
     options:
         heading_level: 3
 
-## qm.qua._dsl._Functions
+## qm.qua._stream_processing_map_functions.MapFunctions
 
-::: qm.qua._dsl._Functions
+::: qm.qua._stream_processing_map_functions.MapFunctions
     options:
         heading_level: 3
 

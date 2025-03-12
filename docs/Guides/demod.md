@@ -136,7 +136,7 @@ occur during the demodulation. We discuss this next.
 </figure>
 
 
-!!! warning
+!!! Warning
     It is very important to make sure this section is well understood when using the demodulation operation, otherwise overflow may occur that will lead to corrupt results.
 
     To avoid overflow, follow these guidelines:
@@ -172,7 +172,7 @@ The notation used here for the fixed point is as follows: m.f - 'm' is the numbe
   <figcaption>Fig. 3: Timing diagram for the measurement operation</figcaption>
 </figure>
 
-!!! warning
+!!! Warning
     The phase of the readout pulse IF carrier is not necessarily equal to the phase of the IF tone used in the demodulation, and may also change between
     versions. Therefore, the demodulation results may slightly change between versions.
 

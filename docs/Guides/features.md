@@ -85,7 +85,6 @@ measure("readout", "RR", None,
 ```
 
 !!! Note
-
     1. The chunk size is in units of 4 ns.
     2. For arbitrary integration weights, chunk size must be bigger than or equal to 7
     3. Duration of integration weights must be 4 * `chunk_size` * `array_size`
@@ -122,7 +121,6 @@ measure("readout", "RR", None,
 ```
 
 !!! Note
-
     1. The chunk size is in units of 4 ns.
     2. For arbitrary integration weights, chunk size must be bigger than or equal to 7
     3. Duration of integration weights must be 4 * chunk_size * array_size
@@ -163,7 +161,6 @@ measure("readout", "RR", None,
 ```
 
 !!! Note
-
     1. The chunk size is in units of 4 ns.
     2. For arbitrary integration weights, chunk size must be bigger than or equal to 7
     3. Duration of integration weights must be 4 * chunk_size * array_size
@@ -266,7 +263,7 @@ $$
 \dot{V(t)} < derivativeThreshold
 $$
 
-For example, in the configuration block below, the time tagging is set to detect a voltage edge. The element `spcm` has the time tagging parameters defined in the `outputPulseParameters` block.
+For example, in the configuration block below, the time tagging is set to detect a voltage edge. The element `spcm` has the time tagging parameters defined in the `timeTaggingParameters` block.
 
 ```python
 'spcm': {
@@ -281,7 +278,7 @@ For example, in the configuration block below, the time tagging is set to detect
     },
     'time_of_flight': 180,
     'smearing': 0,
-    'outputPulseParameters': {   # Time tagging parameters
+    'timeTaggingParameters': {   # Time tagging parameters
         'signalThreshold': -500,
         'signalPolarity': 'Below',
         'derivativeThreshold': -10000,
@@ -310,11 +307,11 @@ If the `signalPolarity` would be changed to `Above`, the rising edge would be de
     Due to backwards compatibility, the parameter's values can also be `Ascending` for `Above` and  `Descending` for `Below`
 
 ??? info "Default Time Tagging Values"
-    If the `'outputPulseParameters'` dictionary is left empty, the default values are used.
+    If the `'timeTaggingParameters'` dictionary is left empty, the default values are used.
     The user must supply **all** values, or none. The default values are as follows:
 
     ```python
-    'outputPulseParameters': {
+    'timeTaggingParameters': {
         'signalThreshold': 800,
         'signalPolarity': 'Below',
         'derivativeThreshold': 300,
@@ -341,7 +338,7 @@ measure([pulse], [element], [stream], time_tagging.analog(times, max_time, count
 
 ##### High resolution time-tagging
 
-{{ requirement("QOP", "2.0") }} {{ requirement("QUA", "0.3.7") }}
+{{ requirement("QOP", "2.0") }}
 High resolution time tagging has a resolution <50 ps with a dead time of 84 ns.
 The high resolution time-tagging is done in a measure statement, with the following syntax:
 
@@ -425,9 +422,22 @@ with for_(j, 0, j < 16, j + 1):
     ...
 ```
 
+##### Gapless sequences with the Unsafe Switch Case
+
 The switch case operation has an optional flag, `unsafe` that can be used to decrease the gaps that might be created when using switch-case
-inside a loop, such as in the example above. However, this flag cannot be used with `with default_():`, and in
-addition, if a value in the `switch` does not match any of the values in the `case`, unexpected behavior can occur.
+inside a loop, such as in the example above. However, this flag cannot be used with `with default_():`.
+This flag is useful when the switch-case is used inside a loop, and the values in the switch are known to be within the range of the cases.
+
+!!! Warning
+    If the value in the switch does not match any of the values in the case, unexpected behavior can occur, and there will be no warning or error message.
+
+The unsafe flag allows the compiler to minimize the latency required to jump to the next case to be 40ns, which allows for gapless sequences as long as the operations inside are longer than 40ns.
+
+{{ requirement("QOP", "2.4") }} {{ requirement("QOP", "3.0") }} If the following conditions are met, the PPU can further optimize the latency to 16ns:
+* No parametrized play commands in the cases (i.e. no amp, chirp, duration, etc.)
+* No parametrized wait commands in the cases (i.e. duration is not a QUA variable)
+* No parametrized frame_rotations commands in the cases (i.e. the angle is not a QUA variable)
+* No other commands besides the above (e.g. no `align()` commands)
 
 The usage can be seen in the following example:
 
@@ -456,7 +466,7 @@ play('op', 'qe', condition=a > 0)
 
 #### Port Condition
 
-{{ requirement("QOP", "3.2") }}{{ requirement("QUA", "1.2") }}
+{{ requirement("QOP", "3.2") }}
 
 The MW-FEM allows for a faster conditional play mechanism. to utilize it, use the port condition context. For example:
 
@@ -594,7 +604,8 @@ job.resume()
 
 ## Input streams
 
-{{ requirement("QOP", "2") }} {{ requirement("QUA", "0.3.7") }} Input streams allows passing data from the client computer to a running job in the OPX+ with
+{{ requirement("QOP", "2") }}
+Input streams allows passing data from the client computer to a running job in the OPX+ with
 minimal latency. To use one, you must first declare it in the QUA program using the
 {{f("qm.qua._dsl.declare_input_stream")}} command. The declaration is similar to the declaration of a normal QUA
 variable. You need to define its type (int, fixed, bool), it's name, and optionality, its size or values.
@@ -636,7 +647,7 @@ while some_cond:
 ```
 
 ## Timestamp Stream
-{{ requirement("QOP", "2.2") }}, {{ requirement("QUA", "1.1.2") }}
+{{ requirement("QOP", "2.2") }}
 It is possible to retrieve the precise timestamp of any {{f("qm.qua._dsl.play")}} and {{f("qm.qua._dsl.measure")}} 
 commands from the beginning of an executed program, 
 and use it for circuit analysis and verification. 
@@ -698,7 +709,7 @@ by configuring `sticky: {analog: True, digital: True }`. Doing so will hold the 
 marker until the next pulse begins. Playing the next digital marker will override the held value and once again the last
 value will be held. Once a ramp to zero has been initiated at the end of the sequence or upon command, 
 the digital marker will stop at the beginning of the ramp. This can be seen in the figure shown below (lower panel) when the digital pulse sets down at about 2600 ns.
-!!! warning
+!!! Warning
     The amplitude of sticky pulses is accumulated with a resolution of 16 bit.
     Therefore, *N* changes to the sticky pulse amplitude can result in an amplitude inaccuracy of about $N \cdot 2^{-16}$.
     To null out this accumulated error, it is recommended to use {{f("qm.qua._dsl.ramp_to_zero")}} from time to time.
@@ -747,7 +758,7 @@ We first define the quantum element as follows:
 Note the `{'duration': 200}` which sets the ramp to zero duration, in clock cycles.
 We also define a second quantum element `qe2` which is not sticky.
 
-We can then run a simple program playing the same constant pulse twice, for the two different quantum elements:
+We can then run a simple program playing the same constant pulse twice, for the two different elements:
 
 ```python
 with program() as prog:
@@ -892,7 +903,7 @@ $$
 
 
 !!! Note
-    Note that this discrete implementation of the chirp differs from the continuous frequency chirp which yields
+    This discrete implementation of the chirp differs from the continuous frequency chirp which yields
 
     $$
     \phi(t) = 2\pi (f_0t + \frac{t^2}{2}\alpha)
@@ -933,7 +944,7 @@ See [OPX+ Pulse Process Schematic](../Hardware/OPX_hardware.md#opx-block-diagram
 This could be useful to correct for electronic crosstalk that exists between different control lines.
 It is also possible to add a "self-crosstalk term", this will cause an amplitude scaling to that port, which defaults to "1" if not given.
 
-!!! warning
+!!! Warning
     Adding a crosstalk term to any port will delay **all** analog pulses coming out from all ports. The delay will be 8 cycles (32 ns).
     Starting from {{ requirement("QOP","2.1") }}, it is possible to add the [compilation flag](features.md#compilation-options) `disable-crosstalk-matrix-ports-alignment` to only delay the ports which participate in the Crosstalk Correction Matrix.
 
@@ -1020,7 +1031,7 @@ play(pulse, element, duration = 2*t+100)
 The 'duration' parameter can accept a general mathematical expression composed of operators (+, -, \*, /),
 numbers, QUA variables and QUA functions (such as cos and sin).
 
-!!! warning
+!!! Warning
     When playing an arbitrary waveform, if the value of the duration parameter is set to below the original pulse
     length, corrupted output may occur.
 
@@ -1044,7 +1055,7 @@ play(pulse, element, duration = 40, truncate = 10)
 The 'truncate' parameter can accept a general mathematical expression composed of operators (+, -, \*, /),
 numbers, QUA variables and QUA functions (such as cos and sin).
 
-!!! warning
+!!! Warning
     If the 'truncate' parameter is longer than the pulse duration, it'll cause unexpected results.
 
 ## Dynamic Port Allocation
@@ -1141,63 +1152,66 @@ To do so we configure this property in the [port's configuration](../Introductio
 Note that the default value of `inverted` is `False`. When inverted, The output of the digital marker will change to HIGH
 immediately when the QM is opened and will resort back to the default behavior (LOW) when the QM is closed. 
 
+## Cores and Oscillators
 
+The QOP has multiple cores & oscillators, enabling simultaneous play of multiple elements.
+By default, the different cores & oscillators are not shared between different elements. 
+Two (or more) elements that are never played together [can share the same core](#sharing-cores), allowing for the definition of more elements and the writing of more complex programs.
+Two elements that share a core can play one after the other, without gaps, even when the elements use different oscillators.
+One useful example would be to have the qubit control and its readout on the same core, as they are never played together.  
+In addition, it is also possible to define two elements that [share an oscillator](#sharing-oscillators).
 
+=== "OPX1000"
+    
+    === "LF-FEM"
 
-## Threads
+        The LF-FEM has $N_{cores}=16$, which limits the maximum number of elements that can be used simultaneously.
+        A single-input quantum element requires one core and a mixed-input (IQ) element uses two cores, one for each port.
+        Working with a sampling rate of 2 GSPS will consume double the amount of cores, see more [here](opx1000_fems.md#sampling-rate).
 
-The maximum number of quantum elements that can be used simultaneously is limited by the number of processing threads in the hardware.
-A single-input quantum element requires one thread and a mixed input (IQ) element uses two *threads*, one for each channel.
-The OPX has $N_{threads}=10$ *threads* and the OPX+ has $N_{threads}=18$.
-By default, *threads* are not shared between different quantum elements. However, two (or more) quantum elements which
-are never played together can share a *thread*, as explained below. Sharing threads allow the user to define more quantum elements and write more complex programs.
+    === "MW-FEM"
 
-### Automatic Thread Allocation
+        The MW-FEM has $N_{cores}=8$, which limits the maximum number of elements that can be used simultaneously.
+        Each element requires one core.
+    Each core has $N_{oscillators}=6$ internal oscillators.
+    Note that an oscillator is needed also for baseband pulses and for performing integration on the readout signal.
+    If two (or more) elements with an intermediate frequency [share a core](#sharing-cores), they will each use a separate oscillators, unless they are explicitly defined to [share an oscillator](#sharing-oscillators).
+    If two (or more) elements without an intermediate frequency [share a core](#sharing-cores), they will share the same oscillator.
 
-It is possible to add a flag when executing a QUA program that will enable the *Automatic Thread Allocation*. In order to enable it, use:
+=== "OPX+"
 
-```python
-qm.execute(..., flags=['auto-element-thread'])
-```
+    The OPX+ has $N_{cores}=18$, which limits the maximum number of elements that can be used simultaneously.
+    A single-input quantum element requires one core and a mixed input (IQ) element uses two cores, one for each channel.
 
-When the flag is set, the QUA compiler will automatically try to figure out which elements are never played together and these elements will share a *thread*.
-Since the code can be complicated and not deterministic, the compiler uses the `align` statement to know which quantum elements are playing in parallel and which are not.
-For example:
+    There are $N_{oscillators}=18$ oscillators shared by all cores.
+    This limits the number of elements **with an intermediate frequency**.
 
-```python
-with program() as prog1:
-    a = declare(fixed)
-    play("marker", "qeDig")
-    play("pulse", "qe2")
-    align("qe2", "qeDig")
-    play("marker", "qeDig")
-    with for_(a, 0.2, a < 0.9, a + 0.1):
-        play("pulse" * amp(a), "qe1")
-```
+=== "OPX"
 
-It seems that "qeDig" plays in parallel with both "qe1" and "qe2", but "qe1" and "qe2" never play in parallel.
-This means that "qe2" and "qe1" can share the same *thread*.
+    The OPX has $N_{cores}=10$, which limits the maximum number of elements that can be used simultaneously.
+    A single-input quantum element requires one core and a mixed input (IQ) element uses two cores, one for each channel.
 
-Because the `align` statement is being used for the Automatic Thread Allocation, it is important to use it whenever possible.
+    There are $N_{oscillators}=10$ oscillators shared by all cores.
+    This limits the number of elements **with an intermediate frequency**.
 
-### Manual Thread Allocation
+### Sharing Cores
 
-It is also possible to manually assign the *threads* to the quantum elements, when defining them, in the following manner:
+It is possible to assign elements to specific cores when defining them:
 
 ```python
 config = {
     ...
     'elements': {
         'qe1': {
-            "thread": "a",
+            "core": "a",
             ...
         },
         'qe2': {
-            "thread": "a",
+            "core": "a",
             ...
         },
         'qe3': {
-            "thread": "b",
+            "core": "b",
             ...
         },
         'qe4': {
@@ -1207,13 +1221,15 @@ config = {
     ...
 }
 ```
+!!! Note
+    In order for two elements to share the same core, they must be in the same controller and FEM.
 
-In the example above, "qe2" and "qe1" are assigned to *thread* "a" and can never run at the same time. "qe3" is being assigned to *thread* "b".
-Any quantum element which does not have a *thread* directly specified will have its own *thread*.
+In the example above, "qe2" and "qe1" are assigned to core "a" and can never run at the same time. "qe3" is being assigned to core "b".
+Any quantum element which does not have a core directly specified will have its own core.
 
 !!! Note
-    If "qe1" has two inputs (i.e. an IQ pair) it will actually be assigned two *threads*.
-    If "qe2" has a single input, it will use one of the *threads* which is used by "qe1".
+    If "qe1" has two inputs (i.e. an IQ pair) it will actually be assigned two cores.
+    If "qe2" has a single input, it will use one of the cores which is used by "qe1".
 
 If "qe2" and "qe1" will be given a play command, they will be played one after the other and not at the same time. For example:
 
@@ -1225,28 +1241,28 @@ with program() as prog:
 ```
 
 In the example above, "qe1" will be played first and only when it is done "qe2" will be played.
-Because "qe3" is on another *thread*, it will start immediately with "qe1". See examples [here](timing_in_qua.md#examples-for-timing-scenarios-in-qua)
+Because "qe3" is on another core, it will start immediately with "qe1". See examples [here](timing_in_qua.md#examples-for-timing-scenarios-in-qua)
 
-## Oscillators
+!!! Note
+    Assigning a core to an element which requires several cores (Higher sampling rate, mixed input, etc) will automatically assign the required number of cores.
 
-In addition to limited threads, there is also a limited number of internal oscillators. The OPX has $N_{osc}=10$
-and the OPX+ has $N_{osc}=18$. This limits the number of quantum elements **with an intermediate frequency**.
-However, it is possible to share oscillators between different elements.
+### Sharing Oscillators
+
+{{ requirement("OPX+", "2.0") }}
+It is possible to share oscillators between different elements.
+
+!!! Note
+    For two elements to share the same oscillator, they must be in the same controller and FEM.
+
+!!! Note
+    {{ requirement("OPX1000", "3.0") }}
+    In orders for two elements to share the same oscillator, they must also [share a core](#sharing-cores).
+
+This is done by defining the elements to use an `oscillator` instead of defining its `intermediate_frequency`.
 For information on how to define shared oscillators, see the [configuration](../Introduction/config.md#oscillators) page.
 
 Sharing oscillators between elements shares their frequency, their frame and their mixer correction matrix.
 This means that any operation that affects these on any of the elements, would affect them all.
-In the following example, `qe1`, `qe2` and `qe3` share an oscillator:
-
-```python
-with program() as prog:
-    update_frequency("qe1", 50e6)
-    play('const', 'qe2')  # Plays a 50 MHz pulse
-    update_frequency("qe1", 100e6)
-    play('const', 'qe2')  # Plays a 100 MHz pulse
-    frame_rotation_2pi("qe3", 0.5)
-    play('const', 'qe2')  # Plays a 100 MHz pulse, but with the frame rotated by pi
-```
 
 ## Precompile Jobs
 
@@ -1301,47 +1317,29 @@ These options can be activated by passing a list of flags to the execution, comp
 
 The following is a short list of optional flags and their description:
 
-- 'auto-element-thread' - Used when thread sharing is required. The compiler will automatically determine which elements can share a thread and allocate the resources accordingly. See further information [here](#threads).
-- 'disable-filtered-ports-alignment' - Starting from version {{ requirement("QOP","2") }} on OPX+, this flag will disable the temporal alignment between analog ports that are filtered with a digital output filter and those that are not. This will reduce latency for unfiltered ports when using the filters. In addition, this flag will disable the automatic adjustment of the time-of-flight and digital delays parameters in the configuration. Read more about the latency in the [output filter guide](output_filter.md).
+- 'disable-filtered-ports-alignment' - Starting from version {{ requirement("QOP","2") }} on OPX+, this flag will disable the temporal alignment between analog ports that are filtered with a digital output filter and those that are not. This will reduce latency for unfiltered ports when using the filters. In addition, this flag will disable the automatic adjustment of the time-of-flight and digital delays parameters in the configuration. Read more about the latency in the [output filter guide](../Guides/output_filter.md).
 - 'disable-crosstalk-matrix-ports-alignment' - Starting from version {{ requirement("QOP","2.1") }} on OPX+, this flag will disable the temporal alignment between analog ports that participate in the Crosstalk Correction Matrix and those that are not. This will reduce latency for these ports when using the Crosstalk Correction Matrix. In addition, this flag will disable the automatic adjustment of the time-of-flight and digital delays parameters in the configuration. Read more about the latency in the [crosstalk correction matrix guide](#crosstalk-correction-matrix).
 - 'skip-loop-unrolling' -  Disables an optimization over loop iterations. This gives faster compilation time at the cost of more program memory use and possibly more gaps.
 - 'skip-loop-rolling' - Disables another optimization over loop iterations. This gives faster compilation time at the cost of more program memory use.
 - 'skip-add-implicit-align' - Removes the automatically added [implicit align](timing_in_qua.md#the-implicit-align) from all control flows.
 - 'not-strict-timing' - {{ requirement("QOP","2") }} Gaps within a {{f("qm.qua._dsl.strict_timing_")}} block will not block execution by raising warnings instead of errors. Read more about the strict timing feature [here](timing_in_qua.md#strict-timing).
+- 'enable-reset-all-phases-at-program-start' - {{ requirement("QOP","3.3") }} Adds a {{f("qm.qua._dsl.reset_global_phase")}} at the beginning of the program, which will reset the MW-FEM upconverters phase.
 
 The way to use these compilation options depends on the `qm-qua` Python package version. Choose your version below to see how:
 
-=== "`qm-qua`>=1.1.2"
+```python
+from qm import CompilerOptionArguments
 
-    ```python
-    from qm import CompilerOptionArguments
+my_compiler_options = CompilerOptionArguments(flags=['flag1', 'flag2'])
 
-    my_compiler_options = CompilerOptionArguments(flags=['flag1', 'flag2'])
+qm.execute(prog, compiler_options=my_compiler_options) # execution
+qm.compile(prog, compiler_options=my_compiler_options)  # compilation
+qmm.simulate(config, prog, SimulationConfig(duration), compiler_options=my_compiler_options) # simulation
+```
 
-    qm.execute(prog, compiler_options=my_compiler_options) # execution
-    qm.compile(prog, compiler_options=my_compiler_options)  # compilation
-    qmm.simulate(config, prog, SimulationConfig(duration), compiler_options=my_compiler_options) # simulation
-    ```
-    
-    For example, in the following code, we execute a program with the automatic thread allocation compilation option:
-    
-    ```python
-    my_compiler_options = CompilerOptionArguments(flags=['auto-element-thread'])
-    qm.execute(prog, compiler_options=my_compiler_options)  # execution
-    ```
+For example, in the following code, we execute a program with the automatic core allocation compilation option:
 
-=== "`qm-qua`<1.1.1"
-
-    ```python
-    qm.execute(prog, flags=['flag1', 'flag2'])  # execution
-    qm.compile(prog, flags=['flag1', 'flag2'])  # compilation
-    qmm.simulate(config, prog, SimulationConfig(duration), flags=['flag1', 'flag2']) # simulation
-    ```
-    
-    For example, in the following code, we execute a program with the automatic thread allocation compilation option:
-    
-    ```python
-    qm.execute(prog, flags=['auto-element-thread'])  # execution
-    ```
-
-
+```python
+my_compiler_options = CompilerOptionArguments(flags=['auto-element-thread'])
+qm.execute(prog, compiler_options=my_compiler_options)  # execution
+```

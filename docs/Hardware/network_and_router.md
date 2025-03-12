@@ -130,7 +130,7 @@ We list below four possible configurations and details on accessing the cluster.
 
 === "Option D" 
     
-    !!! warning
+    !!! Warning
         This option is only officially supported from {{ requirement("QOP", "2.2") }}
 
     In this scenario, the QM router is unused, and all QM devices will be directly connected to your own network (typically a router).  
@@ -245,7 +245,6 @@ This guide provides instructions for configuring the proxy settings on the PC, b
 These settings ensure uninterrupted communication with the OPX for both HTTP (Web admin panel) and gRPC protocols (Python job execution).
 
 !!! Note
-
     All of the values that are written below (e.g. `192.168.88`, `192.168.88.0/24`) are for the default MikroTik network, as appears in [Option C](#possible-network-configurations).
     Please adjust these values according to your network configuration.
 
@@ -326,5 +325,4 @@ These settings ensure uninterrupted communication with the OPX for both HTTP (We
     3. Save the file and run `source ~/.bashrc` or `source ~/.bash_profile`.
 
 !!! Note
-
     It is also possible to force the python client to ignore the proxy set by the environment variables by setting the `async_trust_env` parameter of the `QuantumMachinesManager` to `False`.

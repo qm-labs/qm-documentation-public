@@ -29,9 +29,9 @@ and specify the language statements and data types.
 
 
 QUA is a pulse-level-control programming language for quantum devices. This means that it allows programmers to control
-the shapes and timing of the pulses that are sent to the quantum elements in the quantum device.
+the shapes and timing of the pulses that are sent to the elements in the quantum device.
 This enables programmers to perform operations on them, as well as set the timing and parameters of the measurement
-sequences applied to the signals returning from the quantum elements.
+sequences applied to the signals returning from the elements.
 Thus, the most basic statements in QUA are the {{f("qm.qua._dsl.play")}} and {{f("qm.qua._dsl.measure")}} statements.
 
 ## Play Statement
@@ -360,7 +360,7 @@ The digital waveform used to define this behavior is called a digital marker and
 a raw ADC stream readout. When a digital marker is not defined, a raw ADC stream will be measured as a list of zeros.
 This is a common pitfall when taking raw analog data. We emphasize this point:
 
-!!! warning
+!!! Warning
     Even if a measurement is performed without the need of a digital channel, a digital marker MUST be defined if an ADC
     stream is required.
 
@@ -545,7 +545,7 @@ Further explanation can be found in the [dual demodulation section](../Guides/de
 When operating with multiple controllers, an additional latency due to communication overhead might occur. This happens
 in two cases:
 
-1. When aligning two quantum elements which are on separate controllers, and it is impossible for the compiler
+1. When aligning two elements which are on separate controllers, and it is impossible for the compiler
    to determine how long each of the elements will need to wait for the other (for example, due to a branching
    in the code)
 2. When performing a measurement on a quantum element in one controller and using the result of that measurement

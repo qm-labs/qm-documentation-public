@@ -49,7 +49,7 @@ play('qe2_pulse','qe2')
 play('qe3_pulse','qe3')
 ```
 
-In the example above, the three play commends will be executed together after the trigger.
+In the example above, the three play commands will be executed together after the trigger.
 Note that any of the three elements can be placed in the `wait_for_trigger` command.
 
 If we want to pause the entire program until the trigger arrives, we can place an empty align.

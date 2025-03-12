@@ -76,7 +76,7 @@ config = {
 }
 ```
 
-!!! warning
+!!! Warning
     When the gain is set to max attenuation, -12 dB, the maximal power that can be input to the ADC without significant distortion is 16 dBm or 4 Vpp.
 
     **Please avoid exceeding 4 dBm (1 Vpp) without attenuation. This may damage the controller.**

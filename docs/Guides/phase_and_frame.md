@@ -38,6 +38,9 @@ is subtracted from the global phase of the element.
 Using {{f("qm.qua._dsl.reset_global_phase")}} would also subtract the phase associated with the MW-FEM upconverter, in addition to the intermediate phase.
 For any element which is not using the MW-FEM, {{f("qm.qua._dsl.reset_global_phase")}} is equivalent to {{f("qm.qua._dsl.reset_if_phase")}}
 
+!!! Note
+    If the absolute phase of the element is important and needs to be identical between programs, it is recommended to use the {{f("qm.qua._dsl.reset_global_phase")}} command at the beginning of the program.
+
 Another command that will change the global phase is {{f("qm.qua._dsl.update_frequency")}}. When using the flag
 `keep_phase=True`, the phase of the pulse will be continuous through the frequency change, as can be seen in figure 1 indicated by the first dashed black line. 
 The phase continuity results in a change to the global phase, $\phi_G$. 

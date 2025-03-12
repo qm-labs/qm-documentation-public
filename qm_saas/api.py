@@ -26,6 +26,9 @@ class Client:
     def sessions_url(self):
         return f"{self._base_url()}/sessions"
 
+    def versions_url(self):
+        return f"{self._base_url()}/versions"
+
     @staticmethod
     def _headers_unauthenticated():
         return {
@@ -87,5 +90,17 @@ class Client:
             message = response.json().get("message", "no message provided")
             self.log.error(f"HTTP {response.status_code}: {message}")
             raise Exception(f"Could not spawn simulator of version {version}: {message}")
+
+        return response.json()
+
+    def versions(self) -> list[str]:
+        endpoint = self.versions_url()
+        headers = self._headers_authenticated()
+        response = requests.get(url=endpoint, headers=headers)
+
+        if response.status_code != 200:
+            message = response.json().get("message", "no message provided")
+            self.log.error(f"HTTP {response.status_code}: {message}")
+            raise Exception(f"Could not retrieve versions: {message}")
 
         return response.json()

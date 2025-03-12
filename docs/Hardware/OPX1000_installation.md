@@ -3,9 +3,9 @@
 The following page describes the installation procedure of an OPX1000 system, and for systems with Octaves.
 It covers network configuration, OPX1000 connectivity, rack scheme and more.
 
-## Rack Mounting
+## Rack Mounting and Grounding Installation Guide
 
-Instructions for rack mounting the OPX1000 can be found [here](assets/OPX1000 Rack Mounting Installation Guide.pdf).
+Instructions for rack mounting the OPX1000 can be found [here](assets/OPX1000%20Rack%20Mounting%20and%20Installation%20Guide.pdf).
 
 ## Cluster
 
@@ -19,31 +19,29 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
 ## Hardware Installation Procedure
 
 1. Verify you have all the [required components](#required-components-for-the-installation).
-
-2. Mount the system in its designated place. Instructions for rack mounting the OPX1000 can be found [here](#rack-mounting).
-
+2. Mount the system in its designated place. Instructions for rack mounting the OPX1000 can be found [here](#rack-mounting-and-grounding-installation-guide).
 3. Insert the FEMs into in the chassis:
     1. To prevent static discharge that can damage the FEM, please use the provided ESD gloves before touching or handling the FEMs.
     2. Slide FEM into an empty slot in the chassis.
     3. Ensure that the FEM is fully inserted and that the FEM panel is flush with the chassis panel. If it is not, check that the captive screws or ejectors are not obstructing the insertion.
     4. Secure the FEM in place using the captive screws. 
     5. Repeat for all FEMs, also install the provided blank FEMs in any remaining empty slots.
-
-        !!! Note
-            Turning on the system without all the FEMs installed, or the blank FEMs, can cause the system to overheat, which will increase fan speed and can cause the system to shut down to protect itself from damage.
+        1. Turning on the system without all the FEM installed, or the blank FEMs, can cause the system to overheat, which will increase fan speed and can cause the system to shut down to protect itself from damage.
+   
 4. Determine your [network configuration](network_and_router.md#network-overview-and-configuration).
 5. Connect the system:
     1. If there is more than one OPX1000:
         1. One OPX1000 is defined as the *main* OPX1000.
-        2. Clock: Connect the others OPX1000's clock input to the *main* OPX1000's clock outputs via the supplied SMA cables. Any clock input can be used
-        3. QSync: Connect the others OPX1000's QSync port to the *main* OPX1000's Qsync ports via the supplied QSync unshielded ethernet cable. Any QSync port can be used, but it's good practice to match the connections' numbering with the clock.
-        4. Data: Connect the others OPX1000's Comm port to the *main* OPX1000's Comm ports via the supplied optical cables. Remove the connectors' protectors if present. Any Comm port can be used, but it's good practice to match the connections' numbering with the clock & QSync.
+        2. Clock: Connect the others OPX1000's clock input to the *main* OPX1000's clock outputs via the supplied SMA cables. Please see the [connectivity scheme](#connectivity-scheme) for more details.
+        3. QSync: Connect the others OPX1000's QSync port to the *main* OPX1000's Qsync ports via the supplied QSync unshielded ethernet cable. Please see the [connectivity scheme](#connectivity-scheme) for more details.
+        4. Data: Connect the others OPX1000's Comm port to the *main* OPX1000's Comm ports via the supplied optical cables. Remove the connectors' protectors if present and make sure to press the optical cables firmly into the ports until a click is heard to ensure a proper connection. Please see the [connectivity scheme](#connectivity-scheme) for more details. 
     2. Octaves:
         1. If there are any Octaves, connect their clock inputs to any OPX1000's clock outputs.
         2. If all OPX1000es' clock outputs have been used, and there are still unconnected Octaves, then connect the Octave's clock input to other Octave's clock outputs.
     3. Optional: Connect any of the *main* OPX1000 clock inputs to an external reference clock.
     4. Connect the OPX1000 and Octaves to QM router via the ethernet cables, starting from port 2 onwards. Alternatively, connect the devices directly to your local network.
     5. Connect the OPX1000 and Octaves to the power outlet. It is generally recommended to connect both of the OPX1000 power supplies to separate power outlets. See the [opx1000 power requirements section below](#opx1000-power-requirements) for more information.
+    6. Connect the OPX1000 and Octaves grounding post to the grounding point. More information can be found [here](#rack-mounting-and-grounding-installation-guide).  
 6. Turn on all the devices.
 7. When using new devices, download the [latest QOP version](../Releases/qop3_releases.md) and upload it to the device via the admin panel.
 8. Configure the cluster, as shown [below](#configuring-opx1000-and-octave). This step will also install the latest version and can take ~30 minutes. 
@@ -101,58 +99,277 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
 
 ### Connectivity Scheme
 
-The multi OPX1000 system has five required connectivity groups. Clock, QSync, Inter-controller communication, Network, and Power
+A multi-OPX1000 system has three required inter-OPX1000 connectivity groups: <span style="color: #b8860b;">Clock</span>, <span style="color: #8b0000;">QSync</span>, and <span style="color: #1e3a8a;">Communication</span>.
+They are color-coded for clarity in the following tables and schematics.
 
-??? Information "Clock"
+Below is an explanation of each group, followed by a schematic for connecting the OPX1000es, and then followed by detailed tables showing the required connectivity.
 
-    The clock signal is distributed by the *main* OPX1000 with an SMA cable per addtional OPX1000 chassis.
-    An single OPX1000 chassis can distribute the clock for up to four additional OPX1000 chassis.
-    If more than five chassis are used, a tree-like connectivity is needed: *main* OPX1000 chassis distributes the clock 
-    to chassis 2-5. Chassis 2 distribute the clock to chassis 6-9, etc...  
+####   <strong style="color: #b8860b;">Clock</strong>
 
-??? Information "QSync"
+The clock signal is distributed by the *main* OPX1000 with an SMA cable per additional OPX1000.
+The *main* OPX1000 can be connected to an external reference clock.
+A single OPX1000 can distribute the clock for up to four additional OPX1000 and/or Octaves.
 
-    The QSync signal is passed between the controllers via Cat6 RJ45 (Ethernet) cables. 
-    A single OPX1000 chassis can sync for up to four additional OPX1000 chassis.
-    If more than five chassis are used, a tree-like connectivity is needed: *main* OPX1000 chassis syncs chassis 2-5.
-    Chassis 2 syncs chassis 6-9, etc...
+If more than five OPX1000 are used, a tree-like connectivity is needed: the *main* OPX1000 distributes the clock to OPX1000 #2-5. 
+OPX1000 #2 distribute the clock to OPX1000 6-9, etc...
+
+Please make sure to connect the OPX1000 to the clock output ports in order, starting from clock output port 1.
+Always use clock input port 1.
+
+If Octaves are used, please first connect the OPX1000 according to the table below, and then connect the Octaves to the remaining OPX1000 clock output ports, in order.
+
+####  <strong style="color: #8b0000;">QSync</strong>
+
+The QSync signal is passed between the OPX1000 via Cat6 RJ45 (Ethernet) cables. 
+A single OPX1000 can sync for up to four additional OPX1000.
+If more than five OPX1000 are used, a tree-like connectivity is needed: *main* OPX1000 syncs OPX1000 2-5.
+OPX1000 2 syncs OPX1000 6-9, etc...
+
+Please make sure to connect the OPX1000 to the QSync Ports in order, starting from port 1.
+
+####  <strong style="color: #1e3a8a;">Communication</strong>
+
+Data transfer and communication between OPX1000 are operated via optical cables in an `all-to-all` connectivity.
+Each OPX1000 has 4 optical ports and the minimal required connectivity differs with the number of OPX1000,
+as shown below.
+
+Make sure to press the optical cables firmly into the ports until a click is heard to ensure a proper connection.
+
+!!! Note
+    There's a minimal number of FEMs need per Chassis, depending on the number of OPX1000 in the system:
+
+    - For 2-3 OPX1000, each one needs to have at least one FEM, installed in slot 1.
+    - For 4-5 OPX1000, each one needs to have at least two FEMs, installed in slots 1, and 5.
+    - For 6-8 OPX1000, each one needs to have at least four FEMs, installed in slots 1, 3, 5, and 7.
+
+!!! Note
+    The optical cables are not interchangeable and must be connected to the correct port as listed below.
+    They are generally connected from the right to the left, which means from port 4 to port 1.
+    
+=== "2 OPX1000"
+
+    All OPX1000 need to have at least one FEM, installed in slot 1.    
+
+    ![2_OPX1000](assets/OPX1000_2_connectivity.png "2 OPX1000 Connectivity")
+
+    <strong style="color: #b8860b;">Clock</strong>
+
+    | OPX1000 | Clock Out Port | OPX1000 | Clock In Port |
+    |---------|----------------|---------|---------------|
+    | 1       | 1              | 2       | 1             |
+
+    <strong style="color: #8b0000;">QSync</strong>
+
+    | OPX1000 | QSync Port | OPX1000 | QSync Port |
+    |---------|------------|---------|------------|
+    | 1       | 1          | 2       | 1          |
+
+    <strong style="color: #1e3a8a;">Communication</strong>
+
+    All OPX1000 need to have at least one FEM, installed in slot 1.
+
+    | OPX1000 | Comm Port | OPX1000 | Comm Port |
+    |---------|-----------|---------|-----------|
+    | 1       | 4         | 2       | 4         |
 
 
-??? Information "Inter-controller Optical Connectivity Scheme"
+=== "3 OPX1000"
 
-    Data transfer and communication between controllers are operated via optical cables in an `all-to-all` connectivity.
-    Each OPX1000 has 4 optical ports and the preferred connectivity configuration differs with the number of
-    controllers, as shown below.
+    All OPX1000 need to have at least one FEM, installed in slot 1.
 
-    Click on each configuration to see the connectivity scheme.
+    ![3_OPX1000](assets/OPX1000_3_connectivity.png "3 OPX1000 Connectivity")
 
-    !!! Note
-        The following is only a recommendation. Every configuration that establishes all-to-all connectivity is valid.
-      
+    <strong style="color: #b8860b;">Clock</strong>
 
-    === "2 OPX1000"
+    | OPX1000 | Clock Out Port | OPX1000 | Clock In Port |
+    |---------|----------------|---------|---------------|
+    | 1       | 1              | 2       | 1             |
+    | 1       | 2              | 3       | 1             |
 
-        Connect all four optical cables between the chassis
+    <strong style="color: #8b0000;">QSync</strong>
 
-    === "3 OPX1000"
+    | OPX1000 | QSync Port | OPX1000 | QSync Port |
+    |---------|------------|---------|------------|
+    | 1       | 1          | 2       | 1          |
+    | 1       | 2          | 3       | 1          |
 
-        Connect every chassis with two optical cables to every other chassis
+    <strong style="color: #1e3a8a;">Communication</strong>
 
-    === "4 OPX1000"
+    All OPX1000 need to have at least one FEM, installed in slot 1.    
 
-        Connect every chassis with one optical cables to every other chassis. One port would remain unused.
+    | OPX1000 | Comm Port | OPX1000 | Comm Port |
+    |---------|-----------|---------|-----------|
+    | 1       | 4         | 2       | 4         |
+    | 1       | 3         | 3       | 4         |
+    | 2       | 3         | 3       | 3         |
 
-    === "5 OPX1000"
+=== "4 OPX1000"
 
-        Connect every chassis with one optical cables to every other chassis.
+    All OPX1000 need to have at least two FEMs, installed in slots 1, and 5.
 
-    === "6-8 OPX1000"
+    ![4_OPX1000](assets/OPX1000_4_connectivity.png "4 OPX1000 Connectivity")
 
-        Connect every chassis 1-4 to every chassis 5-8 with one optical cable.  
+    <strong style="color: #b8860b;">Clock</strong>
 
-    === "9-32 OPX1000"
+    | OPX1000 | Clock Out Port | OPX1000 | Clock In Port |
+    |---------|----------------|---------|---------------|
+    | 1       | 1              | 2       | 1             |
+    | 1       | 2              | 3       | 1             |
+    | 1       | 3              | 4       | 1             |
 
-        These confiugration will be shipped with special splitter cables which would come with connection instructions.
+    <strong style="color: #8b0000;">QSync</strong>
+
+    | OPX1000 | QSync Port | OPX1000 | QSync Port |
+    |---------|------------|---------|------------|
+    | 1       | 1          | 2       | 1          |
+    | 1       | 2          | 3       | 1          |
+    | 1       | 3          | 4       | 1          |
+
+    <strong style="color: #1e3a8a;">Communication</strong>
+
+    All OPX1000 need to have at least two FEMs, installed in slots 1, and 5.
+
+    | OPX1000 | Comm Port | OPX1000 | Comm Port |
+    |---------|-----------|---------|-----------|
+    | 1       | 4         | 2       | 4         |
+    | 1       | 3         | 3       | 4         |
+    | 1       | 2         | 4       | 4         |
+    | 2       | 3         | 3       | 3         |
+    | 2       | 2         | 4       | 3         |
+    | 3       | 2         | 4       | 2         |
+
+=== "5 OPX1000"
+
+    All OPX1000 need to have at least two FEMs, installed in slots 1, and 5.
+
+    ![5_OPX1000](assets/OPX1000_5_connectivity.png "5 OPX1000 Connectivity")
+
+    <strong style="color: #b8860b;">Clock</strong>
+
+    | OPX1000 | Clock Out Port | OPX1000 | Clock In Port |
+    |---------|----------------|---------|---------------|
+    | 1       | 1              | 2       | 1             |
+    | 1       | 2              | 3       | 1             |
+    | 1       | 3              | 4       | 1             |
+    | 1       | 4              | 5       | 1             |
+
+    <strong style="color: #8b0000;">QSync</strong>
+
+    | OPX1000 | QSync Port | OPX1000 | QSync Port |
+    |---------|------------|---------|------------|
+    | 1       | 1          | 2       | 1          |
+    | 1       | 2          | 3       | 1          |
+    | 1       | 3          | 4       | 1          |
+    | 1       | 4          | 5       | 1          |
+
+    <strong style="color: #1e3a8a;">Communication</strong>
+
+    All OPX1000 need to have at least two FEMs, installed in slots 1, and 5.
+
+    | OPX1000 | Comm Port | OPX1000 | Comm Port |
+    |---------|-----------|---------|-----------|
+    | 1       | 4         | 2       | 4         |
+    | 1       | 3         | 3       | 4         |
+    | 1       | 2         | 4       | 4         |
+    | 1       | 1         | 5       | 4         |
+    | 2       | 3         | 3       | 3         |
+    | 2       | 2         | 4       | 3         |
+    | 2       | 1         | 5       | 3         |
+    | 3       | 2         | 4       | 2         |
+    | 3       | 1         | 5       | 2         |
+    | 4       | 1         | 5       | 1         |
+
+=== "6-8 OPX1000"
+
+    All OPX1000 need to have at least four FEMs, installed in slots 1, 3, 5, and 7.
+
+    ![5_OPX1000](assets/OPX1000_5_connectivity.png "5 OPX1000 Connectivity")
+
+    If using less than 8 OPX1000, simply omit the cables that are not needed.
+
+    <strong style="color: #b8860b;">Clock</strong>
+
+    | OPX1000 | Clock Out Port | OPX1000 | Clock In Port |
+    |---------|----------------|---------|---------------|
+    | 1       | 1              | 2       | 1             |
+    | 1       | 2              | 3       | 1             |
+    | 1       | 3              | 4       | 1             |
+    | 1       | 4              | 5       | 1             |
+    | 2       | 1              | 6       | 1             |
+    | 2       | 2              | 7       | 1             |
+    | 2       | 3              | 8       | 1             |
+
+    <strong style="color: #8b0000;">QSync</strong>
+
+    | OPX1000 | QSync Port | OPX1000 | QSync Port |
+    |---------|------------|---------|------------|
+    | 1       | 1          | 2       | 1          |
+    | 1       | 2          | 3       | 1          |
+    | 1       | 3          | 4       | 1          |
+    | 1       | 4          | 5       | 1          |
+    | 2       | 2          | 6       | 1          |
+    | 2       | 3          | 7       | 1          |
+    | 2       | 4          | 8       | 1          |
+
+    <strong style="color: #1e3a8a;">Communication</strong>
+
+    All OPX1000 need to have at least four FEMs, installed in slots 1, 3, 5, and 7.
+
+    | OPX1000 | Comm Port | OPX1000 | Comm Port |
+    |---------|-----------|---------|-----------|
+    | 1       | 1         | 2       | 1         |
+    | 1       | 2         | 3       | 1         |
+    | 1       | 3         | 4       | 1         |
+    | 1       | 4         | 5       | 1         |
+    | 2       | 2         | 3       | 2         |
+    | 2       | 3         | 4       | 2         |
+    | 3       | 3         | 4       | 3         |
+    | 3       | 4         | 6       | 2         |
+    | 4       | 4         | 7       | 2         |
+    | 5       | 2         | 6       | 1         |
+    | 5       | 3         | 7       | 1         |
+    | 5       | 4         | 8       | 1         |
+    | 6       | 3         | 7       | 2         |
+    | 6       | 4         | 8       | 2         |
+    | 7       | 3         | 8       | 3         |
+    | 7       | 4         | 8       | 4         |
+
+=== "9-32 OPX1000"
+
+    If using less than 32 OPX1000, simply omit the cables that are not needed.
+
+    <strong style="color: #b8860b;">Clock</strong>
+
+    | OPX1000 | Clock Out Port | OPX1000 | Clock In Port |
+    |---------|----------------|---------|---------------|
+    | 1       | 1              | 2       | 1             |
+    | 1       | 2              | 3       | 1             |
+    | 1       | 3              | 4       | 1             |
+    | 1       | 4              | 5       | 1             |
+    | 2       | 1              | 6       | 1             |
+    | 2       | 2              | 7       | 1             |
+    | 2       | 3              | 8       | 1             |
+    | 2       | 4              | 9       | 1             |
+    | 3       | 1              | 10      | 1             |
+    | ...     | ...            | ...     | ...           |
+
+    <strong style="color: #8b0000;">QSync</strong>
+
+    | OPX1000 | QSync Port | OPX1000 | QSync Port |
+    |---------|------------|---------|------------|
+    | 1       | 1          | 2       | 1          |
+    | 1       | 2          | 3       | 1          |
+    | 1       | 3          | 4       | 1          |
+    | 1       | 4          | 5       | 1          |
+    | 2       | 2          | 6       | 1          |
+    | 2       | 3          | 7       | 1          |
+    | 2       | 4          | 8       | 1          |
+    | 3       | 2          | 9       | 1          |
+    | ...     | ...        | ...     | ...        |
+
+    <strong style="color: #1e3a8a;">Communication</strong>
+
+    These confiugration will be shipped with special splitter cables which would come with connection instructions.
 
 
 ### Configuring OPX1000 and Octave
