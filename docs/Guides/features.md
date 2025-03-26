@@ -1167,7 +1167,7 @@ In addition, it is also possible to define two elements that [share an oscillato
 
         The LF-FEM has $N_{cores}=16$, which limits the maximum number of elements that can be used simultaneously.
         A single-input quantum element requires one core and a mixed-input (IQ) element uses two cores, one for each port.
-        Working with a sampling rate of 2 GSPS will consume double the amount of cores, see more [here](opx1000_fems.md#sampling-rate).
+        Working with a sampling rate of 2 GSa/s will consume double the amount of cores, see more [here](opx1000_fems.md#sampling-rate).
 
     === "MW-FEM"
 

@@ -1,5 +1,8 @@
 # Simulator Access through Cloud Service
 
+!!! Note
+    {{ requirement("SaaS", "1.1.4") }} The information in this guide is applicable to QM SaaS version 1.1.4 and later.
+
 QM can provide access to the QOP simulator in a cloud environment. This product is called QM Simulator as a Service
 (QM SaaS). The service is available to customers on request to QM and can be used independently of the OPX hardware.
 
@@ -21,7 +24,7 @@ The client package is [available on PyPi](https://pypi.org/project/qm-saas/) and
 pip or any other package manager with access to the PyPi repository.
 
 ```bash
-pip install qm-saas
+pip install -U qm-saas
 ```
 
 The client package provides a client class `QmSaas` that allows you to interact with the simulator service.
@@ -39,7 +42,7 @@ client = QmSaas(email="jondoe@gmail.com", password="password_from_qm")
 The created client object allows to spawn simulator instances and use them to simulate QUA programs as you would on real OPX hardware.
 Spawning an instance creates a virtual OPX device in the cloud that can be used to simulate QUA programs. The number of instances is limited, and they have a limited lifetime.
 Once an instance is spawned, it provides connection details for the `QuantumMachinesManager` object, which direct the QUA program to the cloud simulator. 
-The instance is created with the latest available QOP version but can be called with a specific version. Check the `QoPVersion` enum for a list of supported versions.
+The instance is created with the latest available QOP version but can be called with a specific version, see [Simulation options](#simulation-of-different-qop-versions).
 
 ```python
 from qm_saas import client
@@ -131,15 +134,32 @@ Therefore, the command can be used to make sure that an instance is opened in ca
 
 ### Simulation options
 
-The QM SaaS supports the simulation of the OPX+ and OPX1000 products. 
-This is achieved by selecting the respective QOP version through the `QoPVersion` enum.
-The QOP version is passed to the `simulator` method when creating an instance. `QoPVersion.v2_X_Y` will give instances of OPX+ simulators and `QoPVersion.v3_X_Y` will give instances of OPX1000 simulators, respectively.
+#### Simulation of different QOP versions
+
+The QM SaaS supports the simulation of multiple versions of both OPX+ and OPX1000. 
+This is handled by the `QOPVersion` object, which accepts a string in the format `vX_Y_Z`.
+To see all available versions, use `QmSaas.versions()`.
+It is also possible to get on the latest QOP version by using `QmSaas.latest_version()`.
+
+!!! Note
+    The latest version will be the one with the highest version number, e.g. `v3_3_0` is higher than `v2_4_3`.
+    This implies that it will always give the latest OPX1000 version.
+
+e.g.
+```python
+print("Supported versions:")
+for version in client.versions():
+    print(f"\t- {version}")
+```
+
+The `QOPVersion` object is then passed to the `simulator` method when creating an instance.
+e.g. `QOPVersion("v2_4_3")` will give an instance of an OPX+ simulator with QOP version `2.4.3` and `QOPVersion("v3_3_0")` will give an instance of an OPX1000 simulator with QOP version `3.3.0`.
 
 ```python
-from qm_saas import client, QoPVersion
+from qm_saas import client, QOPVersion
 from qm import QuantumMachinesManager
 
-with client.simulator(QoPVersion.v3_2_0) as instance:
+with client.simulator(QOPVersion("v3_3_0")) as instance:
     # Use the instance object to simulate QUA programs
     qmm = QuantumMachinesManager(host=instance.host,
                                  port=instance.port,
@@ -153,26 +173,33 @@ For details about simulating different OPX+ hardware configurations, see the [QO
 
 #### Simulation of different OPX1000 hardware configurations
 
-When simulating the OPX1000, there is a default configuration of 1 OPX1000 with LF-FEMs in slots 1-4 and MW-FEMs in slots 5-8.
+When simulating the OPX1000, there is a default configuration of 5 OPX1000 with LF-FEMs in slots 1-4 and MW-FEMs in slots 5-8.
 It is possible to define a custom FEM configuration of the simulator instance. 
 This is done by creating a `ClusterConfig` object and adding the required controllers and FEMs to it. 
 Initially a controller needs to be added to the configuration via `ClusterConfig.controller()`. 
 The FEMs can then be added to this controller object via the `lf_fem(List[int])` and `mw_fem(List[int])` methods. 
 Available slots are 1-8, and both LF FEMs and MW FEMs can be added. 
 Trying to add two FEMs to a single slot will raise an error.
-Multiple controllers can be added; they are automatically named `con1`, `con2`, etc., according to their creation order.
+
+!!! Note
+    Currently all OPX1000 must have the same FEM configuration. 
+    Therefore, a `ClusterConfig` with a single controller will create a cluster with 5 OPX1000s. 
+    There is no need for a `ClusterConfig` with multiple controllers.
+    It is enough to only provide one, and it will automatically apply to all other controllers in the cluster.
+
+[//]: # (Multiple controllers can be added; they are automatically named `con1`, `con2`, etc., according to their creation order.)
 
 The `ClusterConfig` object is then passed to the `simulator` method to create an instance with the given configuration.
 
 ```python
-from qm_saas import ClusterConfig, client
+from qm_saas import ClusterConfig, client, QOPVersion
 
 cluster_config = ClusterConfig()
 controller = cluster_config.controller()
 controller.lf_fems(1, 2, 3, 4)
 controller.mw_fems(5, 6, 7, 8)
 
-with client.simulator(cluster_config=cluster_config) as instance:
+with client.simulator(QOPVersion("v3_3_0"), cluster_config) as instance:
     # Use the instance object to simulate QUA programs on a config of 4 LF and 4 MW FEMs
     qmm = QuantumMachinesManager(host=instance.host,
                                  port=instance.port,

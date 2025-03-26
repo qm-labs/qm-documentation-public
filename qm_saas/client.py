@@ -229,8 +229,6 @@ class ClusterConfig:
         Returns: 
             The controller configuration.
         """
-        if len(self._controllers) != 0:
-            raise ValueError("Only one controller is supported")
         con = f"con{len(self._controllers) + 1}"
 
         pattern = re.compile("^con(\\d+)$")
