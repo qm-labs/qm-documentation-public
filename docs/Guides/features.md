@@ -360,7 +360,7 @@ measure([pulse], [element], [stream],
 #### If, Elif & Else
 
 The simplest way to use branching is using the {{f("qm.qua._dsl.if_")}} statement. Usage of the {{f("qm.qua._dsl.if_")}},
-{{f("qm.qua._dsl.elif_")}} & {{f("qm.qua._dsl.else_")}} conditional is demonstrated in thecode block below. 
+{{f("qm.qua._dsl.elif_")}} & {{f("qm.qua._dsl.else_")}} conditional is demonstrated in the code block below. 
 Here, `op1` is played if `a` is larger than 1, `op2` is played if it's between -1 and 1, and `op3` is played if it is below -1.
 `a` is a `fixed` QUA variable in this case, which can be the result of a measurement or a classical computation.
 
@@ -461,6 +461,8 @@ can be used when feedback latency is critical.
 play('op', 'qe', condition=a > 0)
 ```
 
+It is important to note that unlike the `if_` statement, the play command will take the same amount of time to execute regardless of the condition. This implies that a false condition will be equivalent to a wait command.
+
 !!! important
     In versions up to {{ requirement("QOP", "2.2.0") }}, any digital pulse associated with the operation will always play, regardless of the condition.
 
@@ -474,6 +476,8 @@ The MW-FEM allows for a faster conditional play mechanism. to utilize it, use th
 with port_condition(I>0):
     play('pi', 'qubit')
 ```
+
+It is important to note that unlike the `if_` statement, the play command will take the same amount of time to execute regardless of the condition. This implies that a false condition will be equivalent to a wait command.
 
 #### Ternary Operator
 
