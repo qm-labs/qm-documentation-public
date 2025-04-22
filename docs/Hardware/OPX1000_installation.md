@@ -40,7 +40,7 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
         2. If all OPX1000es' clock outputs have been used, and there are still unconnected Octaves, then connect the Octave's clock input to other Octave's clock outputs.
     3. Optional: Connect any of the *main* OPX1000 clock inputs to an external reference clock.
     4. Connect the OPX1000 and Octaves to QM router via the ethernet cables, starting from port 2 onwards. Alternatively, connect the devices directly to your local network.
-    5. Connect the OPX1000 and Octaves to the power outlet. It is generally recommended to connect both of the OPX1000 power supplies to separate power outlets. See the [opx1000 power requirements section below](#opx1000-power-requirements) for more information.
+    5. Connect the OPX1000 and Octaves to the power outlet. It is generally recommended to connect the OPX1000 power supplies to separate power outlets. See the [opx1000 power requirements section below](#opx1000-power-requirements) for more information.
     6. Connect the OPX1000 and Octaves grounding post to the grounding point. More information can be found [here](#rack-mounting-and-grounding-installation-guide).  
 6. Turn on all the devices.
 7. When using new devices, download the [latest QOP version](../Releases/qop3_releases.md) and upload it to the device via the admin panel.
@@ -61,17 +61,17 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
 
 ### OPX1000 power requirements
 
-=== "Main electricity 100-130VAC (Mostly in the US, Canada, Japan)"
+=== "Main electricity 100-127VAC (Mostly in the US, Canada, Japan)"
 
     The OPX1000 has two installed PSUs (power supply units) and room for a third one, allowing for a 2+1 PSU redundancy.
     
     If more than 4 FEMs are used, two PSUs must be used simultaneously to provide the system with sufficient power. 
-    They must be connected to separate wall outlets, as each PSU can carry up to 11.3A. 
+    They must be connected to separate wall outlets, as each PSU can carry up to 13A. 
     A 3rd power supply can be added to achieve PSU redundancy.
 
 === "Main electricity 200-240VAC (Europe and most of the world)"
 
-    The OPX1000 has two installed PSUs (power supply units) and room for a third one, allowing for a 1+2 PSU redundancy and a 1+2 power grid redudancy.
+    The OPX1000 has two installed PSUs (power supply units) and room for a third one, allowing for a 1+2 PSU redundancy and a 1+2 power grid redundancy.
 
     If multiple PSUs are used, they must be connected to separate wall outlets, as each PSU can carry up to 10A.
     It is also possible to obtain power source redundancy by connecting the PSUs to different power grids.

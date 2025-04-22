@@ -198,10 +198,11 @@ print(waveform_dict["adc_acquisitions"][0])
 }
 ```
 
-!!! Note that it can also be printed as a pretty string:
-```python
-print(waveform_report.to_string())
-```
+!!! Note 
+    The waveform report can also be printed as a pretty string:
+    ```python
+    print(waveform_report.to_string())
+    ```
 <br>
 
 #### To visualize the Waveform Report:
