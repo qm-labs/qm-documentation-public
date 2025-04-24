@@ -542,14 +542,31 @@ It is also possible to change the output mode using the command {{f("qm.octave.q
 There is an intrinsic delay between the time that the digital pulse arrives at the octave and the time that the RF pulse outputs from the octave. This time depends on the path of the digital signal inside the octave, computation time, and the time it takes for the digital switch to open. Hence, it's important to calibrate the `delay` and `buffer` parameters. 
 
 !!! tip
+    
+    
+    === "OPX1000"
 
-    === "{{ requirement("OPX+", "2.2.2") }} and above"
+        The following parameters assume identical cables for the I/Q and digital connections, where the trigger is connected to the digital breakout braid.
+
+        === "{{ requirement("QOP", "3.3.0") }}"
         
-        The suggested parameters are: `delay` = 57 ns, `buffer`  = 18 ns.
+            The suggested parameters are: `delay` = 14 ns, `buffer`  = 13 ns.
 
-    === "{{ requirement("OPX+", "2.2.1") }} and below"
+        === "{{ requirement("QOP", "3.2.4") }} and below"
+        
+            The suggested parameters are: `delay` = 23 ns, `buffer`  = 14 ns.
+    
+    === "OPX+"
+        
+        The following parameters assume identical cables for the I/Q and digital connections.
 
-        The suggested parameters are: `delay` = 87 ns, `buffer`  = 15 ns.
+        === "{{ requirement("OPX+", "2.2.2") }} and above"
+        
+            The suggested parameters are: `delay` = 57 ns, `buffer`  = 18 ns.
+
+        === "{{ requirement("OPX+", "2.2.1") }} and below"
+
+            The suggested parameters are: `delay` = 87 ns, `buffer`  = 15 ns.
 
     
 !!! Warning
