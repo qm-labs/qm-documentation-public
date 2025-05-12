@@ -16,7 +16,7 @@
   },
   "info": {
     "title": "OPX Config",
-    "version": "1.2.2"
+    "version": "1.2.3"
   },
   "swagger": "2.0",
   "definitions": {
@@ -129,6 +129,31 @@
       "title": "Digital input",
       "description": "The specification of the digital input of an element"
     },
+    "TimeTaggingParameters": {
+      "type": "object",
+      "properties": {
+        "signalThreshold": {
+          "type": "integer"
+        },
+        "signalPolarity": {
+          "type": "string",
+          "description": "The polarity of the signal threshold"
+        },
+        "derivativeThreshold": {
+          "type": "integer"
+        },
+        "derivativePolarity": {
+          "type": "string",
+          "description": "The polarity of the derivative threshold"
+        }
+      },
+      "required": [
+        "derivativePolarity",
+        "derivativeThreshold",
+        "signalPolarity",
+        "signalThreshold"
+      ]
+    },
     "HoldOffset": {
       "type": "object",
       "properties": {
@@ -232,8 +257,20 @@
           "additionalProperties": {}
         },
         "outputPulseParameters": {
-          "type": "object",
-          "description": "Pulse parameters for Time-Tagging"
+          "description": "Pulse parameters for Time-Tagging (deprecated, use 'timeTaggingParameters' instead)",
+          "allOf": [
+            {
+              "$ref": "#/definitions/TimeTaggingParameters"
+            }
+          ]
+        },
+        "timeTaggingParameters": {
+          "description": "Pulse parameters for Time-Tagging",
+          "allOf": [
+            {
+              "$ref": "#/definitions/TimeTaggingParameters"
+            }
+          ]
         },
         "hold_offset": {
           "$ref": "#/definitions/HoldOffset"
@@ -243,7 +280,11 @@
         },
         "thread": {
           "type": "string",
-          "description": "QE thread"
+          "description": "Element thread (deprecated, use 'core' instead)"
+        },
+        "core": {
+          "type": "string",
+          "description": "Element thread"
         },
         "RF_inputs": {
           "type": "object",
@@ -269,10 +310,20 @@
         },
         "feedback": {
           "type": "array",
-          "description": "Feedback taps for the analog output filter. List of double",
+          "description": "Feedback taps for the analog output filter. List of double. IIR filtering approach prior to QOP 3.3",
           "items": {
             "type": "number"
           }
+        },
+        "exponential": {
+          "type": "array",
+          "description": "Exponential filter parameters. IIR filtering approach since QOP 3.3.",
+          "items": {}
+        },
+        "high_pass": {
+          "type": "number",
+          "x-nullable": true,
+          "description": "High-pass compensation filter, used to compensate for the low-frequency cutoff of the signal. IIR filtering approach since QOP 3.3"
         }
       }
     },

@@ -104,8 +104,9 @@ $$s(t) = 1 + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...$$
     The filter for every output channel can be configured at the OPX configuration file under `filter` in the `analog_outputs` field.
 
     * To configure the FIR filter, set the taps directly in the `feedforward` field. Feedforward taps are limited to the range (-2,2), but this can be scaled automatically by the IIR filters.
-    * To configure the IIR filters, set the filter parameters in the `exponential` field.
+    * To configure the IIR filters, set the filter parameters in the `exponential` and `high-pass` fields.
         * The `exponential` field accepts a list of tuples of the form `[(A1, tau1), ...]`, where `A` is the amplitude and `tau` is the time constant (see above).
+        * The `high_pass` field accepts a single value `tau_hp`, the time constant of the high-pass filter.
     
     ```python
     'controllers': {
@@ -116,6 +117,7 @@ $$s(t) = 1 + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...$$
                         'filter': {
                             'feedforward': [0.8, 0.3],
                             'exponential': [(A1, tau1), (A2, tau2), ...]
+                            'high_pass': tau_hp
                         },
                     },
                 },
@@ -127,7 +129,7 @@ $$s(t) = 1 + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...$$
     'controllers': {
             'con1': {
                 'analog_outputs': {
-                    1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[]}},
+                    1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[], 'high-pass':None}},
                 },
     ```
     

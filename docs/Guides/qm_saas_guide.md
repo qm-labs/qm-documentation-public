@@ -17,7 +17,7 @@ not requiring access to the hardware.
 
 ### Installation and Initialization
 
-To use the simulator, you need to have the `qm-saas` client python package in your python environment
+To use the simulator, you need to have the `qm-saas` client Python package in your Python environment
 (alongside [qm-qua](../Releases/qm_qua_releases.md)
 and an access token to a cloud service provided by QM.
 The client package is [available on PyPi](https://pypi.org/project/qm-saas/) and can simply be installed via
@@ -29,7 +29,7 @@ pip install -U qm-saas
 
 The client package provides a client class `QmSaas` that allows you to interact with the simulator service.
 This client class provides methods to open and close simulator instances. On construction, it needs to be provided with
-the user email and password, provided by QM.
+the user's email and password, provided by QM.
 
 ```python
 from qm_saas import QmSaas
@@ -39,16 +39,16 @@ client = QmSaas(email="jondoe@gmail.com", password="password_from_qm")
 
 ### The Simulator Instance
 
-The created client object allows to spawn simulator instances and use them to simulate QUA programs as you would on real OPX hardware.
+The created client object allows you to spawn simulator instances and use them to simulate QUA programs as you would on real OPX hardware.
 Spawning an instance creates a virtual OPX device in the cloud that can be used to simulate QUA programs. The number of instances is limited, and they have a limited lifetime.
-Once an instance is spawned, it provides connection details for the `QuantumMachinesManager` object, which direct the QUA program to the cloud simulator. 
-The instance is created with the latest available QOP version but can be called with a specific version, see [Simulation options](#simulation-of-different-qop-versions).
+Once an instance is spawned, it provides connection details for the `QuantumMachinesManager` object, which directs the QUA program to the cloud simulator. 
+The instance is created with the latest available QOP version, but can be called with a specific version, see [Simulation options](#simulation-of-different-qop-versions).
 
 ```python
-from qm_saas import client
 from qm import QuantumMachinesManager
+from qm_saas import QOPVersion
 
-with client.simulator() as instance:
+with client.simulator(QmSaas.latest_version()) as instance:
     # Use the instance object to simulate QUA programs
     qmm = QuantumMachinesManager(host=instance.host,
                                  port=instance.port,
@@ -104,7 +104,6 @@ Serialization and saving can be handled by the `pickle` module in python.
 Within the first python interpreter execution, the instance object can be serialized and stored to a file:
 
 ```python
-    from qm_saas import client
     import pickle
     instance = client.simulator()
     instance.spawn()
@@ -156,7 +155,7 @@ The `QOPVersion` object is then passed to the `simulator` method when creating a
 e.g. `QOPVersion("v2_4_3")` will give an instance of an OPX+ simulator with QOP version `2.4.3` and `QOPVersion("v3_3_0")` will give an instance of an OPX1000 simulator with QOP version `3.3.0`.
 
 ```python
-from qm_saas import client, QOPVersion
+from qm_saas import QOPVersion
 from qm import QuantumMachinesManager
 
 with client.simulator(QOPVersion("v3_3_0")) as instance:

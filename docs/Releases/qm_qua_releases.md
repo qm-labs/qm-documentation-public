@@ -5,12 +5,84 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
+## 1.2.3a1 - 2025-05-11
+- Requires Python >=3.8, <3.13
+- Tested against QOP 3.4
+
+**Fixed**
+
+- Fixed a bug that caused `generate_qua_script` to raise an error when attempting to serialize a program and configuration without a `QuantumMachineManager` instance opened.
+
+## 1.2.2 - 2025-04-01
+- Requires Python >=3.8, <3.13
+- Tested against QOP 3.3, 2.4.4
+
+## 1.2.2a4 - 2025-03-20
+- Requires Python >=3.8, <3.13
+
+**Added**
+
+- Added `qm.qua.type_hints` file to allow the import of type hints relevant to the QUA DSL.
+
+**Fixed**
+
+- `qm.get_config()` and `job.get_compilation_config()` now return the correct default values for analog output filters.
+- The `Math.dot()` function in qm.qua.lib supports different data types for the x and y arguments.
+
+**Changed**
+
+- Made parameters `feedforward` and `feedback` optional in `qm.set_output_filter_by_element` (OPX+)
+
+## 1.2.2a3 - 2025-03-04
+- Requires Python >=3.8, <3.13
+- Tested against QOP 3.3
+
+**Fixed**
+
+- Fixed `mypy` returning false positive type errors.
+- The DSL now is fully typed.
+- A `JobNotFoundException` is now raised when trying to get a job that does not exist (using functions - `qm.get_job`, `qm.get_job_by_id()` and `qmm.get_job()`).
+- Fixed a QUA program serialization error casued by malparsing of certain variable names.
+- Fixed wrong serialization for a random number with a seed.
+- QOP 3.3 - It is now possible to fetch results with a large number of data points, and it will not result in a gRPC timeout.
+- Fixed a bug that prevented calibration of octave with frequencies of type np.int32.
+
+**Changed**
+
+- Supports the new simulator flow in QOP 3.3 in which the `simulate` command becomes non-blocking and the job object can be interacted with. Most Job APIs are not supported yet.
+- `qm.get_job()`, `qm.get_job_by_id()` and `qmm.get_job()` can now return a simulated job.
+- Added new fields for filters in the LF-FEM config: `exponential` and `high_pass`. These are used in QOP 3.3 for a new mechanism for analog output IIR filters.
+- Improved labels for the simulators' samples plot and waveform report plot
+- The simulator's samples plot will no longer plot waveforms that are all zeros (not changed in the simulation)
+- Refined connection error handling: Errors are now caught specifically for connection issues, rather than broadly across larger scopes as was previously the case. 
+
+**Added**
+
+- Added `broadcast` object to the QUA DSL, supporting the functions: `broadcast.and_()`, `broadcast.or_()` and `broadcast.xor_()`, supported from QOP 3.3.
+- Raise an error when trying to fetch results but there is data loss on the OPX1000
+- Added the ability to export the capabilities of the QOP, using `qmm.capabilities`.
+- Added the ability to set capabilities without connecting to a QOP server, using the static function `QuantumMachinesManager.set_capabilities_offline()`.
+- Added arguments to the constructor of `QuantumMachinesManager` to allow control of the connection redirection:
+  - `follow_gateway_redirections` (bool): If True (default), the client will follow redirections to find a QuantumMachinesManager and Octaves. Otherwise, it will only connect to the given host and port.
+  - `async_follow_redirects` (bool): If False (default), async httpx will not follow redirections, relevant only in case follow_gateway_redirections is True.
+  - `async_trust_env` (bool): If True (default), async httpx will read the environment variables for settings as proxy settings, relevant only in case follow_gateway_redirections is True.
+
+**Deprecated**
+
+- The `measure` command signature has changed, `stream` has been renamed `adc_stream` and moved to the end of the arguments list. The old signature is deprecated and will be removed in the future.
+- The field `outputPulseParameters` in the element part of the config has been deprecated and will be replaced with the field `timeTaggingParameters`.
+- `"Ascending"` and  `"Descending"` have been deprecated and are replaced by `"Above"` and `"Below"` for the fields of the polarity in `timeTaggingParameters`
+- The field `thread` in the element part of the config has been deprecated and will be replaced with the field `core`.
+- In QOP >= 3.3, the function `fast_frame_rotation` is deprecated as it is no longer faster than frame_rotation_2pi (and in fact, it is less efficient). It will be removed in future versions.
+
 ## 1.2.2a2 - 2024-12-11
+- Requires Python >=3.8, <3.13
 
 **Fixed**
 
 - Fixed the function `job.update_oscillator_frequency` to work on the latest QOP 3.2.
 - Fixed a bug for OPX1000 in which `qm.get_digital_delay()` would return the digital buffer instead.
+- Fix usage of removeprefix for Python 3.8 compatibility.
 
 **Deprecated**
 
@@ -21,6 +93,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Improved the implementation of `wait_for_all_values` in OPX1000 to reduce latency.
 
 ## 1.2.2a1 - 2024-11-28
+- Requires Python >=3.8, <3.13
 
 **Added**
 
@@ -28,14 +101,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added `AbstractCalibrationDB` class to allow for custom Octave calibration databases. (`from qm.octave import AbstractCalibrationDB`)
 - `QuantumMachinesManager` can now accept an object of type `AbstractCalibrationDB` in its `octave_calibration_db_path` argument
 
+## 1.2.1.1a1 - 2024-12-17
+- Requires Python >=3.8, <3.13
+
+**Fixed**
+
+- Fixed a bug in the MW-FEM samples returned from the cloud simulator (using `qm-saas`) which prevented plotting them
+
+**Changed**
+
+- Improved labels for the simulators' samples plot and waveform report plot
+- The simulator's samples plot will no longer plot waveforms that are all zeros (not changed in the simulation)
+
 ## 1.2.1 - 2024-11-20
-Tested against QOP 2.4, 3.2
+- Requires Python >=3.8, <3.13
+- Tested against QOP 2.4, 3.2
 
 **Fixed**
 
 - Fixed a bug with qm.get_config() in the OPX1000.
 
 ## 1.2.1a3 - 2024-11-06
+- Requires Python >=3.8, <3.13
 
 **Fixed**
 
@@ -48,7 +135,8 @@ Tested against QOP 2.4, 3.2
 - Serializing a QUA program after it was executed will now also include the `CompilerOptions` it was executed with.
 
 ## 1.2.1a2 - 2024-09-16
-Tested against QOP 3.2
+- Requires Python >=3.8, <3.12
+- Tested against QOP 3.2
 
 **Changed**
 
@@ -96,7 +184,8 @@ Tested against QOP 3.2
     - `qmm.close()` - Function removed.
 
 ## 1.2.1a1 - 2024-07-30
-Tested against QOP 2.4.1
+- Requires Python >=3.8, <3.12
+- Tested against QOP 2.4.1
 
 **Added**
 
@@ -113,7 +202,8 @@ Tested against QOP 2.4.1
 - After calibration, dc offsets are set only if found LO *and* IF frequencies that match the current element state. 
 
 ## 1.2.0 - 2024-07-02
-Tested against QOP 3.1
+- Requires Python >=3.8, <3.12
+- Tested against QOP 3.1
 **Note, this version was [Yanked](https://pypi.org/help/#yanked), it was supposed to be pre-released as 1.2.0a1**
 
 **Changed**
@@ -241,7 +331,8 @@ Tested against QOP 3.1
     - The property `job.manager` has been removed.
 
 ## 1.1.7 - 2024-02-19
-Tested against QOP 1.2, 2.2
+- Requires Python >=3.8, <3.12
+- Tested against QOP 1.2, 2.2
 
 **Changed**
 

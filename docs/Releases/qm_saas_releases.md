@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
+## 1.1.4 - 2025-03-13
+
+**Deprecated**
+
+- `QoPVersion` is deprecated and `QoPVersion.latest` will no longer return the latest version. Use a Version returned by `QmSaas.versions()` or `QmSaas.latest_version()` instead.
+
+**Added**
+
+- Added a `QmSaas.versions()` function that returns all supported versions of the simulator available on the server.
+- Added a `QmSaas.latest_version()` function that returns the latest supported version of the simulator available on the server.
+
 ## 1.1.3 - 2025-01-08
 
 **Added**
@@ -27,11 +38,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## 1.1.1- 2024-11-13
 
-**Changed**
+**Deprecated**
 
 - Renamed the `QoPSaaS` class to `QmSaas` and `QoPSaaSInstance` to `QmSaasInstance` respectively.
-- Removed the `sim` prefix from many class properties, e.g. `sim_host` -> `host`.
+
+**Changed**
+
 - The default `host` has changed. The previous default `sim_host` would still work by redirecting to the new one.
+- BREAKING CHANGE - Removed the `sim` prefix from many class properties, e.g. `sim_host` -> `host`.
+- BREAKING CHANGE - Renamed the `spawned` property to `is_spawned`.
+- Updated the API to communicate with the SaaS server to v2:
+  - Using a single proxy instead of one proxy per instance
+  - Security improvements
+  - Performance improvements
+  - v1 API is backward compatible and will be supported for a while (previous qm-saas versions will still work).
 
 **Added**
 

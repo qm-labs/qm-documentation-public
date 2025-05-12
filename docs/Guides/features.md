@@ -434,6 +434,7 @@ This flag is useful when the switch-case is used inside a loop, and the values i
 The unsafe flag allows the compiler to minimize the latency required to jump to the next case to be 40ns, which allows for gapless sequences as long as the operations inside are longer than 40ns.
 
 {{ requirement("QOP", "2.4") }} {{ requirement("QOP", "3.0") }} If the following conditions are met, the PPU can further optimize the latency to 16ns:
+
 * No parametrized play commands in the cases (i.e. no amp, chirp, duration, etc.)
 * No parametrized wait commands in the cases (i.e. duration is not a QUA variable)
 * No parametrized frame_rotations commands in the cases (i.e. the angle is not a QUA variable)
@@ -1316,7 +1317,7 @@ An arbitrary waveform has to be declared as overridable in advance in the config
 ## Compilation Options
 
 
-There are a few optional features and modification in the compilation process from QUA to the OPX low-level code.
+There are a few optional features and modifications in the compilation process from QUA to the OPX low-level code.
 These options can be activated by passing a list of flags to the execution, compile or simulation.
 
 The following is a short list of optional flags and their description:

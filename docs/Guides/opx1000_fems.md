@@ -1,5 +1,21 @@
 # OPX1000 Front End Modules (FEMs)
 
+## QUA & Config changes compared to OPX+
+
+Using the OPX1000 requires minimal changes to QUA and the config relative to the OPX+: 
+
+* Changes in the config are needed to define the FEMs and their parameters, as described in this page
+    * Example configs:
+        * [LF-FEM](https://github.com/qua-platform/qua-libs/blob/main/Quantum-Control-Applications/Superconducting/Single-Flux-Tunable-Transmon/configuration_with_lf_fem.py)
+        * [LF-FEM + Octaves](https://github.com/qua-platform/qua-libs/blob/main/Quantum-Control-Applications/Superconducting/Single-Flux-Tunable-Transmon/configuration_with_lf_fem_and_octave.py)
+        * [LF-FEM + MW-FEM](https://github.com/qua-platform/qua-libs/blob/main/Quantum-Control-Applications/Superconducting/Single-Flux-Tunable-Transmon/configuration_with_lf_fem_and_mw_fem.py)
+
+* No changes to the QUA programs are required relative to OPX+; besides the following for MW-FEM:
+    * When streaming raw ADC data with the MW-FEM, the results are complex and of the form `I+jQ`. This requires doing either one of the following:
+        * Modify the Python analysis part, to treat a complex input.
+          * Add `.real()` and `.image()` to the stream processing pipeline and stream the I and Q results separately, in which case the Python
+            analysis part will remain unchanged.
+
 ## Low Frequency FEM (LF-FEM)
 The LF-FEM module features 8 analog outputs at a sampling rate of 2 GSa/s, 2 analog inputs at a sampling rate of 2 GSa/s, 
 and 8 digital outputs at a sampling rate of 1 GSa/s.
@@ -46,28 +62,6 @@ The upconverter and downconverter frequencies are created digitally and therefor
 This is useful for 2qb gates which relay on the absolute lab phase of pulses, such as FSIM in this [Google paper](https://arxiv.org/pdf/2101.08870). It can also be used for debugging when viewing the pulses on the scope.
 Resetting the phase is achieved using the command, {{f("qm.qua._dsl.reset_global_phase")}}, which would reset the phase of all upconverters, downconverters & intermediate frequencies in the program, and is further explained in [this section](phase_and_frame.md#global-phase).
 
-[//]: # (### Sampling Rate)
-
-[//]: # (The analog outputs and inputs sampling rate can be defined to be 1 or 2 GSa/s, by setting the field `sampling_rate` to be)
-
-[//]: # (either `1e9` &#40;default&#41; or `2e9` in the config at the port. This has the following implications:)
-
-[//]: # ()
-[//]: # (* An output port set to `2e9` can only have a single upconverter.)
-
-[//]: # (* Any element using an output port set to `2e9` will consume double the amount of cores.)
-
-[//]: # (* Any element using an output port set to `1e9` will be limited to a frequency of 500 MHz, and the waveforms' sampling rate is limited to `1e9`.)
-
-[//]: # (* Any measurement done on an input port set to `1e9` will produce an ADC stream at `1e9` and the demodulation will be limited to 500MHz.)
-
-[//]: # ()
-[//]: # (!!! Note)
-
-[//]: # (    If an element is using output ports set to `1e9`, and input ports set to `2e9`, it will also consume double the )
-
-[//]: # (    amount of cores.)
-
 ### Bands
 Each analog port must specify the `band` at which it operates in the config, the supported bands are:
 
@@ -104,7 +98,8 @@ Each analog input port must define a `downconverter_frequency` field with a freq
 
 The analog output power is defined using the field `full_scale_power_dbm`, which can be set between `-11` and `16` dBm 
 with a 3 dB granularity.
-This will set the power delivered to a 50 ohm load when the waveform is set to full scale (`[-1, 1]`).
+This will set the power delivered to a 50 ohm load when the waveform is set to full scale (`[-1, 1]`). 
+The amplitude itself is linear in voltage and not power. Therfore, for a given wavforem, its shape should be identical between the LF- and the MW- FEMs (and OPX+) up to a gain factor.
 
 !!! Note
     For best analog performance, it is recommended to work with the `full_scale_power_dbm` set to a value between 1 and 10 dBm.

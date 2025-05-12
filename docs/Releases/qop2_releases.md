@@ -2,30 +2,32 @@
 
 Here you can find release notes and version files for the latest version of {{ requirement("OPX+",2) }}
 
-The version files and installation steps can be found [here](https://quantum-machines.atlassian.net/servicedesk/customer/portal/1/article/2505834497).
+## QOP 2.4.X
 
-!!! Note
-    Only registered customers can view this link. Please contact your QM representative if you are a customer and don’t have access.
+### QOP 2.4.4
+For an in-depth review of the version's new features and upgrades, please see [the release notes](assets/QOP_Release_Notes_V2_4_4.pdf).
 
-[comment]: <> (## QOP 2.3.X)
+- QOP 2.4.4 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOP/QOP2.4.4/1742888094-z7k1up/QOP2.4.4.tar.gz.age).
 
-[comment]: <> (For an in-depth review of the version's new features and upgrades, please see [the release notes]&#40;./QOP_Release_Notes_V2_3.pdf&#41;.)
-
-[comment]: <> (### QOP 2.3.0)
-
-[comment]: <> (See 2.3 release notes above.)
+??? note "Octave users"
+    - Starting with this version, the Octave clock is managed automatically, as explained in the 
+    [QOP clock](../Guides/qop_clock.md) guide. The qm.octave.set_clock() command is no longer required and will raise an error if used.
+    - When using this version with `qm-qua >= 1.2.1`, you no longer need to initialize the `OctaveConfig`. 
+    Instead, the `octave_calibration_db_path` can be provided as an argument when creating a `QuantumMachinesManager`. 
+    For details, refer to the [Quantum Machine Manager API](../API_references/qm_manager_api.md) documentation.
 
 ## QOP 2.2.X
 
 For an in-depth review of the version's new features and upgrades, please see [the release notes](assets/QOP_Release_Notes_V2_2.pdf).
 
 ### QOP 2.2.2
+- QOP 2.2.2 can be downloaded from [here](https://qmachines-artifacts.s3.amazonaws.com/device-updates/QOP/QOP2.2.2/QOP222.tar.gz.age).
 
-#### Added
+**Added**
 
 - Improved and optimized Octave automatic calibration.
 
-#### Bug fixes
+**Fixed**
 
 - Fixed a rare case where closing one quantum machine will interfere with the digital ports of another quantum machine.
 - Fixed issues with negative IF.
@@ -36,8 +38,9 @@ For an in-depth review of the version's new features and upgrades, please see [t
     {{ requirement("QUA", "1.1.5") }} is required for those who use {{ requirement("QOP", "2.2.2") }} and have an Octave in the cluster.
 
 ### QOP 2.2.0
+- QOP 2.2.0 can be downloaded from [here](https://qmachines-artifacts.s3.amazonaws.com/device-updates/versions/QOP220.tar.gz.age).
 
-See 2.2 release notes above.
+- See 2.2 release notes above.
 
 ## QOP 2.0.X
 
