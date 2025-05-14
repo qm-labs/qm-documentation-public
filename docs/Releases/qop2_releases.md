@@ -13,8 +13,9 @@ For an in-depth review of the version's new features and upgrades, please see [t
     - Starting with this version, the Octave clock is managed automatically, as explained in the 
     [QOP clock](../Guides/qop_clock.md) guide. The qm.octave.set_clock() command is no longer required and will raise an error if used.
     - When using this version with `qm-qua >= 1.2.1`, you no longer need to initialize the `OctaveConfig`. 
-    Instead, the `octave_calibration_db_path` can be provided as an argument when creating a `QuantumMachinesManager`. 
-    For details, refer to the [Quantum Machine Manager API](../API_references/qm_manager_api.md) documentation.
+    Instead, the octave connection details are automatically obtained from the cluster information as explained [here](../Guides/octave.md/#initiate-communication-with-an-octave).
+    In addition, the `octave_calibration_db_path` can be provided as an argument when creating a `QuantumMachinesManager`. 
+    For further details, refer to the [Quantum Machine Manager API](../API_references/qm_manager_api.md) documentation.
 
 ## QOP 2.2.X
 

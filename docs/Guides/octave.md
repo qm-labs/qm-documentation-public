@@ -13,20 +13,18 @@ creating a seamless RF front-end OPX. With the octave, one can have up to five R
 To work with an octave, one needs to initiate communication through the {{f("qm.quantum_machines_manager.QuantumMachinesManager")}}.
 This is done using the following steps: 
 
-=== "{{ requirement("OPX+", "2.4") }} & {{ requirement("QUA", "1.1.7") }} and above"
+=== "{{ requirement("OPX+", "2.4") }} & {{ requirement("QUA", "1.2.1") }} and above"
     
-    1. After creating the cluster with the Octaves, The Octaves will be named in ascending order: `oct1`, `oct2`...
-       The name of the Octaves is shown under the `cluster` page in the admin panel.
-    2. Create a file for Calibration parameters by using the {{f("qm.octave.octave_config.QmOctaveConfig.set_calibration_db")}} command
+    1. After creating the cluster with the Octaves, the Octaves will be named in ascending order: `oct1`, `oct2`...
+       The name of the Octaves is shown under the `cluster` page in the admin panel. 
+    2. Create a file for Calibration parameters by setting its path in the qmm object:
 
     ```python
-    from qm.octave import QmOctaveConfig
+    from qm import QuantumMachinesManager
     
-    octave_config = QmOctaveConfig()
-    octave_config.set_calibration_db(path)
-
+    qmm = QuantumMachinesManager(..., octave_calibration_db_path=path)
     ```
-    a file `calibraion_db.json` is created at the given path. 
+    A file `calibraion_db.json` is created at the given path. 
     This file will be used for saving the calibration parameters. 
     See [the calibration section](../Guides/octave.md#automatic-calibration) for more information. 
 
@@ -34,13 +32,7 @@ This is done using the following steps:
         - One can save `calibraion_db.json` file at the current working directory by setting `path=os.getcwd()`
         - Different users of the same octave can have different calibration databases.
         - Multiple users can share the same calibration database file by either using the same path for it or simply sharing it with each other after calibration.
-    3. Pass the Octave Config to the Quantum Machine Manager.
-       
-        
-        ```python
-        qmm = QuantumMachinesManager(host=opx_ip, port=opx_port, octave=octave_config)
-        ```
-
+        - Instead of using our built-in calibration database (and providing a path for it), It is also possible to supply your own calibration database and supply it (as an object) instead. To do so, the calibration database must implement `AbstractCalibrationDB` which can be imported from `qm.octave`. Please see its docstrings for more information.
 
 
 === "{{ requirement("OPX+", "2.2.2") }} and below"
