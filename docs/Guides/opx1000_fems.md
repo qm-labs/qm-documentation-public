@@ -46,6 +46,10 @@ The analog outputs can operate in one of two modes, set in the config at the out
 * `direct` -  The output range is between -0.5 V to 0.5 V.
 * `amplified` - The output range is between -2.5 V to 2.5 V, the hardware filters are optimized for a cleaner step response.
 
+!!! Note
+    The `direct` mode is optimized for modulated signals with high SFDR and hence is not exactly 50Ω matched.
+    Connecting to a 50Ω matched line will produce the exact applied output voltage without distortions, but connecting it to a High-Z load will not give the expected doubling of the voltage applied at 50 Ω.
+    The `amplified` mode is optimized for improved step response characteristics and is 50 Ω matched.
 
 ## Microwave FEM (MW-FEM)
 The MW-FEM module features 8 analog outputs at a quadrature sampling rate of 1 GSa/s which are digitally unconverted to 
@@ -93,6 +97,9 @@ a `upconverters` field, with up to 2 upconverters per port:
 In the elements `MWInput` field, the user can set the `upconverter` field, the default is 1.
 
 Each analog input port must define a `downconverter_frequency` field with a frequency in the port's band.
+
+!!! Note
+    Note that it is not possible to measure IF frequencies which are <=|5| MHz.
 
 ### Output Power
 
