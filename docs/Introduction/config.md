@@ -109,12 +109,12 @@ Currently, the version value must be set to 1.
         },
         ```
         
-        #### Analog Outputs
+        **Analog Outputs**
         
         Each analog output port is defined with a `key:item` pair, where the key is the port number and the item is a Python dictionary
         holding some port-specific configuration. We can set an `'offset'`, a `'filter'`, `'delay'` to the port in units of ns.
         Moreover, we can define LF-FEM specific parameters such as `'sampling_rate'`, `'output_mode'`, and `'upsampling_mode'`.
-        For more information on the FEM-specific parameters, please refer to the [FEMs guide]().
+        For more information on the FEM-specific parameters, please refer to the [FEMs guide](../Guides/opx1000_fems.md).
     
         For more information on the `filter` capabilities, please refer to the [Guide on output filters](../Guides/output_filter.md).
         
@@ -134,7 +134,6 @@ Currently, the version value must be set to 1.
                         'type': 'MW',
                         'analog_outputs': {
                             1: {
-                                'sampling_rate': 2e9, # Default sampling rate is 1e9
                                 'band': 2, 
                                 'full_scale_power_dbm': 10,  # Default is -11
                                 'upconverters': {
@@ -149,7 +148,7 @@ Currently, the version value must be set to 1.
                             1: {}
                         },
                         "analog_inputs": {
-                            1: {"sampling_rate": 1e9, "band": 2, "downconverter_frequency": 5e9},
+                            1: {"band": 2, "downconverter_frequency": 5e9},
                         }
                     }
                 }
@@ -157,12 +156,12 @@ Currently, the version value must be set to 1.
         },
         ```
         
-        #### Analog Outputs
+        **Analog Outputs**
         
         Each analog output port is defined with a `key:item` pair, where the key is the port number and the item is a Python dictionary
         holding some port-specific configuration. We can set an `'offset'`, `'delay'` to the port in units of ns.
-        Moreover, we can define MW-FEM specific parameters such as `'sampling_rate'`, `'band'`, `'full_scale_power_dbm'` and `'upconverters'`.
-        For more information on the FEM-specific parameters, please refer to the [FEMs guide]().
+        Moreover, we can define MW-FEM specific parameters such as `'band'`, `'full_scale_power_dbm'` and `'upconverters'`.
+        For more information on the FEM-specific parameters, please refer to the [FEMs guide](../Guides/opx1000_fems.md).
     
 
 === "OPX+"
@@ -192,7 +191,7 @@ Currently, the version value must be set to 1.
     },
     ```
     
-    #### Analog Outputs
+    **Analog Outputs**
     
     Each analog output port is defined with a `key:item` pair, where the key is the port number and the item is a Python dictionary
     holding some port-specific configuration. We can set an `'offset'`, a `'filter'`, and in {{ requirement("QOP","2") }} we can also specify a `'delay'` to the port in units of ns.

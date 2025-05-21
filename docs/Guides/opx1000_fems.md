@@ -27,7 +27,7 @@ or 2 GSa/s, by setting the config field `sampling_rate` of an output/input port 
 
 * When the output port is set to `1e9`, which is the default value, the samples are generated at 1 GSa/s and the PPU upsamples the output from 1 GSa/s to 2 GSa/s at which the DACs operate. This is controlled by an additional field `upsampling_mode`:
     - `mw` - In this mode, the upsampling is done by passing the 1 GSa/s samples through a 14-taps Dolph-Chebyshev filter which is optimized to reduce spurs and produce clean MW signals. This is the recommended mode whenever the output is expected to have an intermediate frequency larger than 100 MHz.
-    - `pulse` - In this mode, the upsampling is done by passing the 1 GSa/s samples through a 2 taps moving average filter which is optimized to produce clean step responses. This is the recommended mode whenever the output is **not** expected to have an intermediate frequency.
+    - `pulse` - In this mode, the upsampling is done by doubling the 1 GSa/s samples (essentially, a 0-order interpolation filter) which produces a clean step responses. This is the recommended mode whenever the output is **not** expected to have an intermediate frequency.
 * When the output port is set to `2e9`, the samples are generated at 2 GSa/s and the PPU passes them directly to the DACs.
 
 This has the following implications: 
@@ -43,7 +43,7 @@ This has the following implications:
 ### Output Mode
 The analog outputs can operate in one of two modes, set in the config at the output port using the field `output_mode`:
 
-* `direct` -  The output range is between -0.5 V to 0.5 V.
+* `direct` - The output range is between -0.5 V to 0.5 V.
 * `amplified` - The output range is between -2.5 V to 2.5 V, the hardware filters are optimized for a cleaner step response.
 
 !!! Note
@@ -62,8 +62,8 @@ For more information about the panel and the connectors, see [OPX1000 Hardware](
 
 ### Reset Upconverter and Downconverter phase
 
-The upconverter and downconverter frequencies are created digitally and therefore, their phase can be reset from QUA.
-This is useful for 2qb gates which relay on the absolute lab phase of pulses, such as FSIM in this [Google paper](https://arxiv.org/pdf/2101.08870). It can also be used for debugging when viewing the pulses on the scope.
+The upconverter and downconverter frequencies are created digitally, and therefore, their phase can be reset from QUA.
+This is useful for 2-qubits gates which relay on the absolute lab phase of pulses, such as FSIM in this [Google paper](https://arxiv.org/pdf/2101.08870). It can also be used for debugging when viewing the pulses on the scope.
 Resetting the phase is achieved using the command, {{f("qm.qua._dsl.reset_global_phase")}}, which would reset the phase of all upconverters, downconverters & intermediate frequencies in the program, and is further explained in [this section](phase_and_frame.md#global-phase).
 
 ### Bands

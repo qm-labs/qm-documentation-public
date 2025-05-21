@@ -18,7 +18,7 @@ Note that the admin was taken out of the QOP package and is a separate package s
 
 **Removed**
 
-- Removed the /gateway/health REST API endpoint, please use the /cluster/health endpoint instead.
+- Removed the `/gateway/health` REST API endpoint, please use the `/gateway/topology?cluster_name=foo` endpoint instead. The cluster health can be read from the field `cluster_status` on the root response object.
 
 ## QOPA 1.0.0
 
