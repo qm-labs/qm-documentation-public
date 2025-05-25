@@ -69,9 +69,18 @@ Resetting the phase is achieved using the command, {{f("qm.qua._dsl.reset_global
 ### Bands
 Each analog port must specify the `band` at which it operates in the config, the supported bands are:
 
-* `1` - 50 MHz - 5.5 GHz
-* `2` - 4.5 GHz - 7.5 GHz
-* `3` - 6.5 GHz - 10.5 GHz
+* `1` : 50 MHz - 5.5 GHz
+* `2` : 4.5 GHz - 7.5 GHz
+* `3` : 6.5 GHz - 10.5 GHz
+
+The different bands partially overlap to provide greater frequency allocation flexibility.
+Since each output port is equipped with two Digital Upconverters (DUCs), it is possible to have multiple carriers within a band, which create "sub-bands" of about 800 MHz around the center frequency of the DUC. This allows simultaneous transmission of signals in two distinct sub-bands within a single band, effectively increasing the usable bandwidth per port.
+
+
+![bands](assets/bands.png "MW-FEM bands and sub bands")
+
+!!! Note
+    `band` is a port parameter and pulses played from a certain port are limited to the chosen band.
 
 In addition, the following pairs of analog ports are coupled:
 
@@ -82,6 +91,7 @@ In addition, the following pairs of analog ports are coupled:
 * Out 8 & In 2
 
 Coupled ports must be in the same band, or in bands `1` and `3`.
+In other words, both coupled ports must be configured to the same band (both in `1` or `2` or `3`), or one port in band `1` and the other in band `3`. Other band combinations are not supported.
 
 ### Upconverters and Downconverters
 Each analog output port must define either an `upconverter_frequency` field with a frequency in the port's band, or 
