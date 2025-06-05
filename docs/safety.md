@@ -1,4 +1,4 @@
-# General Safety Information - Consignes de sécurité
+# General Safety Information - Consignes de sécurité - 안전 수칙 안내
 
 === "English"
 
@@ -27,7 +27,7 @@
         - Disconnect power before servicing (Only by QM's technician)
         - Do not use the system or perform any service on it while the system is extended on the slide rails.
     4. Use
-        - Only use SFPs that are safety approved to IEC 60825 and which are CDRH registered.
+        - Only use SFPs that are safety approved to IEC 60825 and which are CDRH registered.        
         - Do not use the product for any purpose other than its intended use.
         - Do not insert foreign objects into the product.
         - Do not use the product if it appears to be damaged or not working properly.
@@ -75,3 +75,41 @@
         - Ne pas ignorer les symboles de sécurité et leur signification.
 
     En respectant ces consignes de sécurité, vous vous assurez de pouvoir utiliser le produit comme il convient et sans danger. Merci de contacter un représentant de Quantum Machines pour toute questions ou doutes relatifs à la sécurité du produit.
+
+=== "Korean"
+
+    [다운로드](./assets/Safety - Korean.pdf)
+
+    이 제품을 사용하기 전에 모든 안전 지침을 읽고 이해하십시오. 이러한 지침을 따르지 않으면 부상 또는 장비 손상이 발생할 수 있습니다.
+
+    1. 전원
+        - 전기 연결은 해당되는 경우 국가 전기 코드(NEC) 및/또는 전기 연결 표준(SEC)에 따라 이루어져야 합니다. 이를 준수하지 않으면 장비 손상, 안전 위험 또는 보증 무효로 이어질 수 있습니다.
+        - 제품과 함께 제공된 전원 공급 장치 또는 제조업체의 사양을 충족하는 전원 공급 장치만 사용하십시오.
+        - 손상된 전원 코드나 어댑터를 사용하지 마십시오.
+        - 전기 콘센트를 과부하하지 마십시오.
+        - 장치는 전원 케이블을 통해 접지되어야 하며, 접지 핀이 없는 콘센트나 접지되지 않은 케이블의 사용은 엄격히 금지됩니다. 별도의 지정된 접지 지점을 가진 장치는 시설 접지에 연결되어야 하며, QM에서 제공한 접지 케이블 사용을 권장합니다. 접지 케이블이 연결되지 않으면 시스템에 영구적인 손상이 발생할 수 있습니다.
+        - 주의! 일부 장치는 여러 전원 공급원이 있습니다. 시스템을 정비하기 전에 모든 전원 공급원을 분리하십시오!
+    2. 환경
+        - 제품을 사양에서 정의된 조건을 초과하는 환경에 노출시키지 마십시오.
+        - 먼지나 이물질이 많은 장소에서는 제품을 사용하지 마십시오.
+        - 제품을 직사광선이나 기타 열원에 노출시키지 마십시오.
+        - 제품을 물 근처나 습한 환경에서 사용하지 마십시오.
+        - 이 장비는 어린이가 있을 가능성이 있는 장소에서의 사용에 적합하지 않습니다.
+        - 이 장비는 출입이 제한된 공간에서만 사용하도록 설계되었습니다.
+    3. 유지보수
+        - 제품을 직접 수리하려 하지 마십시오. QM 서비스 기술자에게 문의하십시오.
+        - 제품에서 커버나 패널을 제거하지 마십시오. 위험한 전압이나 기타 위험에 노출될 수 있습니다.
+        - 이 장치는 클래스 1 레이저 부품(SFP 광 트랜시버)을 포함하고 있습니다. 광섬유 케이블의 단자에 연결되지 않은 커넥터에서 보이지 않는 레이저 방사선이 방출될 수 있습니다. 눈 부상을 피하기 위해 광섬유를 확대경등의 광학 장치로 보지 마십시오. QM 서비스 기술자에게 문의하십시오.
+        - 정비 전에 전원을 분리하십시오(QM 기술자만 수행).
+        - 시스템이 슬라이드 레일에서 확장된 상태에서는 시스템을 사용하거나 어떠한 정비도 수행하지 마십시오.
+    4. 사용 시 주의사항
+        - IEC 60825에 따라 안전 인증을 받고 CDRH에 등록된 SFP만 사용하십시오.
+        - 제품을 의도된 용도 외의 목적으로 사용하지 마십시오.
+        - 제품에 이물질을 삽입하지 마십시오.
+        - 제품이 손상되었거나 제대로 작동하지 않는 경우 사용하지 마십시오.
+        - 제품과 함께 제공된 모든 작동 지침을 따르십시오.
+    5. 경고 기호
+        - 제품 또는 사용자 매뉴얼에 있는 경고 기호나 라벨에 주의하십시오.
+        - 경고 기호나 라벨을 무시하지 마십시오.
+
+    이러한 안전 지침을 따르면 이 제품을 안전하고 올바르게 사용할 수 있습니다. 이 제품의 안전성과 관련하여 질문이나 우려 사항이 있는 경우 QM 담당자에게 문의하십시오.

@@ -172,10 +172,10 @@ For details about simulating different OPX+ hardware configurations, see the [QO
 
 #### Simulation of different OPX1000 hardware configurations
 
-When simulating the OPX1000, there is a default configuration of 5 OPX1000 with LF-FEMs in slots 1-4 and MW-FEMs in slots 5-8.
+When simulating the OPX1000, there is a default configuration of 5 OPX1000 with LF-FEMs in slots 1-5 and MW-FEMs in slots 6-8.
 It is possible to define a custom FEM configuration of the simulator instance. 
 This is done by creating a `ClusterConfig` object and adding the required controllers and FEMs to it. 
-Initially a controller needs to be added to the configuration via `ClusterConfig.controller()`. 
+Initially, a controller needs to be added to the configuration via `ClusterConfig.controller()`. 
 The FEMs can then be added to this controller object via the `lf_fem(List[int])` and `mw_fem(List[int])` methods. 
 Available slots are 1-8, and both LF FEMs and MW FEMs can be added. 
 Trying to add two FEMs to a single slot will raise an error.
