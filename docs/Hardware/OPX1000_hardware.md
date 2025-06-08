@@ -14,6 +14,8 @@ The table below groups the main general characteristics of the OPX1000.
 
 The tables below groups the main characteristics of the LF-FEM & MW-FEM ports.
 
+For more information, see [OPX1000 FEMs Guide](../Guides/opx1000_fems.md)
+
 {{ read_csv("docs/Hardware/assets/lffem_port_spec.csv") }}
 
 {{ read_csv("docs/Hardware/assets/mwfem_port_spec.csv") }}
