@@ -2,7 +2,7 @@
 
 This document describes QUA language features that go beyond the simple use-case described in the QUA overview section.
 
-For easier navigation we recommend using the table of contents to the left.
+For easier navigation, we recommend using the table of contents to the left.
 
 
 ## Measure statement features
@@ -263,7 +263,8 @@ $$
 \dot{V(t)} < derivativeThreshold
 $$
 
-For example, in the configuration block below, the time tagging is set to detect a voltage edge. The element `spcm` has the time tagging parameters defined in the `timeTaggingParameters` block.
+For example, in the configuration block below, the time tagging is set to detect a voltage edge. 
+The element `spcm` has the time tagging parameters defined in the `timeTaggingParameters` block.
 
 ```python
 'spcm': {
@@ -290,8 +291,9 @@ For example, in the configuration block below, the time tagging is set to detect
 Note that the condition on the derivative is chosen such that it will always be **True**. In that way,
 a time tag will be registered upon crossing the signal's threshold.
 
-The example above showcases a common usage of the time tagger as a voltage edge detector which would detect a falling
-edge through $~122 mV$, since the units are in ADC samples (12 bits) and $-500/-4096=-0.122$. The minus sine is added to account for the internal inversion of the OPX's ADC.
+The example above showcases a common usage of the time tagger as a voltage-edge detector which would detect a falling
+edge through $~122 mV$, since the units are in ADC samples (12 bits) and $-500/-4096=-0.122$. 
+The minus sine is added to account for the internal inversion of the OPX's ADC, this is only needed for the OPX+.
 
 For a gaussian input as shown below, the parameters above would detect the falling edge at $t=210 ns$.
 If the `signalPolarity` would be changed to `Above`, the rising edge would be detected at $t=270 ns$.
@@ -301,14 +303,14 @@ If the `signalPolarity` would be changed to `Above`, the rising edge would be de
   <figcaption>timetagging edge detector example</figcaption>
 </figure>
 !!! tip "Recommended settings"
-    For most use-cases, we recommend setting the the `derivativeThreshold` and `derivativePolarity` as in the example above.
+    For most use-cases, we recommend setting the `derivativeThreshold` and `derivativePolarity` as in the example above.
 
 ??? info "Backwards compatibility"
     Due to backwards compatibility, the parameter's values can also be `Ascending` for `Above` and  `Descending` for `Below`
 
 ??? info "Default Time Tagging Values"
     If the `'timeTaggingParameters'` dictionary is left empty, the default values are used.
-    The user must supply **all** values, or none. The default values are as follows:
+    The user must supply **all** values or none. The default values are as follows:
 
     ```python
     'timeTaggingParameters': {
@@ -351,7 +353,7 @@ measure([pulse], [element], [stream],
 
 - `times` is a vector of integers into which the times of the detected pulses are saved (in ps).
 - `max_time` gives the maximum time window, in ns, during which the statement waits for tag arrival.
-- `counts` is a variable that is populated with the number of tags which arrived during the measurement.
+- `counts` is a variable populated with the number of tags which arrived during the measurement.
 
 ## Flow control
 
@@ -435,10 +437,10 @@ The unsafe flag allows the compiler to minimize the latency required to jump to 
 
 {{ requirement("QOP", "2.4") }} {{ requirement("QOP", "3.0") }} If the following conditions are met, the PPU can further optimize the latency to 16ns:
 
-* No parametrized play commands in the cases (i.e. no amp, chirp, duration, etc.)
-* No parametrized wait commands in the cases (i.e. duration is not a QUA variable)
-* No parametrized frame_rotations commands in the cases (i.e. the angle is not a QUA variable)
-* No other commands besides the above (e.g. no `align()` commands)
+* No parametrized play commands in the cases (i.e., no amp, chirp, duration, etc.)
+* No parametrized wait commands in the cases (i.e., duration is not a QUA variable)
+* No parametrized frame_rotations commands in the cases (i.e., the angle is not a QUA variable)
+* No other commands besides the above (e.g., no `align()` commands)
 
 The usage can be seen in the following example:
 
@@ -454,9 +456,9 @@ with for_(j, 0, j < 16, j + 1):
 
 #### Conditional Play
 
-It is also possible to add a condition directly in the {{f("qm.qua._dsl.play")}} command. The pulse would only be played if the condition
-is evaluated to `True`. This would result in a quicker evaluation of the condition, compared to using an `if_`, and
-can be used when feedback latency is critical.
+It is also possible to add a condition directly in the {{f("qm.qua._dsl.play")}} command. 
+The pulse would only be played if the condition is evaluated to `True`. 
+This would result in a quicker evaluation of the condition, compared to using an `if_`, and can be used when feedback latency is critical.
 
 ```python
 play('op', 'qe', condition=a > 0)
@@ -482,10 +484,9 @@ It is important to note that unlike the `if_` statement, the play command will t
 
 #### Ternary Operator
 
-The ternary operation is available via the [Util API](../API_references/qua/util.md), and can be used to quickly evaluate 
-a condition to decide between two parameters, this would result in a quicker evaluation of the condition, compared to using an `if_`.
-In the example below, the duration of the pulse will be `c` if `a > 0` otherwise it would be `d`. `c` and `d` can be either QUA variables,
-or constants.
+The ternary operation is available via the [Util API](../API_references/qua/util.md), and can be used to quickly evaluate a condition to decide between two parameters.
+This would result in a quicker evaluation of the condition, compared to using an `if_`.
+In the example below, the duration of the pulse will be `c` if `a > 0` otherwise it would be `d`. `c` and `d` can be either QUA variables or constants.
 
 ```python
 assign(b, Util.cond(a > 0, c, d))
@@ -584,7 +585,7 @@ for val in current_vals:
 ### Reading an IO variable
 
 IO values can also be used to extract information of a running program. For example, update the LO frequency to some value calculated in real-time, in the OPX.
-The following example demonstrate such use case with an IO variable:
+The following example demonstrates such a use case with an IO variable:
 
 ```python
 with program() as prog:
@@ -595,7 +596,7 @@ with program() as prog:
     ... # 2nd part of the program
 ```
 
-In Python we can have a code block that iteratively checks the IO value and act upon that, for example:
+In Python, we can have a code block that iteratively checks the IO value and act upon that, for example:
 
 ```python
 job = qm.execute(prog)
@@ -610,17 +611,15 @@ job.resume()
 ## Input streams
 
 {{ requirement("QOP", "2") }}
-Input streams allows passing data from the client computer to a running job in the OPX+ with
-minimal latency. To use one, you must first declare it in the QUA program using the
-{{f("qm.qua._dsl.declare_input_stream")}} command. The declaration is similar to the declaration of a normal QUA
-variable. You need to define its type (int, fixed, bool), it's name, and optionality, its size or values.
-Once declared, you can use it as you would use any other QUA variable, with the exception that you have two new
-available commands:
+Input streams are a queue data structure that allows passing data from the client computer to a running job in the OPX+ with minimal latency.
+To use one, you must first declare it in the QUA program using the {{f("qm.qua._dsl.declare_input_stream")}} command.
+The declaration is similar to the declaration of a normal QUA variable. You need to define its type (int, fixed, bool), its name, and optionality, its size or values.
+Once declared, you can use it as you would use any other QUA variable, with the exception that you have two new available commands:
 
-1. Outside the QUA program, in Python, you can use {{f("qm.jobs.base_job.QmBaseJob.push_to_input_stream")}} from the job API to pass
-   data into the QUA program. Note that you can pass multiple values and later access them one by one in QUA.
-2. Inside the QUA program, you can use {{f("qm.qua._dsl.advance_input_stream")}} function to access the next available
-   data. If there is no available data, this command will pause the OPX and wait until data is available.
+1. Outside the QUA program, in Python, you can use {{f("qm.jobs.base_job.QmBaseJob.push_to_input_stream")}} from the job API to pass data into the QUA program queue. 
+   Note that you can pass multiple values through successive calls of this method (one for each entry) and later access them one by one in QUA.
+2. Inside the QUA program, you can use {{f("qm.qua._dsl.advance_input_stream")}} function to access the next available data in the queue. 
+   If there is no available data, this command will pause the OPX and wait until data is available.
 
 !!! Note
     The data inserted using {{f("qm.jobs.base_job.QmBaseJob.push_to_input_stream")}} must match the size of the input stream.
@@ -657,7 +656,7 @@ It is possible to retrieve the precise timestamp of any {{f("qm.qua._dsl.play")}
 commands from the beginning of an executed program, 
 and use it for circuit analysis and verification. 
 This capability covers real-time logic with non-deterministic outcomes (measurements) and compiler scheduling due to optimizations unknown to the user. 
-To retrieve the timestamp stream you must provide the `play()` or `measure()` command with a user-defined string, using the keyword argument `timestamp_stream`.
+To retrieve the timestamp stream, you must provide the `play()` or `measure()` command with a user-defined string, using the keyword argument `timestamp_stream`.
 The timestamp stream is returned using the `results_handle` as an array where each element shows the timestamp 
 at which the play/measure command associated with this stream was executed. The time is given in clock cycles (4 ns per cycle) 
 The following block of code demonstrates how to use the timestamp stream:
@@ -675,7 +674,7 @@ measure_timestamps = job.result_handles.get('measure_timestamps').fetch_all()
 ```
 
 Alternatively, timestamp streams can be retrieved using a stream variable rather than a string, 
-and this variable can be used for further processing. For example let's look at the difference between play and measure commands:
+and this variable can be used for further processing. For example, let us look at the difference between play and measure commands:
     
 ```python
 with program() as prog:
@@ -709,9 +708,9 @@ This ramp can also be explicitly initiated by the {{f("qm.qua._dsl.ramp_to_zero"
     the ramp time is defined in ns, consistently with any time duration in the configuration. Note that this is not a breaking change since the old API, 
     i.e. using `hold_offset` to define the ramp duration in clock cycles is still supported.
 
-Starting from {{ requirement("QOP","2.2") }}, it possible to set the digital marker, associated with the sticky element, to be sticky as well
+Starting from {{ requirement("QOP","2.2") }}, it is possible to set the digital marker, associated with the sticky element, to be sticky as well
 by configuring `sticky: {analog: True, digital: True }`. Doing so will hold the last value of the digital
-marker until the next pulse begins. Playing the next digital marker will override the held value and once again the last
+marker until the next pulse begins. Playing the next digital marker will override the held value, and once again the last
 value will be held. Once a ramp to zero has been initiated at the end of the sequence or upon command, 
 the digital marker will stop at the beginning of the ramp. This can be seen in the figure shown below (lower panel) when the digital pulse sets down at about 2600 ns.
 !!! Warning
@@ -1014,7 +1013,7 @@ The `sampling_rate` parameter specifies the sampling rate in units of Samples/se
 
 Any time a pulse is compressed, the compiler will output a warning and the compression factor:
 
-```python
+```
 WARNING - Waveform wf_long was compressed with rate 0.6548853220189729 and error of 1.6128764990241962E-13
 ```
 
@@ -1159,7 +1158,7 @@ immediately when the QM is opened and will resort back to the default behavior (
 
 ## Cores and Oscillators
 
-The QOP has multiple cores & oscillators, enabling simultaneous play of multiple elements.
+The QOP has multiple cores and oscillators, enabling simultaneous play of multiple elements.
 By default, the different cores & oscillators are not shared between different elements. 
 Two (or more) elements that are never played together [can share the same core](#sharing-cores), allowing for the definition of more elements and the writing of more complex programs.
 Two elements that share a core can play one after the other, without gaps, even when the elements use different oscillators.
@@ -1233,7 +1232,7 @@ In the example above, "qe2" and "qe1" are assigned to core "a" and can never run
 Any quantum element which does not have a core directly specified will have its own core.
 
 !!! Note
-    If "qe1" has two inputs (i.e. an IQ pair) it will actually be assigned two cores.
+    If "qe1" has two inputs (i.e. an IQ pair), it will actually be assigned two cores.
     If "qe2" has a single input, it will use one of the cores which is used by "qe1".
 
 If "qe2" and "qe1" will be given a play command, they will be played one after the other and not at the same time. For example:
@@ -1249,7 +1248,7 @@ In the example above, "qe1" will be played first and only when it is done "qe2" 
 Because "qe3" is on another core, it will start immediately with "qe1". See examples [here](timing_in_qua.md#examples-for-timing-scenarios-in-qua)
 
 !!! Note
-    Assigning a core to an element which requires several cores (Higher sampling rate, mixed input, etc) will automatically assign the required number of cores.
+    Assigning a core to an element which requires several cores (Higher sampling rate, mixed input, etc.) will automatically assign the required number of cores.
 
 ### Sharing Oscillators
 
