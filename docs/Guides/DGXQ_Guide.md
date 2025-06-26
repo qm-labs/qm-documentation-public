@@ -32,7 +32,7 @@ When in doubt or after restart or failure, please follow the next steps:
 To begin working with DGX-Q, the OPX1000 and the GH200 need to be synced. This only needs to happen once after the system boots
 ??? "OPX1000 to the GH200 Synchronization steps"
 
-    1. From the OPX1000 side, make sure the OPX1000 is paired with the GH200 in the admin panel, as explained [here](#pairing-the-opx-with-the-gh200).
+    1. From the OPX1000 side, make sure the OPX1000 is paired with the GH200 in the admin panel, as explained [here](#pairing-the-opx1000-with-the-gh200).
 
     2. From the GH200 side, run the sync command by executing the following command in the terminal:
         ```

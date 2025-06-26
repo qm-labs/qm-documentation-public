@@ -32,18 +32,18 @@ The OPX makes it seamless to pass data between different controllers/FEM (Front 
         I2 = declare(fixed)
         s1 = declare(bool)
         s2 = declare(bool)
-        feedback_cond = declare(bool)
+        feedback_cond = declare(bool, value=True)
         
-        measure('readout', 'resonator1', None, dual_demod.full('cos', 'sin', I1))
-        measure('readout', 'resonator2', None, dual_demod.full('cos', 'sin', I2))
-
-        assign(s1, I1 > th1)
-        assign(s2, I2 > th2)
-        assign(feedback_cond, ~broadcast.and_(s1, s2))
+        with while_(feedback_cond):  # Looping until the feedback condition is met (repeat until success)
+            measure('readout', 'resonator1', None, dual_demod.full('cos', 'sin', I1))
+            measure('readout', 'resonator2', None, dual_demod.full('cos', 'sin', I2))
+    
+            assign(s1, I1 > th1)  # Assigning the condition (qubit state) to a boolean variable
+            assign(s2, I2 > th2)  # Assigning the condition (qubit state) to a boolean variable
+            assign(feedback_cond, ~broadcast.and_(s1, s2))  # Combining the states using logical AND, and broadcasting the result
         
-        with while_(feedback_cond):
-            play('pi', 'qubit1', condition=s1)
-            play('pi', 'qubit2', condition=s2)
+            play('pi', 'qubit1', condition=broadcast.and_(s1))  # Using the broadcasted boolean variable in the conditional play command
+            play('pi', 'qubit2', condition=s2)  # Using the boolean variable directly in the conditional play command, this would do an implicit broadcast
         ```
     
 === "OPX+"
@@ -52,28 +52,27 @@ The OPX makes it seamless to pass data between different controllers/FEM (Front 
     However, when performing measurements, the result value is only saved for the element that is being measured.
     When the user attempts to use this variable for feedback, it is automatically passed to any element that needs it.
 
-    ```python
-    from qm.qua import *
-    I1 = declare(fixed)
-    I2 = declare(fixed)
-    s1 = declare(bool)
-    s2 = declare(bool) 
-    feedback_cond = declare(bool)
-    
-    measure('readout', 'resonator1', None, dual_demod.full('cos', 'sin', I1))
-    measure('readout', 'resonator2', None, dual_demod.full('cos', 'sin', I2))
+    === "Example - 2 Qubits Active Reset"
 
-    play('pulse', 'qubit', condition=I1>th1)
-    
-    assign(s1, I1 > th1)
-    assign(s2, I2 > th2)
-
-    play('pulse', 'qubit', condition=s2)
-    
-    assign(feedback_cond, s1 & s2)
-    
-    play('pulse', 'qubit', condition=feedback_cond)
-    ```
+        ```python
+        from qm.qua import *
+        I1 = declare(fixed)
+        I2 = declare(fixed)
+        s1 = declare(bool)
+        s2 = declare(bool) 
+        feedback_cond = declare(bool, value=True)
+        
+        with while_(feedback_cond):  # Looping until the feedback condition is met (repeat until success)
+            measure('readout', 'resonator1', None, dual_demod.full('cos', 'sin', I1))
+            measure('readout', 'resonator2', None, dual_demod.full('cos', 'sin', I2))
+        
+            assign(s1, I1 > th1)  # Assigning the condition (qubit state) to a boolean variable
+            assign(s2, I2 > th2)  # Assigning the condition (qubit state) to a boolean variable
+            assign(feedback_cond, s1 & s2)  # Combining the states using logical AND
+        
+            play('pulse', 'qubit', condition=I1>th1)  # Directly using the variable and threshold (qubit state) in the conditional play command
+            play('pulse', 'qubit', condition=s2)  # Using the boolean variable in the conditional play command
+        ```
 
 !!! Note
     The example above uses a conditional play command to demonstrate how to use variables for feedback purposes

@@ -1,14 +1,14 @@
 # Simulator Access through Cloud Service
 
 !!! Note
-    {{ requirement("SaaS", "1.1.4") }} The information in this guide is applicable to QM SaaS version 1.1.4 and later.
+    {{ requirement("SaaS", "1.1.4") }} The information in this guide applies to QM SaaS version 1.1.4 and later.
 
 QM can provide access to the QOP simulator in a cloud environment. This product is called QM Simulator as a Service
 (QM SaaS). The service is available to customers on request to QM and can be used independently of the OPX hardware.
 
 SaaS gives the user access to the [QOP simulator](simulator.md),
 which is a software simulator that emulates the output samples of the OPX hardware. This is particularly useful for
-development of QUA programs, exploration of OPX features or for integration of testing into CI workflows, all while
+the development of QUA programs, exploration of OPX features, or for integration of testing into CI workflows, all while
 not requiring access to the hardware.
 
 !!! Note
@@ -28,7 +28,7 @@ pip install -U qm-saas
 ```
 
 The client package provides a client class `QmSaas` that allows you to interact with the simulator service.
-This client class provides methods to open and close simulator instances. On construction, it needs to be provided with
+This client class provides methods for opening and closing simulator instances. On construction, it needs to be provided with
 the user's email and password, provided by QM.
 
 ```python
@@ -39,7 +39,7 @@ client = QmSaas(email="jondoe@gmail.com", password="password_from_qm")
 
 ### The Simulator Instance
 
-The created client object allows you to spawn simulator instances and use them to simulate QUA programs as you would on real OPX hardware.
+The created client object enables you to spawn simulator instances and use them to simulate QUA programs, just as you would on real OPX hardware.
 Spawning an instance creates a virtual OPX device in the cloud that can be used to simulate QUA programs. The number of instances is limited, and they have a limited lifetime.
 Once an instance is spawned, it provides connection details for the `QuantumMachinesManager` object, which directs the QUA program to the cloud simulator. 
 The instance is created with the latest available QOP version, but can be called with a specific version, see [Simulation options](#simulation-of-different-qop-versions).
@@ -59,7 +59,7 @@ with client.simulator(QmSaas.latest_version()) as instance:
 Note the usage of the additional `connection_headers` keyword argument in the `QuantumMachinesManager` object. 
 This is only required when connecting to a cloud simulator instance and not for usage with real hardware (where it defaults to `None`). 
 
-Usage of the context manager ensures that the simulator instance is properly spawned before usage and closed when the context is exited.
+The usage of the context manager ensures that the simulator instance is spawned correctly before use and closed when the context is exited.
 This is recommended for simple usage, but includes a performance overhead for each context manager block, as spawning a new instance can take 10-20 seconds.
 It is also possible to handle the instance manually using `spawn()` and `close()` methods on the instance object.
 However, note that without properly closing the instance, it will remain open until it expires and will count towards the user's instance limit.
@@ -74,8 +74,8 @@ instance.close()
 
 #### Simulator Instance Lifetime
 
-Each user can have up to 3 connected instances at the same time and each instance is automatically closed after 15 minutes.
-This can lead to loosing access to the instance in the middle of a session.
+Each user can have up to 3 connected instances at the same time, and each instance is automatically closed after 15 minutes.
+This can result in losing access to the instance during a session.
 Please contact QM if you need to have the instance open for a longer time.
 To check the status of the instance, the `is_alive` and `expires_at` properties can be used, e.g.:
 
@@ -86,8 +86,8 @@ else:
     print("Instance is not alive anymore")
 ```
 
-Furthermore, one can make sure that no instances are open under by calling the `close_all()` method on the
-client object. This will close all the users instances and make sure resources are available. This is useful when the 
+Furthermore, one can make sure that no instances are open by calling the `close_all()` method on the
+client object. This will close all users' instances and ensure resources are available. This is useful when the 
 old simulator instance objects are not available anymore.
 
 ```python
@@ -96,12 +96,12 @@ client.close_all()
 
 #### Reusing opened Simulator Instances
 The instance object can be reused across multiple simulations by simply reusing the object. 
-This is simple within the same python interpreter execution, as the object is stored in memory and can be reused.
-However, it is also possible to do between different python interpreter executions by serializing and storing the instance object, in order to load it in the following executions.
-This can be particularly useful and saves time for running multiple simulations in succession from an IDE, e.g. for sweeping a parameter space, as it avoids spawning a new simulator instance for each individual simulation. 
-Serialization and saving can be handled by the `pickle` module in python.
+This is simple within the same Python interpreter execution, as the object is stored in memory and can be reused.
+However, it is also possible to do so between different Python interpreter executions by serializing and storing the instance object, allowing it to be loaded in subsequent executions.
+This can be particularly useful, as it saves time by allowing multiple simulations to be run in succession from an IDE, e.g., for sweeping a parameter space, by avoiding the need to spawn a new simulator instance for each simulation. 
+Serialization and saving can be handled by the `pickle` module in Python.
 
-Within the first python interpreter execution, the instance object can be serialized and stored to a file:
+Within the first Python interpreter execution, the instance object can be serialized and stored to a file:
 
 ```python
     import pickle
@@ -127,9 +127,9 @@ In the next python interpreter execution, the instance object can be loaded and 
     instance.close()
 ```
 
-The saving and loading saves the time that it takes to spawn a new instance in the cloud and allows to share the same instance across multiple python interpreter executions. 
+The saving and loading saves the time that it takes to spawn a new instance in the cloud and allows sharing the same instance across multiple Python interpreter executions. 
 Note that the use of `instance.spawn()` will not create a new instance if there is already an instance opened with the same id.
-Therefore, the command can be used to make sure that an instance is opened in case another python interpreter has closed it in the meantime, or in case it has expired.
+Therefore, the command can be used to ensure that an instance is opened in case another Python interpreter has closed it in the meantime, or if it has expired.
 
 ### Simulation options
 
@@ -172,19 +172,19 @@ For details about simulating different OPX+ hardware configurations, see the [QO
 
 #### Simulation of different OPX1000 hardware configurations
 
-When simulating the OPX1000, there is a default configuration of 5 OPX1000 with LF-FEMs in slots 1-5 and MW-FEMs in slots 6-8.
+When simulating the OPX1000, there is a default configuration of 5 OPX1000 with LF-FEMs in slots 1-4 and MW-FEMs in slots 5-8.
 It is possible to define a custom FEM configuration of the simulator instance. 
 This is done by creating a `ClusterConfig` object and adding the required controllers and FEMs to it. 
 Initially, a controller needs to be added to the configuration via `ClusterConfig.controller()`. 
 The FEMs can then be added to this controller object via the `lf_fem(List[int])` and `mw_fem(List[int])` methods. 
 Available slots are 1-8, and both LF FEMs and MW FEMs can be added. 
-Trying to add two FEMs to a single slot will raise an error.
+Attempting to add two FEMs to a single slot will result in an error.
 
 !!! Note
     Currently all OPX1000 must have the same FEM configuration. 
     Therefore, a `ClusterConfig` with a single controller will create a cluster with 5 OPX1000s. 
     There is no need for a `ClusterConfig` with multiple controllers.
-    It is enough to only provide one, and it will automatically apply to all other controllers in the cluster.
+    It is enough only to provide one, and it will automatically apply to all other controllers in the cluster.
 
 [//]: # (Multiple controllers can be added; they are automatically named `con1`, `con2`, etc., according to their creation order.)
 

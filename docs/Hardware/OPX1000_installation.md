@@ -3,9 +3,13 @@
 The following page describes the installation procedure of an OPX1000 system, and for systems with Octaves.
 It covers network configuration, OPX1000 connectivity, rack scheme and more.
 
-## Rack Mounting and Grounding Installation Guide
+## Rack and Power Requirements
 
-Instructions for rack mounting the OPX1000 can be found [here](assets/OPX1000%20Rack%20Mounting%20and%20Installation%20Guide.pdf).
+The rack and power requirements can be found [here](assets/OPX1000%20Rack%20and%20Power%20Requirements.pdf). 
+
+### Rack Mounting and Grounding Installation Guide
+
+Instructions for rack mounting and grounding the OPX1000 can be found [here](assets/OPX1000%20Rack%20Mounting%20and%20Installation%20Guide.pdf).
 
 ## Cluster
 
@@ -114,7 +118,7 @@ The *main* OPX1000 can be connected to an external reference clock.
 A single OPX1000 can distribute the clock for up to four additional OPX1000 and/or Octaves.
 
 If more than five OPX1000 are used, a tree-like connectivity is needed: the *main* OPX1000 distributes the clock to OPX1000 #2-5. 
-OPX1000 #2 distribute the clock to OPX1000 6-9, etc...
+OPX1000 #2 distributes the clock to OPX1000 6–9, etc...
 
 Please make sure to connect the OPX1000 to the clock output ports in order, starting from clock output port 1.
 Always use clock input port 1.
@@ -133,19 +137,29 @@ Please make sure to connect the OPX1000 to the QSync Ports in order, starting fr
 ####  <strong style="color: #1e3a8a;">Communication</strong>
 
 Data transfer and communication between OPX1000 are operated via optical cables in an `all-to-all` connectivity.
-Each OPX1000 has 4 optical ports and the minimal required connectivity differs with the number of OPX1000,
+Each OPX1000 has 4 optical ports, and the minimal required connectivity differs with the number of OPX1000,
 as shown below.
 
 Make sure to press the optical cables firmly into the ports until a click is heard to ensure a proper connection.
 
 !!! Note
-    There's a minimal number of FEMs need per Chassis, depending on the number of OPX1000 in the system:
+    
+    Chassis with revision starting with `C` (or newer), such as `C00` are not compatible with revision `B`, such as `B05`.
+    To create a cluster with different chassis revisions, special adapters must be installed on all `B` chassis.
+    The adapter kit installation guide can be found [here](assets/OPX1000%20Chassis%20B%20to%20C%20adapter%20kit.pdf).
+    Please contact QM support for more information.
+    The chassis revision can be found on the sticker on the back of the chassis, on the bottom left.
+
+!!! Note
+
+    There is a minimal number of FEMs needed per Chassis, depending on the number of OPX1000 in the system:
 
     - For 2-3 OPX1000, each one needs to have at least one FEM, installed in slot 1.
     - For 4-5 OPX1000, each one needs to have at least two FEMs, installed in slots 1, and 5.
     - For 6-8 OPX1000, each one needs to have at least four FEMs, installed in slots 1, 3, 5, and 7.
 
 !!! Note
+
     The optical cables are not interchangeable and must be connected to the correct port as listed below.
     They are generally connected from the right to the left, which means from port 4 to port 1.
     
