@@ -523,7 +523,7 @@ class QmSaas:
             log=self.log
         )
 
-    def simulator(self, version: any, cluster_config: ClusterConfig = None) -> QmSaasInstance:
+    def simulator(self, version: any = None, cluster_config: ClusterConfig = None) -> QmSaasInstance:
         """
         Create a simulator instance on the cloud platform.
 

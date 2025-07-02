@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
+## 1.1.5 - 2025-07-01
+
+**Fixed**
+
+- Fixed an issue where calling the `client.simulator()` method would return an error if no `version` was provided.
+- Added a missing dependency for the `deprecation` Python package.
+
 ## 1.1.4 - 2025-03-13
 
 **Deprecated**
