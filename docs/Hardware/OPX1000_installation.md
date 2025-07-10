@@ -61,7 +61,7 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
       You should see the message `qm - INFO - Health check passed` in the console.
 
 !!! Important
-    When connecting SMA cables to the OPX1000 chassis or FEMs, always use a properly torqued wrench set to 1 Newton-metre (Nm). Applying excessive torque or over-tightening may damage the connectors.
+    When connecting SMA cables to the OPX1000 chassis or FEMs, always use a properly torqued wrench set to 0.3-0.6 Newton-metre (Nm). Applying excessive torque or over-tightening may damage the connectors.
 
 
 ## Extra Topics
@@ -111,7 +111,7 @@ They are color-coded for clarity in the following tables and schematics.
 
 Below is an explanation of each group, followed by a schematic for connecting the OPX1000es, and then followed by detailed tables showing the required connectivity.
 
-####   <strong style="color: #b8860b;">Clock</strong>
+<strong style="color: #b8860b;">Clock</strong>
 
 The clock signal is distributed by the *main* OPX1000 with an SMA cable per additional OPX1000.
 The *main* OPX1000 can be connected to an external reference clock.
@@ -125,7 +125,7 @@ Always use clock input port 1.
 
 If Octaves are used, please first connect the OPX1000 according to the table below, and then connect the Octaves to the remaining OPX1000 clock output ports, in order.
 
-####  <strong style="color: #8b0000;">QSync</strong>
+<strong style="color: #8b0000;">QSync</strong>
 
 The QSync signal is passed between the OPX1000 via Cat6 RJ45 (Ethernet) cables. 
 A single OPX1000 can sync for up to four additional OPX1000.
@@ -134,7 +134,7 @@ OPX1000 2 syncs OPX1000 6-9, etc...
 
 Please make sure to connect the OPX1000 to the QSync Ports in order, starting from port 1.
 
-####  <strong style="color: #1e3a8a;">Communication</strong>
+<strong style="color: #1e3a8a;">Communication</strong>
 
 Data transfer and communication between OPX1000 are operated via optical cables in an `all-to-all` connectivity.
 Each OPX1000 has 4 optical ports, and the minimal required connectivity differs with the number of OPX1000,
@@ -162,7 +162,9 @@ Make sure to press the optical cables firmly into the ports until a click is hea
 
     The optical cables are not interchangeable and must be connected to the correct port as listed below.
     They are generally connected from the right to the left, which means from port 4 to port 1.
-    
+
+#### Detailed Connectivity Diagrams
+
 === "2 OPX1000"
 
     All OPX1000 need to have at least one FEM, installed in slot 1.    

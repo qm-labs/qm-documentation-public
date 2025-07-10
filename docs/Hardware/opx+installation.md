@@ -84,6 +84,8 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
       This requires passing the correct arguments to the QuantumMachinesManager object. See "accessing the cluster" options [below](network_and_router.md#network-overview-and-configuration). 
       You should see the message `qm - INFO - Health check passed` in the console.
 
+!!! Important
+    When connecting SMA cables to the OPX+, always use a properly torqued wrench set to 0.3-0.6 Newton-metre (Nm). Applying excessive torque or over-tightening may damage the connectors.
 
 ## Extra Topics
 
