@@ -24,7 +24,9 @@ If the system was previously configured, you can skip directly to step 4.
     * Follow the mechanical assembly manual [OPNIC Assembly Guide](assets/opnic_installation_in_a_server.pdf)
 
 ??? "Step 2: DGX-Q Connection Schema"
+
     The DGX-Q system requires an Ethernet connection between the OPX1000 chassis and the server and an optical connection between the OPNIC and the OPX1000 chassis. Please follow these guidelines:
+
     * Make sure slot 1 is populated by an FEM or contact Quantum Machines support for an alternative connectivity configuration.
     * Connect the 2 QSFP-MPO adapters to the relevant ports in the OPNIC.
     * Connect the MPO optical cables from the OPNIC to the OPX1000 according to the diagram:
@@ -33,7 +35,7 @@ If the system was previously configured, you can skip directly to step 4.
 
         - **Make sure both MPO optical cables are identical and of the same length.**
 
-        ![DGX-Q Connection](./assets/DGX_Q_Connection.png)
+        ![DGX-Q Connection](assets/DGX_Q_Connection.png)
 
         !!! Note
             The sketch illustrates the connection to a Rev. C chassis.
