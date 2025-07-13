@@ -16,6 +16,7 @@ The low latency RDMA communication enables the materialization of state-of-the-a
 ![DGX Connectivity and Block diagram](assets/DGXQ.png)
 
 ## Setup and Installation
+Pre-requisites: Setup, SW and FW initialization and Hardware Installation - [See guide](../Hardware/DGXQ_Installation.md)
 
 ### Pairing The OPX1000 with the GH200
 The GH200 server containing the OPNIC must be paired with an OPX1000 cluster.
