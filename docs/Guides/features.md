@@ -948,9 +948,19 @@ See [OPX+ Pulse Process Schematic](../Hardware/OPX_hardware.md#opx-block-diagram
 This could be useful to correct for electronic crosstalk that exists between different control lines.
 It is also possible to add a "self-crosstalk term", this will cause an amplitude scaling to that port, which defaults to "1" if not given.
 
-!!! Warning
-    Adding a crosstalk term to any port will delay **all** analog pulses coming out from all ports. The delay will be 8 cycles (32 ns).
-    Starting from {{ requirement("QOP","2.1") }}, it is possible to add the [compilation flag](features.md#compilation-options) `disable-crosstalk-matrix-ports-alignment` to only delay the ports which participate in the Crosstalk Correction Matrix.
+=== "OPX1000"
+
+    !!! Warning
+        Using the crosstalk matrix adds a delay of 6 cycles (24 ns).
+        Adding a crosstalk term to any LF-FEM output port will delay **all** analog pulses coming out from all LF-FEM analog ports.
+        It is possible to add the [compilation flag](features.md#compilation-options) `disable-crosstalk-matrix-ports-alignment` to only delay the ports that participate in the Crosstalk Correction Matrix.
+        
+=== "OPX+"
+
+    !!! Warning
+        Using the crosstalk matrix adds a delay of 8 cycles (32 ns).
+        Adding a crosstalk term to any port will delay **all** analog pulses coming out from all ports.
+        It is possible to add the [compilation flag](features.md#compilation-options) `disable-crosstalk-matrix-ports-alignment` to only delay the ports that participate in the Crosstalk Correction Matrix.
 
 ### Usage Examples
 
