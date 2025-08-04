@@ -110,7 +110,7 @@ This is a known false error and can be ignored. If you encounter in addition any
 
 %
 
-% When using the integration and demodulation features of the :func:`~qm.qua._dsl.measure` statement,
+% When using the integration and demodulation features of the :func:`~qm.qua.measure` statement,
 
 % a complex :ref:`Demodulation and measurement<demodulation>` sequence occurs in the controller. It is
 
@@ -178,7 +178,7 @@ This is a known false error and can be ignored. If you encounter in addition any
 
 % Indicates an overflow in the correction matrix used to output a pulse, for values outside -2 to 2 - 2^-16.
 
-% Relevant for correction matrices set in the configuration or in :func:`~qm.qua._dsl.update_correction`.
+% Relevant for correction matrices set in the configuration or in :func:`~qm.qua.update_correction`.
 %
 % ******************************
 % Out of bounds array read/write

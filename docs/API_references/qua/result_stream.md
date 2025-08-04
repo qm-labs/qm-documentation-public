@@ -1,18 +1,20 @@
 
 # Result Stream
 
-## qm.qua._dsl._ResultStream
+## ResultStream
 
-::: qm.qua._dsl._ResultStream
+::: qm.qua._dsl.stream_processing.stream_processing.ResultStream
     options:
         heading_level: 3
 
-## qm.qua._stream_processing_map_functions.MapFunctions
+## MapFunctions
 
-::: qm.qua._stream_processing_map_functions.MapFunctions
+::: qm.qua._dsl.stream_processing.map_functions.map_functions.MapFunctions
     options:
         heading_level: 3
 
-## qm.qua._dsl._ResultSource
+## ResultStreamSource
 
-::: qm.qua._dsl._ResultSource
+::: qm.qua.type_hints.ResultStreamSource
+    options:
+        heading_level: 3

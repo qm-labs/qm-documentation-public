@@ -1,10 +1,10 @@
 
 # Results API
 
-::: qm.results.base_streaming_result_fetcher.BaseStreamingResultFetcher
+::: qm.StreamsManager
 
-::: qm.results.streaming_result_fetcher.StreamingResultFetcher
+::: qm.BaseSingleStreamFetcher
 
-::: qm.results.single_streaming_result_fetcher.SingleStreamingResultFetcher
+::: qm.SingleStreamSingleResultFetcher
 
-::: qm.results.multiple_streaming_result_fetcher.MultipleStreamingResultFetcher
+::: qm.SingleStreamMultipleResultFetcher

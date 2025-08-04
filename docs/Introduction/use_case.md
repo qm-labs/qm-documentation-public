@@ -364,7 +364,7 @@ This program:
 
     - loops over 100 values of $a$, from 0 to 1 in increments of 0.01 and for each value of $a$ performs the Rabi sequence:
       - Playing a pulse with amplitude $a$ to the qubit
-      - Aligning the resonator and the qubit. Since operations on different elements are run in parallel, this {{f("qm.qua._dsl.align")}} function forces here the system to wait until the qubit operation is done before operating the resonator.
+      - Aligning the resonator and the qubit. Since operations on different elements are run in parallel, this {{f("qm.qua.align")}} function forces here the system to wait until the qubit operation is done before operating the resonator.
       - Measuring the resonator response and extracting from it the state of the qubit. This is done by sending a measurement pulse to the resonator and demodulating and integrating the returning pulse using the indicated integration weights.
       - Saving the demodulation and integration results, I and Q, as well as the corresponding amplitude.
 
@@ -394,7 +394,7 @@ I = res_handles.get('I').fetch_all()
 Q = res_handles.get('Q').fetch_all()
 ```
 
-We first create a results handle object `res_handles` and then {{f("qm.results.base_streaming_result_fetcher.BaseStreamingResultFetcher.wait_for_all_values")}} waits
+We first create a results handle object `res_handles` and then {{f("qm.BaseSingleStreamFetcher.wait_for_all_values")}} waits
 until all values are obtained. We can then pull the results from `res_handles` using the fetch method.
 Read more on results fetching in the [stream processing guide](../Guides/stream_proc.md#results-handles).
 

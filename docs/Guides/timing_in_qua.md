@@ -13,9 +13,9 @@ The QUA syntax defines an implicit pulse dependency, which determines the order 
 The dependency can be summarized as follows:
 
 1. Each pulse is played immediately, unless specified otherwise or a calculation has to be done.
-2. We can delay the pulse play by using a {{f("qm.qua._dsl.wait")}} command. Dependency-wise, this is equivalent to a play with zero amplitude.
+2. We can delay the pulse play by using a {{f("qm.qua.wait")}} command. Dependency-wise, this is equivalent to a play with zero amplitude.
 3. Pulses applied to the same element are dependent on each other according to the order in which they appear in the program.
-4. We can create a dependency between different elements via the {{f("qm.qua._dsl.align")}} command. Whenever elements are 'aligned', the execution of operations that come **after** the alignment is dependent on the operations that come before.
+4. We can create a dependency between different elements via the {{f("qm.qua.align")}} command. Whenever elements are 'aligned', the execution of operations that come **after** the alignment is dependent on the operations that come before.
 
 !!! Note
     Each element has its own [core](features.md#cores-and-oscillators), unless defined otherwise. If elements do share cores, they are dependent on each other as in case 3 above.
@@ -93,14 +93,14 @@ For more information on how to use flags, see [compilation options](features.md#
 The QUA syntax of pulses and operations only defines their order of execution, it does not guarantee that they would be played without introducing gaps.
 This means that two consecutive `play` commands on the same element may have a short gap between them.
 The compiler tries to minimize these gaps, but it is not always possible to completely eliminate them. For tips on how to reduce these gaps, see [QUA Best Practice Guide](../Guides/best_practices.md).
-It is also possible to indicate to the compiler sections in which it is critical to have no gaps, this can be done with the {{f("qm.qua._dsl.strict_timing_")}} block.
+It is also possible to indicate to the compiler sections in which it is critical to have no gaps, this can be done with the {{f("qm.qua.strict_timing_")}} block.
 
 ### Strict Timing
 
 !!! Note
     {{ requirement("QOP", "2") }} The strict timing feature only exists in the OPX+
 
-Any command written inside a {{f("qm.qua._dsl.strict_timing_")}} block will be required to be played without gaps.
+Any command written inside a {{f("qm.qua.strict_timing_")}} block will be required to be played without gaps.
 In cases where this is not possible, an error will be raised indicating the gaps.
 It is possible to add the flag `not-strict-timing` to the execution to raise warnings instead of errors.
 For more information on how to use flags, see [compilation options](features.md#compilation-options).
@@ -113,7 +113,7 @@ with strict_timing_():
     play('y90', 'qubit')
 ```
 
-In the next example, the {{f("qm.qua._dsl.for_")}} loop is also inside the strict timing, which also requires that there will be no gaps between different iterations of the loop.
+In the next example, the {{f("qm.qua.for_")}} loop is also inside the strict timing, which also requires that there will be no gaps between different iterations of the loop.
 i.e., this means that the following code will produce a chain of 200 pulses alternating between `x180` and `y90` with no gaps at all.
 
 ```python
@@ -131,7 +131,12 @@ This passage of information takes several clock cycles and introduces gaps to th
 In cases where the duration of the operation on all the elements is known during compilation (Deterministic case),
 the compiler optimizes the sequence and replaces the hardware sync with precalculated wait commands for each element.
 This optimization ensures that there are no gaps formed in a deterministic case. However, if the run-time of one of the elements is not known during compilation
-(non-Deterministic case), gaps will be formed. See examples 3 and 4 below for more details.
+(non-Deterministic case), gaps will be formed. See examples 3 and 4 below for more details. 
+
+The syncing duration also depends on the system topology, i.e. the relative location of the channels being aligned. 
+When the channels are on the same module (either the same OPX+ or the same FEM of an OPX1000) the sync is fastest. 
+Synchronization across different FEMs within an OPX1000 introduces a slightly longer delay, while the longest delay occurs when syncing channels across different OPX chassis. 
+Therefore there might be different gaps in non-deterministic align depending on which channels are aligned. 
 
 ## Examples for Timing scenarios in QUA
 

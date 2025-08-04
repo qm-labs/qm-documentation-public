@@ -5,7 +5,7 @@ The trigger can be used to control the timing of events in the program from an e
 
 ## Basic Usage
 
-The usage in QUA is via the {{f("qm.qua._dsl.wait_for_trigger")}} function. Basic usage of this feature is performed as follows:
+The usage in QUA is via the {{f("qm.qua.wait_for_trigger")}} function. Basic usage of this feature is performed as follows:
 
 ```python
 wait_for_trigger(element)
@@ -32,14 +32,14 @@ The pulse 'wait_pulse' will be played continuously until the arrival of the trig
 ## Triggering Multiple Elements
 
 When we want to trigger multiple elements in the same controller, (i.e., same trigger signal), we can simply write multiple
-{{f("qm.qua._dsl.wait_for_trigger")}} commands. For example:
+{{f("qm.qua.wait_for_trigger")}} commands. For example:
 
 ```python
 wait_for_trigger('qe1', 'wait_pulse')
 wait_for_trigger('qe2', 'wait_pulse')
 ```
 
-Alternatively, and in case we don't want to play a wait pulse, we can use the {{f("qm.qua._dsl.align")}} command. For example:
+Alternatively, and in case we don't want to play a wait pulse, we can use the {{f("qm.qua.align")}} command. For example:
 
 ```python
 wait_for_trigger('qe1')

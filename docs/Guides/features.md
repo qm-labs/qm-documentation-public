@@ -7,7 +7,7 @@ For easier navigation, we recommend using the table of contents to the left.
 
 ## Measure statement features
 
-The {{f("qm.qua._dsl.measure")}} command is a central command in QUA. It allows for the acquisition of ADC data corresponding to a readout pulse, its storage and processing.
+The {{f("qm.qua.measure")}} command is a central command in QUA. It allows for the acquisition of ADC data corresponding to a readout pulse, its storage and processing.
 The raw ADC data can be processed in several ways, as explained below.
 
 ### Demodulation
@@ -240,13 +240,13 @@ There are two conditions on the signal. One for the value and one for the deriva
 For `signalPolarity` set to `'Above'`:
 
 $$
-V(t) > signalThreshold
+V(t) > \text{signalThreshold}
 $$
 
 For `signalPolarity` set to `'Below'`:
 
 $$
-V(t) < signalThreshold
+V(t) < \text{signalThreshold}
 $$
 
 Where $V(t)$ is the measured voltage at time $t$. Similarly, the condition on the signal derivative follows the same logic:
@@ -254,13 +254,13 @@ Where $V(t)$ is the measured voltage at time $t$. Similarly, the condition on th
 For `derivativePolarity` set to `'Above'`:
 
 $$
-\dot{V(t)} > derivativeThreshold
+\dot{V}(t) > \text{derivativeThreshold}
 $$
 
 For `derivativePolarity` set to `'Below'`:
 
 $$
-\dot{V(t)} < derivativeThreshold
+\dot{V}(t) < \text{derivativeThreshold}
 $$
 
 For example, in the configuration block below, the time tagging is set to detect a voltage edge. 
@@ -280,9 +280,10 @@ The element `spcm` has the time tagging parameters defined in the `timeTaggingPa
     'time_of_flight': 180,
     'smearing': 0,
     'timeTaggingParameters': {   # Time tagging parameters
-        'signalThreshold': -500,
+        'signalThreshold': -500,  # in ADC units
         'signalPolarity': 'Below',
-        'derivativeThreshold': -10000,
+        'derivativeThreshold': -10000,  # in ADC units / ns (OPX+)
+                                        # in ADC units / 0.5ns (OPX1000)
         'derivativePolarity': 'Above'
     }
 },
@@ -292,11 +293,11 @@ Note that the condition on the derivative is chosen such that it will always be 
 a time tag will be registered upon crossing the signal's threshold.
 
 The example above showcases a common usage of the time tagger as a voltage-edge detector which would detect a falling
-edge through $~122 mV$, since the units are in ADC samples (12 bits) and $-500/-4096=-0.122$. 
-The minus sine is added to account for the internal inversion of the OPX's ADC, this is only needed for the OPX+.
+edge through $~122\text{mV}$, since the units are in ADC samples (12 bits) and $-500/-4096=-0.122$. 
+The minus sign is added to account for the internal inversion of the OPX's ADC.
 
-For a gaussian input as shown below, the parameters above would detect the falling edge at $t=210 ns$.
-If the `signalPolarity` would be changed to `Above`, the rising edge would be detected at $t=270 ns$.
+For a gaussian input as shown below, the parameters above would detect the falling edge at $t=210\text{ns}$.
+If the `signalPolarity` would be changed to `Above`, the rising edge would be detected at $t=270\text{ns}$.
 
 <figure markdown>
   ![timetagging edge detector example](assets/timetagging_example.png)
@@ -361,8 +362,8 @@ measure([pulse], [element], [stream],
 
 #### If, Elif & Else
 
-The simplest way to use branching is using the {{f("qm.qua._dsl.if_")}} statement. Usage of the {{f("qm.qua._dsl.if_")}},
-{{f("qm.qua._dsl.elif_")}} & {{f("qm.qua._dsl.else_")}} conditional is demonstrated in the code block below. 
+The simplest way to use branching is using the {{f("qm.qua.if_")}} statement. Usage of the {{f("qm.qua.if_")}},
+{{f("qm.qua.elif_")}} & {{f("qm.qua.else_")}} conditional is demonstrated in the code block below. 
 Here, `op1` is played if `a` is larger than 1, `op2` is played if it's between -1 and 1, and `op3` is played if it is below -1.
 `a` is a `fixed` QUA variable in this case, which can be the result of a measurement or a classical computation.
 
@@ -377,7 +378,7 @@ with else_():
 
 #### Switch Case
 
-It is also possible to use a {{f("qm.qua._dsl.switch_")}}-{{f("qm.qua._dsl.case_")}}, as shown in the example below. 
+It is also possible to use a {{f("qm.qua.switch_")}}-{{f("qm.qua.case_")}}, as shown in the example below. 
 Here, `op1` will be played if `a=1`, `op2` will be played if `a=2`, and `default_op` will be played otherwise.
 `a` is an `int` QUA variable in this case, which can be the result of a measurement or a classical computation.
 
@@ -456,7 +457,7 @@ with for_(j, 0, j < 16, j + 1):
 
 #### Conditional Play
 
-It is also possible to add a condition directly in the {{f("qm.qua._dsl.play")}} command. 
+It is also possible to add a condition directly in the {{f("qm.qua.play")}} command. 
 The pulse would only be played if the condition is evaluated to `True`. 
 This would result in a quicker evaluation of the condition, compared to using an `if_`, and can be used when feedback latency is critical.
 
@@ -497,7 +498,7 @@ play('op', 'qe', duration=Util.cond(a > 0, c, d))
 
 #### For
 
-The QUA {{f("qm.qua._dsl.for_")}} loop is similar to a python loop, having a `(var, start, end_cond, step)` structure.
+The QUA {{f("qm.qua.for_")}} loop is similar to a python loop, having a `(var, start, end_cond, step)` structure.
 The following block of code plays a pulse five times, running over a QUA variable `t`, and uses it for the pulse
 duration.
 
@@ -509,7 +510,7 @@ with for_(t, 10, t < 15, t+1):
 
 #### For_Each
 
-The QUA {{f("qm.qua._dsl.for_each_")}} loop scans the variable through a predefined vector. This is a bit less efficient compared to the
+The QUA {{f("qm.qua.for_each_")}} loop scans the variable through a predefined vector. This is a bit less efficient compared to the
 `for_` loop above, but can scan arbitrary points.
 
 ```python
@@ -537,7 +538,7 @@ In both cases, `t_vec` and `a_vec` can also be QUA arrays
 
 #### While
 
-The {{f("qm.qua._dsl.while_")}} loop is executed for as long as the condition is `True`. The following block of code plays a pulse 5 times.
+The {{f("qm.qua.while_")}} loop is executed for as long as the condition is `True`. The following block of code plays a pulse 5 times.
 
 ```python
 N = declare(int,value=0)
@@ -548,7 +549,7 @@ with while_(N < 5):
 
 ## Pause, Resume and IO variables
 
-QUA programs can be paused by using the {{f("qm.qua._dsl.pause")}} QUA command. When a `pause` command is reached, the OPX completely halts
+QUA programs can be paused by using the {{f("qm.qua.pause")}} QUA command. When a `pause` command is reached, the OPX completely halts
 the execution of the program until a {{f("qm.jobs.running_qm_job.RunningQmJob.resume")}} command is sent using the `Job` API.
 This could be used to control an external device, such as an LO source. When the program is paused, data
 can be sent between the client PC and the real-time program using 2 available IO variables (Input/Output variables).
@@ -558,7 +559,7 @@ technique.
 
 ### Setting an IO variable
 
-In this QUA program, a {{f("qm.qua._dsl.pause")}} precedes the {{f("qm.qua._dsl.play")}} command, which plays a pulse with an amplitude dynamically set by an IO variable.
+In this QUA program, a {{f("qm.qua.pause")}} precedes the {{f("qm.qua.play")}} command, which plays a pulse with an amplitude dynamically set by an IO variable.
 
 ```python
 with program() as prog:
@@ -612,13 +613,13 @@ job.resume()
 
 {{ requirement("QOP", "2") }}
 Input streams are a queue data structure that allows passing data from the client computer to a running job in the OPX+ with minimal latency.
-To use one, you must first declare it in the QUA program using the {{f("qm.qua._dsl.declare_input_stream")}} command.
+To use one, you must first declare it in the QUA program using the {{f("qm.qua.declare_input_stream")}} command.
 The declaration is similar to the declaration of a normal QUA variable. You need to define its type (int, fixed, bool), its name, and optionality, its size or values.
 Once declared, you can use it as you would use any other QUA variable, with the exception that you have two new available commands:
 
 1. Outside the QUA program, in Python, you can use {{f("qm.jobs.base_job.QmBaseJob.push_to_input_stream")}} from the job API to pass data into the QUA program queue. 
    Note that you can pass multiple values through successive calls of this method (one for each entry) and later access them one by one in QUA.
-2. Inside the QUA program, you can use {{f("qm.qua._dsl.advance_input_stream")}} function to access the next available data in the queue. 
+2. Inside the QUA program, you can use {{f("qm.qua.advance_input_stream")}} function to access the next available data in the queue. 
    If there is no available data, this command will pause the OPX and wait until data is available.
 
 !!! Note
@@ -652,7 +653,7 @@ while some_cond:
 
 ## Timestamp Stream
 {{ requirement("QOP", "2.2") }}
-It is possible to retrieve the precise timestamp of any {{f("qm.qua._dsl.play")}} and {{f("qm.qua._dsl.measure")}} 
+It is possible to retrieve the precise timestamp of any {{f("qm.qua.play")}} and {{f("qm.qua.measure")}} 
 commands from the beginning of an executed program, 
 and use it for circuit analysis and verification. 
 This capability covers real-time logic with non-deterministic outcomes (measurements) and compiler scheduling due to optimizations unknown to the user. 
@@ -701,7 +702,7 @@ The previous API, used up until {{ requirement("QUA","1.1.1") }} using `'hold_of
 Importantly, when an element is sticky, the values of the currently playing pulse will be **added** to the previously held value.
 A sticky element always ramps back to its DC offset value when the element has reached its final instruction of the program.
 The duration of the ramp in ns can be set by configuring `'sticky': {'analog': True, 'duration': 50 }`. 
-This ramp can also be explicitly initiated by the {{f("qm.qua._dsl.ramp_to_zero")}} function.
+This ramp can also be explicitly initiated by the {{f("qm.qua.ramp_to_zero")}} function.
 
 !!! Note
     With the previous API the ramp time was defined in clock cycles using `hold_offset` using the new API with {{ requirement("QUA","1.1.3") }}
@@ -716,7 +717,7 @@ the digital marker will stop at the beginning of the ramp. This can be seen in t
 !!! Warning
     The amplitude of sticky pulses is accumulated with a resolution of 16 bit.
     Therefore, *N* changes to the sticky pulse amplitude can result in an amplitude inaccuracy of about $N \cdot 2^{-16}$.
-    To null out this accumulated error, it is recommended to use {{f("qm.qua._dsl.ramp_to_zero")}} from time to time.
+    To null out this accumulated error, it is recommended to use {{f("qm.qua.ramp_to_zero")}} from time to time.
 
     Alternatively, defining the amplitude of pulses of sticky elements to be in 16-bit resolution will prevent accumulated errors.
     When using `*amp()`, the last waveform sample multiplied by the scale factor should be in 16-bit resolution.
@@ -808,7 +809,7 @@ Note the first pulse eases to zero at a double rate compared to the second one.
 
 ## Ramp Pulse
 
-It's possible to generate a voltage ramp by using the {{f("qm.qua._dsl.ramp")}} command.
+It's possible to generate a voltage ramp by using the {{f("qm.qua.ramp")}} command.
 The `slope` argument is specified in units of `V/ns`. Usage of this feature is as follows:
 
 ```python
@@ -1094,7 +1095,7 @@ To define such an element in the config, use the `singleInputCollection` diction
 },
 ```
 
-At run time, use the `target` parameter of the {{f("qm.qua._dsl.play")}} command:
+At run time, use the `target` parameter of the {{f("qm.qua.play")}} command:
 
 ```python
 play('pulse', 'aom_selector', target='row')
@@ -1336,8 +1337,8 @@ The following is a short list of optional flags and their description:
 - 'skip-loop-unrolling' -  Disables an optimization over loop iterations. This gives faster compilation time at the cost of more program memory use and possibly more gaps.
 - 'skip-loop-rolling' - Disables another optimization over loop iterations. This gives faster compilation time at the cost of more program memory use.
 - 'skip-add-implicit-align' - Removes the automatically added [implicit align](timing_in_qua.md#the-implicit-align) from all control flows.
-- 'not-strict-timing' - {{ requirement("QOP","2") }} Gaps within a {{f("qm.qua._dsl.strict_timing_")}} block will not block execution by raising warnings instead of errors. Read more about the strict timing feature [here](timing_in_qua.md#strict-timing).
-- 'enable-reset-all-phases-at-program-start' - {{ requirement("QOP","3.3") }} Adds a {{f("qm.qua._dsl.reset_global_phase")}} at the beginning of the program, which will reset the MW-FEM upconverters phase.
+- 'not-strict-timing' - {{ requirement("QOP","2") }} Gaps within a {{f("qm.qua.strict_timing_")}} block will not block execution by raising warnings instead of errors. Read more about the strict timing feature [here](timing_in_qua.md#strict-timing).
+- 'enable-reset-all-phases-at-program-start' - {{ requirement("QOP","3.3") }} Adds a {{f("qm.qua.reset_global_phase")}} at the beginning of the program, which will reset the MW-FEM upconverters phase.
 
 The way to use these compilation options depends on the `qm-qua` Python package version. Choose your version below to see how:
 

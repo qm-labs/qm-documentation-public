@@ -64,7 +64,7 @@ For more information about the panel and the connectors, see [OPX1000 Hardware](
 
 The upconverter and downconverter frequencies are created digitally, and therefore, their phase can be reset from QUA.
 This is useful for 2-qubits gates which relay on the absolute lab phase of pulses, such as FSIM in this [Google paper](https://arxiv.org/pdf/2101.08870). It can also be used for debugging when viewing the pulses on the scope.
-Resetting the phase is achieved using the command, {{f("qm.qua._dsl.reset_global_phase")}}, which would reset the phase of all upconverters, downconverters & intermediate frequencies in the program, and is further explained in [this section](phase_and_frame.md#global-phase).
+Resetting the phase is achieved using the command, {{f("qm.qua.reset_global_phase")}}, which would reset the phase of all upconverters, downconverters & intermediate frequencies in the program, and is further explained in [this section](phase_and_frame.md#global-phase).
 
 ### Bands
 Each analog port must specify the `band` at which it operates in the config, the supported bands are:

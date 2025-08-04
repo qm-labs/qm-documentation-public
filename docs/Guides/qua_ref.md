@@ -85,7 +85,7 @@ with if_( (~( a > b )) | ( c > d) ):
 
 QUA arrays are defined and accessed as follows.
 
-1. {{f("qm.qua._dsl.declare")}} a new array:
+1. {{f("qm.qua.declare")}} a new array:
 
 Syntax:
 

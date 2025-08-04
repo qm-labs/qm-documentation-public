@@ -15,7 +15,7 @@ Therefore, we would be happy to receive any comments or suggestions.
   Ideally, real-time modification of pulses should only be used when sweeping parameters, either dynamically in QUA or manually.
 
 - Beware of accumulated errors when using [sticky elements](features.md#sticky-element) and when using [frame rotations](../Introduction/qua_overview.md#updating-the-frame-phase). Make sure to reset the
-  values using {{f("qm.qua._dsl.ramp_to_zero")}} and {{f("qm.qua._dsl.reset_frame")}}.
+  values using {{f("qm.qua.ramp_to_zero")}} and {{f("qm.qua.reset_frame")}}.
 
 - Only define QUA variables for parameters you want to sweep or change in real-time. Otherwise, use Python variables.
 
@@ -31,7 +31,7 @@ Therefore, we would be happy to receive any comments or suggestions.
 
 ## Loops
 
-- Iterating with {{f("qm.qua._dsl.for_each_")}} loops adds a small overhead compared to using {{f("qm.qua._dsl.for_")}} loops.
+- Iterating with {{f("qm.qua.for_each_")}} loops adds a small overhead compared to using {{f("qm.qua.for_")}} loops.
   In addition, they require saving the entire array into the memory, resulting in a limited array length.
 
 - Beware of fixed/floating point inaccuracies. In the following example, it is unclear whether 1.0 would be included

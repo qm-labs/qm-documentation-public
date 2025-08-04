@@ -83,7 +83,7 @@ Currently, the version value must be set to 1.
         'controllers': {
             'con1': {
                 'type':'opx1000',
-                'fems':
+                'fems': {
                     1 :{
                         'type': 'LF',
                         'analog_outputs': {
@@ -102,7 +102,8 @@ Currently, the version value must be set to 1.
                                 'offset': 0.0,
                                 'sampling_rate': 2e9, # Default sampling rate is 1e9
                                 'gain_db': -3
-                            }, 
+                            },
+                        }
                     }
                 }
             }
@@ -129,7 +130,7 @@ Currently, the version value must be set to 1.
         'controllers': {
             'con1': {
                 'type':'opx1000',
-                'fems':
+                'fems': {
                     2 :{
                         'type': 'MW',
                         'analog_outputs': {

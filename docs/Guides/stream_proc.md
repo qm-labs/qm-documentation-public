@@ -32,13 +32,13 @@ and a *terminal*. The processed stream items can be accessed on the client PC, w
 by creating *result handles* on the client PC.
 In what follows, we introduce each of these components and explain how they are used.
 
-To initiate a stream, we use {{f("qm.qua._dsl.declare_stream")}} to declare a stream variable, using the following syntax inside a QUA program:
+To initiate a stream, we use {{f("qm.qua.declare_stream")}} to declare a stream variable, using the following syntax inside a QUA program:
 
 ```python
 my_stream = declare_stream()
 ```
 
-To pass a variable to a stream, we use the {{f("qm.qua._dsl.save")}} statement or the {{f("qm.qua._dsl.measure")}} statement.
+To pass a variable to a stream, we use the {{f("qm.qua.save")}} statement or the {{f("qm.qua.measure")}} statement.
 This creates a data transfer path through which *stream items* are processed and then saved to either
 a permanent or overriding storage (see [Glossary](#glossary) for more details).
 
@@ -62,7 +62,7 @@ Here two streams are created. The first, `my_stream1`, is used to stream raw ADC
 The second, `my_stream2`, is used to stream the value of the QUA variable `a`.
 
 The pipelines and terminals are defined under the `with stream_processing()` context. Pipelines initiate with a
-stream variable and terminate with a {{f("qm.qua._dsl._ResultStream.save")}} or {{f("qm.qua._dsl._ResultStream.save_all")}}
+stream variable and terminate with a {{f("qm.qua._dsl.stream_processing.stream_processing.ResultStream.save")}} or {{f("qm.qua._dsl.stream_processing.stream_processing.ResultStream.save_all")}}
 function, which acts as a *terminal*. In this example the pipelines are
 simple: The first selects only the data from analog input1 and adds timestamps to it. The second is immediately terminated.
 
@@ -83,8 +83,8 @@ my_stream_res = res.adc_results.fetch_all()['value']
 ```
 
 This example collects all results which were contained in the stream using the
-{{f("qm.results.base_streaming_result_fetcher.BaseStreamingResultFetcher.fetch_all")}} method.
-Alternatively, we can only get the most recent result by calling the {{f("qm.results.multiple_streaming_result_fetcher.MultipleStreamingResultFetcher.fetch")}} method.
+{{f("qm.BaseSingleStreamFetcher.fetch_all")}} method.
+Alternatively, we can only get the most recent result by calling the {{f("qm.SingleStreamMultipleResultFetcher.fetch")}} method.
 Note that both these methods are called on a result handle. This structure and its usage are described below.
 
 !!! Note
@@ -135,7 +135,7 @@ which we can later refer to in the client PC.
     See details on buffer below and [here](demod.md#timing-of-the-measurement-operation) on smearing
 
     To record a raw ADC stream, it is required to play a [digital marker](../Introduction/qua_overview.md#digital-markers-and-quantum-element-readout) that is associated with the measurement element. Only samples that arrive while the digital trigger is on will be recorded in the stream pipeline. This means it is possible to "gate" the raw ADC stream by using different
-    sequences of digital waveforms in the readout operation used for the {{f("qm.qua._dsl.measure")}} command.
+    sequences of digital waveforms in the readout operation used for the {{f("qm.qua.measure")}} command.
 
 <figure markdown>
   ![raw_adc](assets/raw_adc.svg)
@@ -174,12 +174,12 @@ A handle to a specific terminal with tag `"my_result"`, for example, is accessed
 A shorthand notation for this is `my_result = job.results_handles.my_result`.
 
 We can query both the state of a single result handle or that of the collection of all results handles.
-For example, one can query the processing state using the {{f("qm.results.streaming_result_fetcher.StreamingResultFetcher.is_processing")}} method,
-or the {{f("qm.results.streaming_result_fetcher.StreamingResultFetcher.wait_for_all_values")}} method to suspend python execution until either a timeout has occurred or
+For example, one can query the processing state using the {{f("qm.StreamsManager.is_processing")}} method,
+or the {{f("qm.SingleStreamSingleResultFetcher.wait_for_all_values")}} method to suspend python execution until either a timeout has occurred or
 saving has completed.
 In case the handle references results from a save terminal, we can also wait for a specific number of results
-to arrive using the {{f("qm.results.base_streaming_result_fetcher.BaseStreamingResultFetcher.wait_for_values")}} method.
-The number of stream items referenced by a specific result handle can be obtained by calling {{f("qm.results.base_streaming_result_fetcher.BaseStreamingResultFetcher.count_so_far")}}
+to arrive using the {{f("qm.BaseSingleStreamFetcher.wait_for_values")}} method.
+The number of stream items referenced by a specific result handle can be obtained by calling {{f("qm.BaseSingleStreamFetcher.count_so_far")}}
 on that handle, or equivalently by calling `len(my_result)`.
 
 Saving results in numpy format to a local variable is done using the `fetch` and `fetch_all`
@@ -188,7 +188,7 @@ methods as specified below.
 
 ### fetch and fetch_all
 
-To transfer the results from the server PC to the client PC, {{f("qm.results.base_streaming_result_fetcher.BaseStreamingResultFetcher.fetch")}} and {{f("qm.results.base_streaming_result_fetcher.BaseStreamingResultFetcher.fetch_all")}} commands are called on a result
+To transfer the results from the server PC to the client PC, {{f("qm.BaseSingleStreamFetcher.fetch")}} and {{f("qm.BaseSingleStreamFetcher.fetch_all")}} commands are called on a result
 handle, for example:
 
 ```python
@@ -206,15 +206,15 @@ For example, say your result stream contains \[0,1,2,3,4,5,6,7,8,9\].
 
 
 !!! Warning
-    When fetching the data while using {{f("qm.qua._dsl.pause")}} - {{f("qm.jobs.running_qm_job.RunningQmJob.resume")}} with a {{f("qm.qua._dsl.save")}} command there is no guarantee that the data you fetch at a given moment is the data point from the current iteration. There can be some delay from the moment the data is acquired until it is available for fetching.
+    When fetching the data while using {{f("qm.qua.pause")}} - {{f("qm.jobs.running_qm_job.RunningQmJob.resume")}} with a {{f("qm.qua.save")}} command there is no guarantee that the data you fetch at a given moment is the data point from the current iteration. There can be some delay from the moment the data is acquired until it is available for fetching.
     Moreover, the streams are a-synchronous. For example, the availability of the result I\[j\] might be a few moments before Q\[j\]. If you fetch the data before the data is available at the Q stream, you will end up with a mixed data point I\[j\],Q\[j-1\].
-    That means that it is better to use the {{f("qm.qua._dsl._ResultStream.save_all")}} command and fetch the desired data.
+    That means that it is better to use the {{f("qm.qua._dsl.stream_processing.stream_processing.ResultStream.save_all")}} command and fetch the desired data.
 
 ## Using Stream Operators
 
 ### Data Restructuring with buffer()
 
-The buffer method allows reshaping of the incoming stream items using the {{f("qm.qua._dsl._ResultStream.buffer")}} operator. 
+The buffer method allows reshaping of the incoming stream items using the {{f("qm.qua._dsl.stream_processing.stream_processing.ResultStream.buffer")}} operator. 
 For example:
 
 ```python
@@ -253,11 +253,11 @@ my_stream2.buffer(int(3e5)).save()
 
 !!! Note
     streaming a buffered variable with time stamps is akin to streaming double the amount of variable. When using
-    {{f("qm.qua._dsl._ResultSource.with_timestamps")}}, each variable should be calculated as two variables when considering this limitation.
+    {{f("qm.qua.type_hints.ResultStreamSource.with_timestamps")}}, each variable should be calculated as two variables when considering this limitation.
 
 ### Combining streams using the `zip` operator
 
-Streams can be zipped together into tuples of results using the {{f("qm.qua._dsl._ResultStream.zip")}} stream operator. 
+Streams can be zipped together into tuples of results using the {{f("qm.qua._dsl.stream_processing.stream_processing.ResultStream.zip")}} stream operator. 
 This is similar to creating a buffer but combines data from two separate streams rather than reshaping a single one. 
 In this case, the zipped resulting stream will have a shape dictated by the number of zipped tuples. 
 Each element of this tuple is a named field `value_i` where `i` is the named field number (the index of the zipped stream).
@@ -468,7 +468,7 @@ If the `flat_struct` flag is used on zipped streams, each named field will have 
 ## Stream Processing Arithmetics
 
 It is possible to use the server to perform arithmetic operations on a single stream or between different streams.
-A complete list of the possible operations can be found in {{f("qm.qua._dsl._ResultStream")}}. In general, an operation
+A complete list of the possible operations can be found in {{f("qm.qua._dsl.stream_processing.stream_processing.ResultStream")}}. In general, an operation
 can be performed between a stream to itself, two different streams or a stream and a scalar. The operation is done
 element-wise, so both streams need to be buffered identically. In the case of an operation between a stream and a scalar,
 the operations must be done before buffering the stream.

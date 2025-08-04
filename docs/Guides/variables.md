@@ -8,7 +8,7 @@ The following page describes the three types of variables in QUA: Integers, fixe
 
 Integers in QUA are 32 bit, so their range is  $[-2^{31}, 2^{31}-1]$ which is roughly $\pm 2e9$.
 
-To create an integer variable we {{f("qm.qua._dsl.declare")}} as follows:
+To create an integer variable we {{f("qm.qua.declare")}} as follows:
 
 ```python
 i = declare(int)  # creates a variable named "i" of type integer
@@ -30,7 +30,7 @@ i = declare(int)  # creates a variable named "i" of type integer
 Fixed point numbers in QUA are in 4.28 format. There are 4 integer bits, including a sign bit, and 28 fractional bits.
 Therefore, the range of the fixed point number is $[-8, 8)$ in steps of $2^{-28} = ~3.7e-9$.
 
-To create a fixed variable we {{f("qm.qua._dsl.declare")}} as follows:
+To create a fixed variable we {{f("qm.qua.declare")}} as follows:
 
 ```python
 i = declare(fixed)  # creates a variable named "i" of type fixed point
@@ -47,7 +47,7 @@ i = declare(fixed)  # creates a variable named "i" of type fixed point
 
 ### Booleans
 
-To create a boolean variable we {{f("qm.qua._dsl.declare")}} as follows:
+To create a boolean variable we {{f("qm.qua.declare")}} as follows:
 
 ```python
 b = declare(bool)  # creates a variable named "b" of type fixed boolean

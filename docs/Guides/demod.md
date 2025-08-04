@@ -1,6 +1,6 @@
 # Demodulation and Measurement
 
-The demodulation operation, used in the {{f("qm.qua._dsl.measure")}} QUA statement, is central to dispersive readout techniques such as cQED
+The demodulation operation, used in the {{f("qm.qua.measure")}} QUA statement, is central to dispersive readout techniques such as cQED
 and other quantum platforms such as spin qubits, Majorana based qubits and others. In this section we describe it in general, from the
 perspective of applying it for state estimation using the OPX. We then show how it is performed in practice on the OPX, focusing on timing and fixed point implementation
 features.
@@ -84,7 +84,7 @@ Here we see a very important characteristic of non-integer demodulation periods:
     pseudo-random manner and will appear as repeatable noise when performing multiple demodulations in the
     same QUA program.
 
-    If you wish to make this error constant, use the {{f("qm.qua._dsl.reset_if_phase")}} QUA statement before measurement!
+    If you wish to make this error constant, use the {{f("qm.qua.reset_if_phase")}} QUA statement before measurement!
 
 ### Application of demod for dispersive readout
 

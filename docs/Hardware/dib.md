@@ -85,7 +85,7 @@ measure([pulse], [element], [stream], counting.digital([counts], [max_time], [el
 
 ## Wait for trigger
 
-It is possible for any element to wait until a pulse arrives at one of the OPD inputs. This is done with the {{f("qm.qua._dsl.wait_for_trigger")}} function.
+It is possible for any element to wait until a pulse arrives at one of the OPD inputs. This is done with the {{f("qm.qua.wait_for_trigger")}} function.
 
 ```python
 wait_for_trigger(element_waiting, pulse_to_play=None, trigger_element=None)

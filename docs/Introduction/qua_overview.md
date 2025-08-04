@@ -32,11 +32,11 @@ QUA is a pulse-level-control programming language for quantum devices. This mean
 the shapes and timing of the pulses that are sent to the elements in the quantum device.
 This enables programmers to perform operations on them, as well as set the timing and parameters of the measurement
 sequences applied to the signals returning from the elements.
-Thus, the most basic statements in QUA are the {{f("qm.qua._dsl.play")}} and {{f("qm.qua._dsl.measure")}} statements.
+Thus, the most basic statements in QUA are the {{f("qm.qua.play")}} and {{f("qm.qua.measure")}} statements.
 
 ## Play Statement
 
-The most basic statement in QUA is the {{f("qm.qua._dsl.play")}} statement:
+The most basic statement in QUA is the {{f("qm.qua.play")}} statement:
 
 ```python
 play(pulse, element)
@@ -80,7 +80,7 @@ If the considered element has a single input, the pulse sent to it must be defin
 }
 ```
 
-Let us denote the samples of the waveform by $s_i$. The {{f("qm.qua._dsl.play")}} statement instructs the OPX to modulate the waveform
+Let us denote the samples of the waveform by $s_i$. The {{f("qm.qua.play")}} statement instructs the OPX to modulate the waveform
 samples with the `intermediate_frequency` of the element:
 
 $$
@@ -88,7 +88,7 @@ $$
 $$
 
 Where $A$ is the [amplitude transformation](#amplitude-transformations), $\omega_{IF}$ is the intermediate frequency defined in the configuration of the element and $\phi_F$
-is the frame phase, initially set to zero (see the {{f("qm.qua._dsl.frame_rotation_2pi")}} function specifications for more
+is the frame phase, initially set to zero (see the {{f("qm.qua.frame_rotation_2pi")}} function specifications for more
 information).
 The OPX plays $\tilde{s_i}$ to the analog output port defined in the configuration of the element
 (port 1 in the above example).
@@ -151,7 +151,7 @@ and the `lo_frequency`. For example:
 }
 ```
 
-Denoting the samples of the waveforms by $I_i$ and $Q_i$, the {{f("qm.qua._dsl.play")}} statement instructs the OPX to modulate
+Denoting the samples of the waveforms by $I_i$ and $Q_i$, the {{f("qm.qua.play")}} statement instructs the OPX to modulate
 the waveforms with the intermediate frequency of the element and to apply the mixer correction matrix in the
 following way:
 
@@ -160,7 +160,7 @@ $$
 $$
 
 Where $\omega_{IF}$ is the intermediate frequency defined in the configuration of the element and $\phi_F$
-is the frame phase, initially set to zero (see the {{f("qm.qua._dsl.frame_rotation_2pi")}} function specifications for more
+is the frame phase, initially set to zero (see the {{f("qm.qua.frame_rotation_2pi")}} function specifications for more
 information).
 $A_{ij}$'s are the matrix element defining the [amplitude transformations](#amplitude-transformations).
 $C_{ij}$'s are the matrix elements of the correction matrix defined in the mixer configuration for the relevant
@@ -194,7 +194,7 @@ configuration:
 The matrix can also be updated when a program is running by either:
 
 - Using the Job API: {{f("qm.jobs.running_qm_job.RunningQmJob.set_element_correction")}}.
-- Using the {{f("qm.qua._dsl.update_correction")}} function in QUA.
+- Using the {{f("qm.qua.update_correction")}} function in QUA.
 
 ```python
 # updating the C matrix associated with qubit
@@ -206,7 +206,7 @@ measurements.
 
 #### Amplitude transformations
 
-The pulses amplitude can be changed via the `amp()` parameter inside the {{f("qm.qua._dsl.play")}} command:
+The pulses amplitude can be changed via the `amp()` parameter inside the {{f("qm.qua.play")}} command:
 
 ```python
 play(pulse*amp(A), element)
@@ -222,7 +222,7 @@ matrix)
 !!! Note
     This transformation requires real-time computation that can introduce gaps. It should only be used when the pulse amplitude needs to be updated during the program, either dynamically in QUA or manually.
 
-For usage examples, see {{f("qm.qua._dsl.play")}}.
+For usage examples, see {{f("qm.qua.play")}}.
 
 ## Digital Waveform Manipulations
 
@@ -324,12 +324,12 @@ In the example above, the digital waveform is a digital high for the entire dura
     If the digital waveform is longer than the pulse length, then it will be truncated.
 
 !!! Note
-    Changing the pulse duration inside a {{f("qm.qua._dsl.play")}} command will not change the sequences of the digital waveform but will pad the
+    Changing the pulse duration inside a {{f("qm.qua.play")}} command will not change the sequences of the digital waveform but will pad the
     digital waveform to fit the new pulse duration. For example, a digital waveform defined as `[(1,10), (0,10), (1,0)]`
     associated with some pulse of length 100, will have the same initial sequence `(1,10), (0,10)` and will be padded
     with 1's to fit the new pulse length upon using `play('pulse', 'qubit', duration=200)`
 
-When such pulse is played to the element, via the {{f("qm.qua._dsl.play")}} or the measurement command, the digital waveform is sent to all
+When such pulse is played to the element, via the {{f("qm.qua.play")}} or the measurement command, the digital waveform is sent to all
 the digital inputs of the element. For each digital input the OPX performs the following:
 
 - Delays the digital waveform by the `delay` that is defined in the configuration of the digital input (given in ns).
@@ -371,7 +371,7 @@ A more detailed discussion on phase and frame can be found in [Phase and Frame i
 
 ### Updating the frequency
 
-The frequency associated with an element can be updated using the {{f("qm.qua._dsl.update_frequency")}} function in the
+The frequency associated with an element can be updated using the {{f("qm.qua.update_frequency")}} function in the
 following way:
 
 ```python
@@ -394,14 +394,14 @@ update_frequency('element_1', 100755, units='mHz')  # will set the frequency to 
 
 ### Resetting the phase
 
-One can reset the intermediate phase $\omega_{IF}t$ associated with a frequency using {{f("qm.qua._dsl.reset_if_phase")}}:
+One can reset the intermediate phase $\omega_{IF}t$ associated with a frequency using {{f("qm.qua.reset_if_phase")}}:
 
 ```python
 # resetting the phase of element_1
 reset_if_phase('element_1')
 ```
 
-When using the MW-FEM, one can also reset the global phase using {{f("qm.qua._dsl.reset_global_phase")}}:
+When using the MW-FEM, one can also reset the global phase using {{f("qm.qua.reset_global_phase")}}:
 
 
 ```python
@@ -411,7 +411,7 @@ reset_global_phase()
 
 ### Updating the frame phase
 
-Adding a fixed phase $\phi_F$ is possible using the {{f("qm.qua._dsl.frame_rotation_2pi")}} function:
+Adding a fixed phase $\phi_F$ is possible using the {{f("qm.qua.frame_rotation_2pi")}} function:
 
 ```python
 # setting the phase of element_1 to pi using the 2pi function
@@ -426,11 +426,11 @@ frame_rotation_2pi(phi, 'element_1')
 !!! Note
     The phase is accumulated with a resolution of 16 bit.
     Therefore, *N* changes to the phase can result in a phase inaccuracy of about $N \cdot 2^{-16}$.
-    To null out this accumulated error, it is recommended to use {{f("qm.qua._dsl.reset_frame")}} from time to time.
+    To null out this accumulated error, it is recommended to use {{f("qm.qua.reset_frame")}} from time to time.
 
 ### Resetting the frame phase
 
-To reset the frame phase $\phi_F$ back to zero, the {{f("qm.qua._dsl.reset_frame")}} command can be used:
+To reset the frame phase $\phi_F$ back to zero, the {{f("qm.qua.reset_frame")}} command can be used:
 
 ```python
 # setting F to be the identity matrix (phi=0)
@@ -439,7 +439,7 @@ reset_frame('element_1')
 
 ## Measure statement
 
-The measurement statement, {{f("qm.qua._dsl.measure")}}, is one of the most complex statements in QUA, and looks like this:
+The measurement statement, {{f("qm.qua.measure")}}, is one of the most complex statements in QUA, and looks like this:
 
 ```python
 measure(pulse, element, stream_name, demod.full(integration_weights, variable), demod.full(integration_weights, variable))
@@ -502,7 +502,7 @@ is to be used (as in the example have) then it must also have `integration_weigh
 A measurement statement, such as the one shown above, instructs the OPX to:
 
 1. Send the indicated pulse to the indicated element, manipulating the waveforms in the same manner that is described
-   in the {{f("qm.qua._dsl.play")}} statement section above.
+   in the {{f("qm.qua.play")}} statement section above.
 2. After a time period `time_of_flight` (given in ns), samples the returning pulse at the OPX input port/s that are
    connected to the output/s of the element. It saves the sampled data under `stream_name`
    (unless `stream_name` = `None`, in which case the sampled data will not be saved).
