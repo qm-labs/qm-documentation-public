@@ -8,9 +8,11 @@ Note that the admin was taken out of the QOP package and is a separate package s
 - QOPA 1.2.2 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1750000608-9bcu65/QOPA1.2.2.tar.gz.age).
 
 **Changed** 
+
 - Topology reports status "unknown" if gateway does not respond.
 
 **Fixed**
+
 - Outdated streaming results are now being deleted from the device's disk.
 - Improved the restart flow when the cluster is not responding, preventing the cluster from being stuck.
 

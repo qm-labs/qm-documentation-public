@@ -175,7 +175,7 @@ A shorthand notation for this is `my_result = job.results_handles.my_result`.
 
 We can query both the state of a single result handle or that of the collection of all results handles.
 For example, one can query the processing state using the {{f("qm.StreamsManager.is_processing")}} method,
-or the {{f("qm.SingleStreamSingleResultFetcher.wait_for_all_values")}} method to suspend python execution until either a timeout has occurred or
+or the {{f("qm.StreamsManager.wait_for_all_values")}} method to suspend python execution until either a timeout has occurred or
 saving has completed.
 In case the handle references results from a save terminal, we can also wait for a specific number of results
 to arrive using the {{f("qm.BaseSingleStreamFetcher.wait_for_values")}} method.
