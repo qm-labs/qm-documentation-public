@@ -1,12 +1,12 @@
 import logging
 import warnings
-from typing_extensions import Mapping  # Mapping in 3.8 does not support class indexing
 from typing import (
     Dict,
     List,
     Tuple,
     Union,
     Literal,
+    Mapping,
     TypeVar,
     Callable,
     KeysView,

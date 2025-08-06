@@ -1,6 +1,5 @@
 from enum import Enum
-from typing_extensions import Literal
-from typing import Type, Union, overload
+from typing import Union, Literal, overload
 
 from qm._loc import _get_loc
 from qm.exceptions import QmQuaException
@@ -21,20 +20,20 @@ class QuaStreamDirection(Enum):
 
 @overload
 def declare_external_stream(
-    struct_type: Type[StructT], stream_id: int, direction: Literal[QuaStreamDirection.INCOMING]
+    struct_type: type[StructT], stream_id: int, direction: Literal[QuaStreamDirection.INCOMING]
 ) -> QuaExternalIncomingStream[StructT]:
     ...
 
 
 @overload
 def declare_external_stream(
-    struct_type: Type[StructT], stream_id: int, direction: Literal[QuaStreamDirection.OUTGOING]
+    struct_type: type[StructT], stream_id: int, direction: Literal[QuaStreamDirection.OUTGOING]
 ) -> QuaExternalOutgoingStream[StructT]:
     ...
 
 
 def declare_external_stream(
-    struct_type: Type[StructT], stream_id: int, direction: QuaStreamDirection
+    struct_type: type[StructT], stream_id: int, direction: QuaStreamDirection
 ) -> Union[QuaExternalIncomingStream[StructT], QuaExternalOutgoingStream[StructT]]:
     """Declare a stream to an external compute resource.
 

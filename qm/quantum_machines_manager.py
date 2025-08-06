@@ -106,7 +106,7 @@ class QuantumMachinesManager:
         *,
         cluster_name: Optional[str] = None,
         timeout: Optional[float] = None,
-        log_level: int = logging.INFO,
+        log_level: Union[int, str] = logging.INFO,
         connection_headers: Optional[Dict[str, str]] = None,
         add_debug_data: bool = False,
         credentials: Optional[ssl.SSLContext] = None,
@@ -124,7 +124,7 @@ class QuantumMachinesManager:
             port: Port where to find the QM orchestrator. If None, local settings are used.
             cluster_name (string): The name of the cluster. Requires redirection between devices.
             timeout (float): The timeout, in seconds, for detecting the qmm and most other gateway API calls. Default is 60.
-            log_level (string): The logging level for the connection instance. Defaults to `INFO`. Please check `logging` for available options.
+            log_level (Union[int, string]): The logging level for the connection instance. Defaults to `INFO`. Please check `logging` for available options.
             octave (QmOctaveConfig): The configuration for the Octave devices. Deprecated from QOP 2.4.0.
             octave_calibration_db_path (PathLike): The path for storing the Octave's calibration database. It can also be a calibration database which is an instance of `AbstractCalibrationDB`.
             follow_gateway_redirections (bool): If True (default), the client will follow redirections to find a QuantumMachinesManager and Octaves. Otherwise, it will only connect to the given host and port.

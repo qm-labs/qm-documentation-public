@@ -26,9 +26,9 @@ from qm.simulate import (  # noqa
 )
 
 from ._stream_results import (  # noqa
-    BaseSingleStreamFetcher,
     StreamsManager,
     StreamingResultFetcher,
+    BaseSingleStreamFetcher,
     SingleStreamingResultFetcher,
     MultipleStreamingResultFetcher,
     SingleStreamSingleResultFetcher,
