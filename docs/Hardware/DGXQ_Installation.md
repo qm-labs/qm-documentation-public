@@ -14,6 +14,9 @@ The DGX-Q software on the server consists of three open-source software componen
 2. OPNIC SDK: A shared library that is used by user’s application on the server
 3. OPNIC CLI tool: A CLI interface for managing the OPNIC (for example, a one-time sync with QOP, updating card FW, etc.)
 
+!!! Warning
+    Avoid running `sudo apt upgrade` on the Grace Hopper server, as it may trigger unintended driver updates that are incompatible with the provided OPNIC drivers.
+
 ## OPNIC Installation in the DGX-Q Server
 
 Step 4 can be used to update the OPNIC firmware.

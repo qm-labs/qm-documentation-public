@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
+## 1.2.3 - 2025-08-28
+- Requires Python >=3.9, <3.13
+- Tested against QOP 2.5.0, 3.5.0
+
+**Fixed**
+
+- Fixed a bug where `job.is_finished()` incorrectly returned `False` for completed jobs.
+- Fixed a bug where the timeout parameter in `job.result_handles.fetch_results()` was only applied to a single internal API request.
+- Ensured `job.result_handles.fetch_results()` consistently raises `QMTimeoutError`, instead of raising regular `TimeoutError` in some scenarios.
+- Reduced max timeout value for `job.result_handles.wait_for_all_values` to 23 days, to fix Windows gRPC timeout format errors.
+
 ## 1.2.3a2 - 2025-08-04
 - Requires Python >=3.9, <3.13
 - Tested against QOP 2.5.0
