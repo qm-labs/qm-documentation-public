@@ -8,7 +8,7 @@ This should open the web GUI. You can find your current QOP version displayed in
 1. Based on your QOP version, refer to the flowchart below and install each intermediate version until 
 you reach the desired release.
  
-    ![QOP_Versions_Flowchart](assets/QOP_Versions_Diagram_v2.png)
+    ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_2.x.x.png)
 
 1. In the web GUI, navigate to `Preferences > Versions`.
 1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package.

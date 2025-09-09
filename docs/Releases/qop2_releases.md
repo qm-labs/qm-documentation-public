@@ -2,6 +2,25 @@
 
 Here you can find release notes and version files for the latest version of {{ requirement("OPX+",2) }}
 
+## QOP 2.5.X
+
+### QOP 2.5.0
+For an in-depth review of the version's new features and upgrades, please see [the release notes](assets/QOP2.5_Release_Notes.pdf).
+
+- QOP 2.5.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOP/QOP2.5.0/1754209957-6wuxhq/QOP2.5.0.tar.gz.age).
+- It is recommended to use with {{requirement("QUA", "1.2.3")}} or newer.
+
+??? note "Octave users upgrading from {{requirement("OPX+", "2.2.X")}} and below"
+    Octave users upgrading from QOP version 2.2.X or earlier are encouraged to review the
+    [QOP 2.4.4 Release notes](./assets/QOP_Release_Notes_V2_4_4.pdf), to learn about the updated Octave clock and
+    configuration introduced in that version.
+
+??? note "QOP Admin (QOPA)"
+    Starting with this version, the Admin is taken out of the QOP package, and will
+    become a stand-alone package to be installed separately. This QOP version comes with QOPA version 1.3.0 included.
+    However, future versions of both QOP and QOPA will be installed sepaeately.
+    For more information, please visit the [QOPA Releases](./qopa_releases.md) page.
+
 ## QOP 2.4.X
 
 ### QOP 2.4.4
