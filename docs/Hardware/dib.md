@@ -37,7 +37,7 @@ When defining a digital input, several parameters needs to be defined:
 - `deadtime` - Minimal time between pulses in ns. e.g., If it is set to 16 ns, then only the 1st pulse out of two pulses 10 ns apart will be detected. 'deadtime' should be between 4 and 16 ns.
 - `threshold` - Voltage threshold
 
-Once defined in the controller, it can be used in a quantum element as follows:
+Once defined in the controller, it can be used in an element as follows:
 
 ```python
 "elements": {

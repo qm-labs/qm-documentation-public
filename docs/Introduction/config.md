@@ -16,58 +16,85 @@ In the following tutorial, we describe the components of the configuration and t
 
 ## Overview
 
-The configuration is a crucial piece of the QOP which enables writing advanced QUA protocols simply and intuitively,
-using 'human language.'
+=== "OPX1000"
 
-As described in the [conceptual overview](./qop_overview.md), the configuration is
-where we define our 'Quantum machine' with its elements and their operations.
+    {{ requirement("QOP", "3.5") }} For previous versions, please see the OPX+ version.
+    
+    The configuration is a crucial piece of the QOP which enables writing advanced QUA protocols simply and intuitively,
+    using 'human language.'
+    
+    The configuration is divided into two parts: the controller config and the logical config.
+    
+    The controller config is where we define the physical hardware connected to the controllers, and the basic properties of the channels.
+    The logical config is where we define all the user-defined elements, pulses, waveforms, and other logical entities that are used in the QUA program.
 
-For example, a simple quantum machine may be the combination of two analog output ports connected to a superconducting
-qubit through an IQ mixer and a readout resonator connected to two analog input ports through another mixer.
+    These are the configuration's components:
 
-In the configuration we will define (partial list):
+    ```python
+    physical_config = {
+        'controllers': {...},
+        'octaves': {...},
+        'mixers': {...},
+    }
+    logical_config = {
+        'elements': {...},
+        'pulses': {...},
+        'waveforms': {...},
+        'digital_waveforms': {...},
+        'integration_weights': {...},
+        'oscillators': {...}
+    }
+    ```
 
-- The setup connectivity and associated dc offsets
-- Intermediate frequencies of the qubit and resonator
-- Waveforms, amplitudes, and lengths of both control and measurements pulses
-- IQ mixer correction parameters
-- Octave configuration (if used)
+=== "OPX+"
 
+    The configuration is a crucial piece of the QOP which enables writing advanced QUA protocols simply and intuitively,
+    using 'human language.'
+
+    As described in the [conceptual overview](./qop_overview.md), the configuration is
+    where we define our 'Quantum machine' with its elements and their operations.
+    
+    For example, a simple quantum machine may be the combination of two analog output ports connected to a superconducting
+    qubit through an IQ mixer and a readout resonator connected to two analog input ports through another mixer.
+    
+    In the configuration we will define (partial list):
+
+    - The setup connectivity and associated dc offsets
+    - Intermediate frequencies of the qubit and resonator
+    - Waveforms, amplitudes, and lengths of both control and measurements pulses
+    - IQ mixer correction parameters
+    - Octave configuration (if used)
+    
+    These are the configuration's components:
+
+    ```python
+    config = {
+        'controllers': {...},
+        'octaves': {...},
+        'elements': {...},
+        'pulses': {...},
+        'waveforms': {...},
+        'digital_waveforms': {...},
+        'integration_weights': {...},
+        'mixers': {...},
+        'oscillators': {...}
+    }
+    ```
+    
+As we can see, the configuration is essentially a Python dictionary of dictionaries, each defining a subsection of the
+Quantum Machine.
+    
 When performing an operation (e.g., a pi pulse on the qubit), the relevant waveform will be sent out of the associated
-analog outputs, adjusted to the required length and amplitude, modulated by the qubit's frequency, and corrected to
-account for the IQ mixer imbalance. All within a simple, single line of code.
+analog outputs, adjusted to the required length and amplitude, modulated by the qubit's frequency.
+All within a simple, single line of code.
 
 This is an example of the powerful 'set and forget' approach of QUA.
 
-We will get back to this example later, but for now, let's look at some of the configuration's components.
-
-```python
-config = {
-    'version': 1,
-    'controllers': {...},
-    'octaves': {...},
-    'elements': {...},
-    'pulses': {...},
-    'waveforms': {...},
-    'digital_waveforms': {...},
-    'integration_weights': {...},
-    'mixers': {...},
-    'oscillators': {...}
-}
-```
-
-As we can see, the configuration is essentially a Python dictionary of dictionaries, each defining a subsection of the
-quantum machine.
-
-!!! tip
+!!! Note
     Time values in the configuration are in units of ns, and some are required to be divisible by 4.
     Electric potential is defined in units of V.
 
 ## Configuration Components
-
-### Version
-
-Currently, the version value must be set to 1.
 
 ### Controllers
 
@@ -78,7 +105,7 @@ Currently, the version value must be set to 1.
         The controller's dictionary sets the input and output ports of the control hardware (i.e., your OPX).
         We define and configure the ports that participate in the quantum machine for every controller and Front End Module (FEM).
         In the example below, we use 1 analog outputs, 1 analog inputs, and 1 digital output of an LF-FEM situated in slot 1 of the controller.
-        
+
         ```python
         'controllers': {
             'con1': {
@@ -92,7 +119,7 @@ Currently, the version value must be set to 1.
                                 'sampling_rate': 2e9, # Default sampling rate is 1e9
                                 'output_mode': 'amplified', # Default output_mode is 'direct'
                                 'upsampling_mode': 'pulse', # Default is 'mw'
-                            },   
+                            },
                         },
                             'digital_outputs': {
                                 1: {}
@@ -109,17 +136,17 @@ Currently, the version value must be set to 1.
             }
         },
         ```
-        
+
         **Analog Outputs**
-        
+
         Each analog output port is defined with a `key:item` pair, where the key is the port number and the item is a Python dictionary
         holding some port-specific configuration. We can set an `'offset'`, a `'filter'`, `'delay'` to the port in units of ns.
         Moreover, we can define LF-FEM specific parameters such as `'sampling_rate'`, `'output_mode'`, and `'upsampling_mode'`.
         For more information on the FEM-specific parameters, please refer to the [FEMs guide](../Guides/opx1000_fems.md).
-    
+
         For more information on the `filter` capabilities, please refer to the [Guide on output filters](../Guides/output_filter.md).
-        
-    
+
+
     === "MW-FEM"
     
         The controller's dictionary sets the input and output ports of the control hardware (i.e., your OPX).
@@ -207,7 +234,7 @@ Currently, the version value must be set to 1.
 
 ### Elements
 
-In the element section, each element is defined with its own dictionary. For example, a quantum machine with
+In the element section, each element is defined with its own dictionary. For example, a config with
 two qubits, two readout resonators and a flux line is defined as follows:
 
 ```python
@@ -225,8 +252,8 @@ Within each element's dictionary, we set the input and output parameters, we map
 - Mixed Inputs Element
 - Single Input Element
 - Octave-using Element
-- MW FEM-using Element
-- LF FEM-using Element
+- MW-FEM-using Element
+- LF-FEM-using Element
 
 !!! Note
     It is not possible to define an element which has inputs and outputs from different controllers or FEMs.
@@ -235,12 +262,6 @@ Within each element's dictionary, we set the input and output parameters, we map
 
 ```python
 'qubit1': {
-    'mixInputs': {
-        'I': ('con1', 1),
-        'Q': ('con1', 2),
-        'lo_frequency': qubit_LO,
-        'mixer': 'mixer_qubit'
-    },
     'intermediate_frequency': qubit_IF,
     'operations': {
         'saturation': 'saturation_pulse',
@@ -337,7 +358,7 @@ In the MW FEM, we define the ports as follows:
         "upconverter": 2  # optional, if not specified, the default will be 1  
     },
     "MWOutput": {
-        "port": ("con1", 5, 1),  # Output (FEM input) has only a single downconveter, so there is no need to specificy it
+        "port": ("con1", 5, 1),  # Output (FEM input) has only a single downconveter, so there is no need to specify it
     },
 }
 

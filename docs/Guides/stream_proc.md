@@ -210,6 +210,67 @@ For example, say your result stream contains \[0,1,2,3,4,5,6,7,8,9\].
     Moreover, the streams are a-synchronous. For example, the availability of the result I\[j\] might be a few moments before Q\[j\]. If you fetch the data before the data is available at the Q stream, you will end up with a mixed data point I\[j\],Q\[j-1\].
     That means that it is better to use the {{f("qm.qua._dsl.stream_processing.stream_processing.ResultStream.save_all")}} command and fetch the desired data.
 
+### Multiple streams fetching with fetch_all_results
+
+{{ requirement("QOP", "3.5") }}
+
+It is possible to fetch all the streams (or some of them by name) without opening a stream result handle for each one independently.
+This can be done with {{f("qm.results.base_streaming_result_fetcher.BaseStreamingResultFetcher.fetch_all_results")}}.
+A simple usage example:
+
+```python
+with program() as basic_example:
+    Is = [declare(fixed) for _ in range(num_of_streams)]
+    I_streams = [declare_stream() for _ in range(num_of_streams)]
+    for k in range(num_of_streams):
+        assign(Is[k], k)
+        save(Is[k], I_streams[k])
+    with stream_processing():
+        for idx, stream in enumerate(I_streams):
+            stream.save_all(f'I_{idx}')
+
+
+qmm = QuantumMachinesManager(ip, host_name)
+qm = qmm.open_qm(config)
+job = qm.execute(basic_example)
+res = job.result_handles
+streams = res.fetch_all_results()
+```
+
+This example creates `num_of_streams` streams, then fetches all of them and saves them into `streams`.
+The default values for `fetch_all_results` are:
+
+* `wait_until_done=True` - Which means that the fetching will happen only when the program has reached the `DONE` state
+* `timeout=60` - How long until the command will timeout and close the stream
+* `stream_names = None` - If stream names are given, only these streams will be fetched. When set to `None`, All the streams in the program will be fetched. Names should be given as a list of strings.
+
+???info "Live ploting example"
+    This can also be used for example for live plotting when `wait_until_done = False`:
+
+    ```python
+    with program() as basic_example_loops:
+        Is = [declare(fixed) for _ in range(num_of_streams)]
+        I_streams = [declare_stream() for _ in range(num_of_streams)]
+        n = declare(int)
+        with for_(n, 0, n < 1e9, n + 1):
+            for k in range(num_of_streams):
+                measure('readout', 'q1', None, dual_demod.full('cos', 'sin', Is[k]))
+                save(Is[k], I_streams[k])
+        with stream_processing():
+            for idx, stream in enumerate(I_streams):
+                stream.average.save(f'I_{idx}')
+
+
+    qmm = QuantumMachinesManager(ip, host_name)
+    qm = qmm.open_qm(config)
+    job = qm.execute(basic_example_loops)
+    res = job.result_handles
+    while res.is_processing():
+        streams = res.fetch_all_results(wait_until_done=False)
+        time.sleep(1)
+        print(streams)
+    ```
+
 ## Using Stream Operators
 
 ### Data Restructuring with buffer()

@@ -326,7 +326,12 @@ If the `signalPolarity` would be changed to `Above`, the rising edge would be de
 
 ##### Basic time-tagging
 
-Basic time tagging has a resolution of 1 ns with a dead time of 2 ns.
+=== "OPX1000"
+    Starting from {{ requirement("QOP", "3.5") }}, the basic time tagging has a resolution of 0.5 ns with a dead time of 1 ns. Previously, the resolution was 1 ns.
+
+=== "OPX+"
+    Basic time tagging has a resolution of 1 ns with a dead time of 2 ns.
+
 Time-tagging is done in a measure statement, with the following syntax:
 
 ```python
@@ -335,14 +340,20 @@ times = declare(int, size=10)
 measure([pulse], [element], [stream], time_tagging.analog(times, max_time, counts)
 ```
 
-- `times` is a vector of integers into which the times of the detected pulses are saved (in ns).
+- `times` is a vector of integers into which the times of the detected pulses are saved (the units depend on the QOP version).
 - `max_time` gives the maximum time window, in ns, during which the statement waits for tag arrival.
 - `counts` is a variable that is populated with the number of tags which arrived during the measurement.
 
 ##### High resolution time-tagging
 
 {{ requirement("QOP", "2.0") }}
-High resolution time tagging has a resolution <50 ps with a dead time of 84 ns.
+
+=== "OPX1000"
+    High resolution time tagging has a resolution of <50 ps with a dead time of 108 ns.
+
+=== "OPX+"
+    High resolution time tagging has a resolution of <50 ps with a dead time of 84 ns.
+
 The high resolution time-tagging is done in a measure statement, with the following syntax:
 
 ```python
@@ -730,7 +741,7 @@ the digital marker will stop at the beginning of the ramp. This can be seen in t
     ```
 
 The sticky element behavior is simply shown in the following example.
-We first define the quantum element as follows:
+We first define the element as follows:
 
 ```python
 "qe1": {
@@ -761,7 +772,7 @@ We first define the quantum element as follows:
 ```
 
 Note the `{'duration': 200}` which sets the ramp to zero duration, in clock cycles.
-We also define a second quantum element `qe2` which is not sticky.
+We also define a second element `qe2` which is not sticky.
 
 We can then run a simple program playing the same constant pulse twice, for the two different elements:
 
@@ -832,7 +843,7 @@ with program() as myFirstProgram:
         play(ramp(-a/2), 'qe1', duration=d)
 ```
 
-The quantum element `qe1` is defined as a sticky pulse and the resulting waveform is therefore triangular in each loop step as is shown in the image below.
+The element `qe1` is defined as a sticky pulse and the resulting waveform is therefore triangular in each loop step as is shown in the image below.
 
 !!![ramp_pulse](assets/ramp_pulse.png)
 
@@ -1181,7 +1192,7 @@ In addition, it is also possible to define two elements that [share an oscillato
     === "LF-FEM"
 
         The LF-FEM has $N_{cores}=16$, which limits the maximum number of elements that can be used simultaneously.
-        A single-input quantum element requires one core and a mixed-input (IQ) element uses two cores, one for each port.
+        A single-input element requires one core and a mixed-input (IQ) element uses two cores, one for each port.
         Working with a sampling rate of 2 GSa/s will consume double the amount of cores, see more [here](opx1000_fems.md#sampling-rate).
 
     === "MW-FEM"
@@ -1196,7 +1207,7 @@ In addition, it is also possible to define two elements that [share an oscillato
 === "OPX+"
 
     The OPX+ has $N_{cores}=18$, which limits the maximum number of elements that can be used simultaneously.
-    A single-input quantum element requires one core and a mixed input (IQ) element uses two cores, one for each channel.
+    A single-input element requires one core and a mixed input (IQ) element uses two cores, one for each channel.
 
     There are $N_{oscillators}=18$ oscillators shared by all cores.
     This limits the number of elements **with an intermediate frequency**.
@@ -1204,7 +1215,7 @@ In addition, it is also possible to define two elements that [share an oscillato
 === "OPX"
 
     The OPX has $N_{cores}=10$, which limits the maximum number of elements that can be used simultaneously.
-    A single-input quantum element requires one core and a mixed input (IQ) element uses two cores, one for each channel.
+    A single-input element requires one core and a mixed input (IQ) element uses two cores, one for each channel.
 
     There are $N_{oscillators}=10$ oscillators shared by all cores.
     This limits the number of elements **with an intermediate frequency**.
@@ -1240,7 +1251,7 @@ config = {
     In order for two elements to share the same core, they must be in the same controller and FEM.
 
 In the example above, "qe2" and "qe1" are assigned to core "a" and can never run at the same time. "qe3" is being assigned to core "b".
-Any quantum element which does not have a core directly specified will have its own core.
+Any element which does not have a core directly specified will have its own core.
 
 !!! Note
     If "qe1" has two inputs (i.e. an IQ pair), it will actually be assigned two cores.

@@ -9,6 +9,7 @@ Once the filter is calibrated, we are free to design pulses without considering 
 allowing for a more convenient workflow and seamless transfer of pulses between setups.
 
 !!! important
+
     Adding a filter to any port will delay **all** analog pulses coming out from all ports. See more on the [Delay Consequences](#delay-consequences) below.
 
 ## Overview of the Filters Operation
@@ -26,6 +27,7 @@ similarly, the number of feedforward taps is $K+1$, which corresponds to the num
 In our case, $x[n]$ and $y[n]$ are the waveform and the output of the OPX, respectively, at timestamp `n`.
 
 !!! Note
+
     In the field of Digital Signal Processing (DSP), a *tap* is simply a filter coefficient.
 
 In the frequency domain, the output/input relation is given by the filter's transfer function.
@@ -38,10 +40,12 @@ By choosing the right filter taps, we can set the frequency response to compensa
 of the channel.
     
 !!! Note
+
     A filter consisting of only feed-forward taps is called a finite impulse response (FIR) filter. If feedback taps
     are used, the filter is called an infinite impulse response (IIR) filter.
 
 !!! Note
+
     The feedforward taps can be multiplied by some arbitrary gain, reducing the magnitude of $H(\theta)$, while retaining its shape.
     This allows a simple method for gain reduction, which can later be compensated using an analog amplifier.
 
@@ -49,35 +53,56 @@ of the channel.
 
 The most common filters are the exponential compensation filters and high-pass compensation filters.
 
-**Exponential Compensation Filter**:
+#### Exponential Compensation Filter
 The exponential compensation filter is used to compensate for an exponential decaying over/undershoot of the signal, which can occur due to passing the signal through the DC port of a bias-tee, or due to the signal passing through many other electronic components (Attenuators, parasitic capacitance, on-chip responses, etc.).
 The distortion is given by the following step response: 
 
-$$s(t) = 1 + Ae^{-\frac{t}{\tau}}$$
+$$s(t) = \left(1 + Ae^{-\frac{t}{\tau}}\right)\cdot u(t)$$
 
 Where A is the amplitude and $\tau$ is the time constant of the filter.
 
-**High-Pass Compensation Filter**:
+#### High-Pass Compensation Filter
 The high-pass compensation filter is used to compensate for the low-frequency cutoff of the signal, which can occur due to passing the signal through the AC port of a bias-tee.
 The distortion is given by the following step response:
 
-$$s(t) = e^{-\frac{t}{\tau_\text{hp}}}$$
+$$s(t) = \left(e^{-\frac{t}{\tau_\text{hp}}}\right)\cdot u(t)$$
 
 Where $\tau_\text{hp}$ is the time constant of the filter.
 
 !!! Note
-    The high-pass compensation filter is inherently **not** a BIBO filter (Bounded Input, Bounded Output).
-    It would lead to an overflow eventually unless the signal is "net-zero" (i.e., the average of the signal is zero).
 
-**Multiple Filters**:
+    {{ requirement("QOP", "3.5") }}
+    The OPX1000 allows the user to configure an ideal high-pass compensation filter, which is inherently **not** a BIBO filter (Bounded Input, Bounded Output).
+    It would lead to an overflow eventually unless the signal is "net-zero" (i.e., the average of the signal is zero).
+    Even slight variations from "net-zero", e.g. due to fixed-point signal manipulation in the Pulse Processor before the exponential filters, can accumulate, and would result in an accumulating error.
+    In addition, the filter will keep its state between different pulses and or programs, which could lead to a drifting "DC offset".
+    It is possible to reset the filter state between programs using the {{f("qm.reset_digital_filters")}} command.
+
+#### General Form For Multiple Exponential Filters
 
 Multiple exponential and a highpass response can be modeled by the following step response:
 
-$$s(t) = e^{-\frac{t}{\tau_\text{hp}}} + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...$$
+$$s(t) = \left(A_{dc} + \sum_{n=1}^N A_n e^{-\frac{t}{\tau_n}}\right)\cdot u(t)$$
 
-Note that ${\tau_\text{hp}}$ can be infinity, in which the first element would just be equal to 1. In this case, it is simpler to fit to
+Where $A_{dc}$ is the DC gain of the filter, and $\tau_n$ is the time constant of the $n$-th filter.
+If $A_{dc}=1$, the filter will be a simple sum of exponential filters:
 
-$$s(t) = 1 + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...$$
+$$s(t) = \left(1 + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...\right)\cdot u(t)$$
+
+If $A_{dc}=0$ and $A_1=1$, the filter will be a sum of exponential filters with a high-pass response, with $\tau_{hp}=\tau_1$:
+
+$$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\frac{t}{\tau_3}} + ...\right)\cdot u(t)$$
+
+!!! Note
+
+    Due to the nature of the ideal high-pass filter ($A_{dc}=0$, $A_{1}=1$, $\tau_1=\tau_{hp}$), which would diverge for any signal that is not "net-zero", we recommend using it with care. See the note [above](#high-pass-compensation-filter).
+    
+    In most cases, it is better to set $A_{dc}$ to a small non-zero value, and $A_{1}=1-A_{dc}$, which would lead to a long decay with a time constant of $\frac{\tau_{hp}}{A_{dc}}$.
+    e.g. if $A_{dc}=\frac{\tau_{hp}}{0.5 s}$, the decay time will be 0.5 seconds.
+
+    This filter does not fully compensate the high-pass filter. However, the voltage error at the output of the high-pass filter is proportional to the deviation from net-zero over the timescale of the exponential decay, and is bounded by $A_{dc} \cdot V_{max}$, where $V_{max}$ is the max voltage at the output of the high-pass filter.
+    
+    The exact value of the error is $e(t) = \frac{A_{dc}^2}{\tau_\text{hp}} \cdot \int_\infty^t x(\tilde{t})e^{-A_{dc} \frac{t-\tilde{t}}{\tau_\text{hp}}} \,d\tilde{t}$
 
 ## Using The Filters
 
@@ -86,33 +111,73 @@ $$s(t) = 1 + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...$$
     {{ requirement("QOP", "3.3") }}
     
     The OPX1000 output filter consists of one FIR filter with 48 taps, and 6 IIR filters, each with a single feedback tap.
-    The IIR filters are not identical and there are two flavours of IIR filters, 5 long IIR filters and 1 short IIR filter.
-    The short IIR filter is optimized for time constants from $\tau_\text{min}=0 \, ns$ to $\tau_\text{max}=300 \, ns$.
-    The long IIR filters are optimized for time constants from $\tau_\text{min}=50 \, ns$ to $\tau_\text{max}=\infty \, ns$.
+    The filters always operate at 2 GSa/s, and each FIR tap is 0.5 ns.
+    There are a total of 6 IIR filters, which can cover exponential decays and high-pass compensation filters with time constants ranging from 1 ns to 1 second.
     
-    The min and max time constants are not hard limits, and simply indicate the range in which the filters are most effective.
-    The short filter is taken for the lowest time constant below 300 ns.
-    
-    The filters are cascaded sequentially, such that the output of one filter is the input of the next one.
     Note that the filters are applied after the [Crosstalk Correction Matrix](../Guides/features.md/#crosstalk-correction-matrix) and before the DC Offset.
-    
+
     ![output_filter_OPX1000](output_filter_qop3.png)
 
-    !!! Note
-        The cascaded implementation of the exponential filters means that the actual coefficients of the filters is convolved.
-    
     The filter for every output channel can be configured at the OPX configuration file under `filter` in the `analog_outputs` field.
 
-    * To configure the FIR filter, set the taps directly in the `feedforward` field. Feedforward taps are limited to the range (-2,2), but this can be scaled automatically by the IIR filters.
-    * To configure the IIR filters, set the filter parameters in the `exponential` and `high-pass` fields.
-        * The `exponential` field accepts a list of tuples of the form `[(A1, tau1), ...]`, where `A` is the amplitude and `tau` is the time constant (see above).
-        * The `high_pass` field accepts a single value `tau_hp`, the time constant of the high-pass filter.
+    === "QOP 3.5 and newer"
+
+        {{ requirement("QOP", "3.5") }}
+
+        * To configure the FIR filter, set the taps directly in the `feedforward` field. Feedforward taps are limited to the range (-2,2).
+        * To configure the IIR filters, set the filter parameters in the `exponential` and `exponential_dc_gain` fields.
+            * The `exponential` field accepts a list of tuples of the form `[(A1, tau1), ...]`, where `A` is the amplitude and `tau` is the time constant (see above).
+            * The `exponential_dc_gain` field accepts a single value `A_dc`, and its default value is `1`.
+            * The `high_pass` field can also be used, but only when the `exponential_dc_gain` is not set. 
+                It accepts a single value `tau_hp`, the time constant of the high-pass filter.
+                Using it is equivalent to setting `exponential_dc_gain` to $\frac{\tau_{hp}}{0.5 s}$ and adding to the exponential list the value ($1 - \frac{\tau_{hp}}{0.5 s}$, $\tau_{hp}$). 
     
-    ```python
-    'controllers': {
+        ```python
+        'controllers': {
             'con1': {
                 'analog_outputs': {
-                    '1': {
+                    1: {
+                        ...,
+                        'filter': {
+                            'feedforward': [0.8, 0.3],
+                            'exponential': [(A1, tau1), (A2, tau2), ...],
+                            'exponential_dc_gain': A_dc
+                        },
+                    },
+                },
+            },
+        }
+        ```
+    
+        To disable a filter, we simply omit it from the configuration or set it to an empty list/None in the following way:
+        
+        ```python
+        'controllers': {
+            'con1': {
+                'analog_outputs': {
+                    1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[], 'exponential_dc_gain':None}},
+                },
+            },
+        }
+        ```
+        
+    === "QOP 3.4 and older"
+
+        The filters are cascaded sequentially, such that the output of one filter is the input of the next one.
+        !!! Note
+
+            The cascaded implementation of the exponential filters means that the actual coefficients of the filters is convolved.
+
+        * To configure the FIR filter, set the taps directly in the `feedforward` field. Feedforward taps are limited to the range (-2,2).
+        * To configure the IIR filters, set the filter parameters in the `exponential` and `high-pass` fields.
+            * The `exponential` field accepts a list of tuples of the form `[(A1, tau1), ...]`, where `A` is the amplitude and `tau` is the time constant (see above).
+            * The `high_pass` field accepts a single value `tau_hp`, the time constant of the high-pass filter. Note that a decay of 0.5 seconds is automatically added to the high-pass filter.
+    
+        ```python
+        'controllers': {
+            'con1': {
+                'analog_outputs': {
+                    1: {
                         ...,
                         'filter': {
                             'feedforward': [0.8, 0.3],
@@ -121,18 +186,22 @@ $$s(t) = 1 + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...$$
                         },
                     },
                 },
-    ```
+            },
+        }
+        ```
     
-    To disable a filter, we simply omit it from the configuration or set it to an empty list/None in the following way:
-    
-    ```python
-    'controllers': {
+        To disable a filter, we simply omit it from the configuration or set it to an empty list/None in the following way:
+        
+        ```python
+        'controllers': {
             'con1': {
                 'analog_outputs': {
-                    1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[], 'high-pass':None}},
+                    1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[], 'high_pass':None}},
                 },
-    ```
-    
+            },
+        }
+        ```
+        
     !!! Note
         
         It is relatively easy to design a filter which will cause the output to exceed the maximum allowed output range of the OPX1000.
@@ -154,20 +223,24 @@ $$s(t) = 1 + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...$$
 
     ```python
     'controllers': {
-            'con1': {
-                'analog_outputs': {
-                    1: {'offset': 0, "filter": {'feedforward': signal.windows.hann(25) * 0.1, 'feedback':[0.5, -0.3]}},
-                },
+        'con1': {
+            'analog_outputs': {
+                1: {'offset': 0, "filter": {'feedforward': signal.windows.hann(25) * 0.1, 'feedback':[0.5, -0.3]}},
+            },
+        },
+    
     ```
 
     To disable a filter, we simply omit it from the configuration or set it to an empty list in the following way:
 
     ```python
     'controllers': {
-            'con1': {
-                'analog_outputs': {
-                    1: {'offset': 0, "filter": {'feedforward': [], 'feedback':[]}},
-                },
+        'con1': {
+            'analog_outputs': {
+                1: {'offset': 0, "filter": {'feedforward': [], 'feedback':[]}},
+            },
+        },
+    }
     ```
 
     By setting the taps, the filter is automatically configured to one of the following modes:
@@ -177,6 +250,7 @@ $$s(t) = 1 + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...$$
      - IIR mode --- supports $M = 1, K=37$, $M=2, K = 30$ and $M=3, K = 23$.
 
     !!! Note
+
         The relation between the configured feedback taps and the aforementioned coefficients is given by convolution.
 
     In order to find the IIR filter taps coefficient, we recommend to use the [digital filter](https://github.com/qua-platform/py-qua-tools/tree/main/qualang_tools/digital_filters) tool.
@@ -206,20 +280,24 @@ $$s(t) = 1 + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...$$
 
     ```python
     'controllers': {
-            'con1': {
-                'analog_outputs': {
-                    1: {'offset': 0, "filter": {'feedforward': signal.windows.hann(25) * 0.1, 'feedback':[0.5, -0.3]}},
-                },
+        'con1': {
+            'analog_outputs': {
+                1: {'offset': 0, "filter": {'feedforward': signal.windows.hann(25) * 0.1, 'feedback':[0.5, -0.3]}},
+            },
+        },
+    }
     ```
 
     To disable a filter, we simply omit it from the configuration or set it to an empty list in the following way:
 
     ```python
     'controllers': {
-            'con1': {
-                'analog_outputs': {
-                    1: {'offset': 0, "filter": {'feedforward': [], 'feedback':[]}},
-                },
+        'con1': {
+            'analog_outputs': {
+                1: {'offset': 0, "filter": {'feedforward': [], 'feedback':[]}},
+            },
+        },
+    }
     ```
 
     By setting the taps, the filter is automatically configured to one of the following modes:
@@ -255,13 +333,21 @@ When using the [compilation flag](features.md#compilation-options) `disable-filt
 
 === "OPX1000"
 
-    - FIR Filter: The delay is 8 cycles (32 ns).
-    - IIR + FIR Filters: Using any number of IIR filters will add 21 cycles (84 ns) to the delay. Note that this includes the FIR filters, as it is not possible to use the IIR without using the FIR.
-                         In addition, there will be an additional delay according to the number of IIR filters used:
-        - The latency of the short filter is 9 cycles (36 ns) - It is used if the shortest $\tau$ is below 300 ns.
-        - The latency of the long filters is 10, 20, 30, 35, 40 cycles (40, 80, 120, 140, 160 ns) when using 1, 2, 3, 4, 5 filters respectively.
-    
-    e.g. Using all filters (FIR + 6 IIR) will add a total of 70 cycles (280 ns) to the delay. 
+    === "QOP 3.5 and newer"
+
+        - FIR Filter: The delay is 8 cycles (32 ns).
+        - IIR Filters: The delay is 17 cycles (68 ns), regardless of the number of IIR filters used.
+        - FIR + IIR Filters: The delay is 25 cycles (100 ns).
+
+    === "QOP 3.4 and older"
+
+        - FIR Filter: The delay is 8 cycles (32 ns).
+        - IIR + FIR Filters: Using any number of IIR filters will add 21 cycles (84 ns) to the delay. Note that this includes the FIR filters, as it is not possible to use the IIR without using the FIR.
+                             In addition, there will be an additional delay according to the number of IIR filters used:
+            - The latency of the short filter is 9 cycles (36 ns) - It is used if the shortest $\tau$ is below 300 ns.
+            - The latency of the long filters is 10, 20, 30, 35, 40 cycles (40, 80, 120, 140, 160 ns) when using 1, 2, 3, 4, 5 filters respectively.
+        
+        e.g. Using all filters (FIR + 6 IIR) will add a total of 70 cycles (280 ns) to the delay. 
 
 === "OPX+"
     
@@ -272,6 +358,7 @@ When using the [compilation flag](features.md#compilation-options) `disable-filt
     The delay is 12 cycles (48 ns) if only FIR filters are used and 13 cycles (52 ns) if IIR filters are used.
 
 !!! Note
+
     In addition, FIR filters also add a group delay that depends on the specific filter configuration. This delay is not included in the numbers above.
 
 We emphasize a few important consequences:
