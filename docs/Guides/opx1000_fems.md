@@ -80,6 +80,7 @@ Since each output port is equipped with two Digital Upconverters (DUCs), it is p
 ![bands](assets/bands.png "MW-FEM bands and sub bands")
 
 !!! Note
+
     `band` is a port parameter and pulses played from a certain port are limited to the chosen band.
 
 In addition, the following pairs of analog ports are coupled:
@@ -92,6 +93,10 @@ In addition, the following pairs of analog ports are coupled:
 
 Coupled ports must be in the same band, or in bands `1` and `3`.
 In other words, both coupled ports must be configured to the same band (both in `1` or `2` or `3`), or one port in band `1` and the other in band `3`. Other band combinations are not supported.
+
+!!! Note
+
+    Band 2 is slower (delayed) by 20 ns compared to Bands 1 & 3.
 
 ### Upconverters and Downconverters
 Each analog output port must define either an `upconverter_frequency` field with a frequency in the port's band, or 

@@ -89,7 +89,7 @@ $$
 $$
 
 Where $A$ is the [amplitude transformation](#amplitude-transformations), $\omega_{IF}$ is the intermediate frequency defined in the configuration of the element and $\phi_F$
-is the frame phase, initially set to zero (see the {{f("qm.qua._dsl.frame_rotation_2pi")}} function specifications for more information).
+is the frame phase, initially set to zero (see the {{f("qm.qua.frame_rotation_2pi")}} function specifications for more information).
 The OPX plays $\tilde{s_i}$ to the analog output port defined in the configuration of the element (port 1 in FEM 1 in the above example).
 
 ### MWInput Element
@@ -249,7 +249,7 @@ measurements.
 
 #### Amplitude transformations
 
-The pulses amplitude can be changed via the `amp()` parameter inside the {{f("qm.qua._dsl.play")}} command:
+The pulses amplitude can be changed via the `amp()` parameter inside the {{f("qm.qua.play")}} command:
 
 ```python
 play(pulse*amp(A), element)
@@ -372,7 +372,7 @@ In the example above, the digital waveform is a digital high for the entire dura
     associated with some pulse of length 100, will have the same initial sequence `(1,10), (0,10)` and will be padded
     with 1's to fit the new pulse length upon using `play('pulse', 'qubit', duration=200)`
 
-When such pulse is played to the element, via the {{f("qm.qua._dsl.play")}} or the measurement command, the digital waveform is sent to all
+When such pulse is played to the element, via the {{f("qm.qua.play")}} or the measurement command, the digital waveform is sent to all
 the digital inputs of the element. For each digital input the OPX performs the following:
 
 - Delays the digital waveform by the `delay` that is defined in the configuration of the digital input (given in ns).

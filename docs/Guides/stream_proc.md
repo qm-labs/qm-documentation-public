@@ -113,6 +113,15 @@ Note that both these methods are called on a result handle. This structure and i
 
 ### Streaming Raw ADC Results
 
+!!! Note
+
+    The OPX is primarily optimized for real-time ADC processing (demodulation, integration, timetagging) and is not designed for continuous streaming of raw ADC data.
+    Streaming raw ADC data is best suited for scenarios involving limited data volume and low duty cycles.
+    Depending on the system configuration and QOP version, extended use of raw ADC streaming may result in slower data processing, system warnings, or—under certain conditions—instability during job execution.
+    
+    * For the OPX1000 LF-FEM, it is impossible to stream raw ADC data from **both ports** at the same time for more than **16 µs**.
+    * For the OPX1000 MW-FEM, it is impossible to stream raw ADC data from any port for more than **16 µs**.
+
 The following is a simple example of a program that acquires a single raw ADC trace:
 
 ```python
@@ -131,10 +140,11 @@ Next, to populate the stream with results, we specify the relevant stream in the
 which we can later refer to in the client PC.
 
 !!! Note
+
     Setting `adc_trace=True` is equivalent to writing `stream.buffer(pulse_len + 2*smearing)`.
     See details on buffer below and [here](demod.md#timing-of-the-measurement-operation) on smearing
 
-    To record a raw ADC stream, it is required to play a [digital marker](../Introduction/qua_overview.md#digital-markers-and-quantum-element-readout) that is associated with the measurement element. Only samples that arrive while the digital trigger is on will be recorded in the stream pipeline. This means it is possible to "gate" the raw ADC stream by using different
+    To record a raw ADC stream, it is required to play a [digital marker](../Introduction/qua_overview.md#digital-markers-and-element-readout) that is associated with the measurement element. Only samples that arrive while the digital trigger is on will be recorded in the stream pipeline. This means it is possible to "gate" the raw ADC stream by using different
     sequences of digital waveforms in the readout operation used for the {{f("qm.qua.measure")}} command.
 
 <figure markdown>
@@ -143,11 +153,12 @@ which we can later refer to in the client PC.
 The orange dots are the raw ADC samples when the digital trigger is switched on/off every eight samples.</figcaption>
 </figure>
 
-!!! important
-    The digital waveform only affects the raw ADC streams. It does not change the data used when processing the measurement
-    using integration, demodulation etc.
+!!! Important
 
-!!!Note "Streaming Raw ADC Results in MW-FEM"
+    The digital waveform only affects the raw ADC streams. It does not change the data used when processing the measurement
+    using integration, demodulation, etc.
+
+!!! Note "Streaming Raw ADC Results in MW-FEM"
     
     {{ requirement("QOP", "3.0") }}
 
@@ -210,12 +221,12 @@ For example, say your result stream contains \[0,1,2,3,4,5,6,7,8,9\].
     Moreover, the streams are a-synchronous. For example, the availability of the result I\[j\] might be a few moments before Q\[j\]. If you fetch the data before the data is available at the Q stream, you will end up with a mixed data point I\[j\],Q\[j-1\].
     That means that it is better to use the {{f("qm.qua._dsl.stream_processing.stream_processing.ResultStream.save_all")}} command and fetch the desired data.
 
-### Multiple streams fetching with fetch_all_results
+### Multiple streams fetching with fetch_results
 
 {{ requirement("QOP", "3.5") }}
 
 It is possible to fetch all the streams (or some of them by name) without opening a stream result handle for each one independently.
-This can be done with {{f("qm.results.base_streaming_result_fetcher.BaseStreamingResultFetcher.fetch_all_results")}}.
+This can be done with {{f("qm.StreamsManager.fetch_results")}}.
 A simple usage example:
 
 ```python
@@ -234,11 +245,11 @@ qmm = QuantumMachinesManager(ip, host_name)
 qm = qmm.open_qm(config)
 job = qm.execute(basic_example)
 res = job.result_handles
-streams = res.fetch_all_results()
+streams = res.fetch_results()
 ```
 
 This example creates `num_of_streams` streams, then fetches all of them and saves them into `streams`.
-The default values for `fetch_all_results` are:
+The default values for `fetch_results` are:
 
 * `wait_until_done=True` - Which means that the fetching will happen only when the program has reached the `DONE` state
 * `timeout=60` - How long until the command will timeout and close the stream
@@ -266,7 +277,7 @@ The default values for `fetch_all_results` are:
     job = qm.execute(basic_example_loops)
     res = job.result_handles
     while res.is_processing():
-        streams = res.fetch_all_results(wait_until_done=False)
+        streams = res.fetch_results(wait_until_done=False)
         time.sleep(1)
         print(streams)
     ```

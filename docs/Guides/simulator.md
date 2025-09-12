@@ -49,6 +49,12 @@ qmm.simulate(config, prog, SimulationConfig(duration, simulation_interface=Loopb
 
 A list of two such tuples can be passed to the {{f("qm.simulate.loopback.LoopbackInterface")}} per simulated controller (as there are two inputs to the OPX).
 
+!!! Note 
+
+    {{ requirement("QOP", "3.0") }}
+    
+    For the OPX1000, the syntax should also include the FEM number, as follows: `LoopbackInterface([("con1", 1, 1, "con1", 1, 2)])`.
+
 Moreover, it is possible to also simulate signal propagation delay and noise using the `noisePower` and `latency` keywords in the {{f("qm.simulate.loopback.LoopbackInterface")}}
 
 - `noisePower` adds gaussian noise with zero mean and a variance (in units \[$V^2$\]) set by this parameter.

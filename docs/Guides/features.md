@@ -485,7 +485,11 @@ It is important to note that unlike the `if_` statement, the play command will t
 
 {{ requirement("QOP", "3.2") }}
 
-The MW-FEM allows for a faster conditional play mechanism. to utilize it, use the port condition context. For example:
+The MW-FEM allows for a faster conditional play mechanism. 
+When sending several pulses to the same port (multiplexing), it is impossible to only block one of them. 
+To use, open a context manager and include all the relevant elements. 
+Failure to include an element playing to the port will result in an error.
+For example:
 
 ```python
 with port_condition(I>0):
@@ -493,6 +497,11 @@ with port_condition(I>0):
 ```
 
 It is important to note that unlike the `if_` statement, the play command will take the same amount of time to execute regardless of the condition. This implies that a false condition will be equivalent to a wait command.
+
+!!! Note
+
+    Pulses played using the port condition suffer a few (1-2) ns of instabilities at the beginning and end of the pulse. 
+    It is there important to pad these pulses with zeros at their beginning and end, and/or calibrate these pulses with the port condition.
 
 #### Ternary Operator
 

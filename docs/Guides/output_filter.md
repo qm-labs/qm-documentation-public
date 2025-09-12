@@ -76,7 +76,7 @@ Where $\tau_\text{hp}$ is the time constant of the filter.
     It would lead to an overflow eventually unless the signal is "net-zero" (i.e., the average of the signal is zero).
     Even slight variations from "net-zero", e.g. due to fixed-point signal manipulation in the Pulse Processor before the exponential filters, can accumulate, and would result in an accumulating error.
     In addition, the filter will keep its state between different pulses and or programs, which could lead to a drifting "DC offset".
-    It is possible to reset the filter state between programs using the {{f("qm.reset_digital_filters")}} command.
+    It is possible to reset the filter state between programs using the {{f("qm.api.v2.qm_api.QmApi.reset_digital_filters")}} command.
 
 #### General Form For Multiple Exponential Filters
 
