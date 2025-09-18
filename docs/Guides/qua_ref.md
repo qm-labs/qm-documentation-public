@@ -54,6 +54,13 @@ Left/right bitshifts and bitwise AND, OR, and XOR are supported.
 !!! Note
     The bitwise NOT operation (~a) is not supported.
 
+!!! Warning
+    In Python, arithmetic operations are evaluated **before** bitwise operations.
+    To ensure expressions are evaluated in the intended order, it is recommended to use parentheses.<br>
+    For example:<br>
+    `2 + 4 >> 1` will return `3`. <br>
+    `2 + (4 >> 1)` will return `4`.
+
 ## Boolean Operations
 
 Boolean operations can be used, but using the operators below ('&', '|', etc) and not with the Pythonic operators ('AND', 'OR', etc)
