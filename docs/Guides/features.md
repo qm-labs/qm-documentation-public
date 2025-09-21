@@ -1093,6 +1093,72 @@ numbers, QUA variables and QUA functions (such as cos and sin).
 !!! Warning
     If the 'truncate' parameter is longer than the pulse duration, it'll cause unexpected results.
 
+## Waveform Caching
+
+{{ requirement("QOP", "3.5") }}
+
+This feature provides a mechanism to load waveforms from a predefined array, between strict timing shots. This is useful when experiments require waveforms that exceed the memory limit, e.g. when dynamically changing long predefined pulses.
+
+### Defining Waveform Arrays
+
+To use this feature, define the waveform in the configuration using the `type: array` syntax, along with a `samples_array` list. Each entry in the list corresponds to a different waveform that can be dynamically loaded later in the QUA program. It is possible to use up to 31 `samples_array` of WFs per core, where each array can contain up to 1024 waveforms. Currently, there is a limitation of 256 MB, which corresponds to 128 M Samples at 1 GSPS or 64 M Samples at 2 GSPS, per core.
+
+Example configuration:
+
+```python
+...
+"waveforms": {
+    "arb_wf": {
+        "type": "array",
+        "samples_array": [
+            [0.2] * pulse_len,
+            0.2 * gaussian(pulse_len, ...),
+            0.2 * cosine_window(pulse_len, ...),
+        ]
+    },
+},
+...
+```
+
+!!! Note
+    All waveforms listed in the `samples_array` must be of the same length
+
+### Pre-loading a Waveform in QUA
+
+To load one of these waveforms at runtime, use the {{f("qm.qua._dsl.load_waveform")}} function. The duration of this command is non-deterministic and should be used outside of a strict timing block, allowing you to prepare waveforms before a "shot" and without affecting the precise timing of the sequence.
+
+Parameters:
+
+- `pulse` (str): The name of the `operation` defined in the configuration that uses the waveform.
+
+- `index` (int): The index of the waveform to load from the `samples_array`.
+
+- `element` (str): The name of the `element` to load the waveform into.
+
+Once loaded, the waveform will be used on the next `play()` command for the specified `element` and `pulse`.
+
+Below is a basic example illustrating dynamic waveform switching. The waveform is reloaded for `qubit1` in each iteration inside a loop with the index as a qua int parameter.
+
+```python
+with program() as basic_example:
+
+    n = declare(int)
+    i = declare(int)
+
+    with for_(n, 0, n < 1e6, n + 1):
+        # Averaging loop
+        with for_(i, 0, i < N, i + 1):
+            load_waveform("arb", i, "qubit1")
+            with strict_timing_():
+                play("arb", "qubit1")  # New waveform loaded in this iteration               
+```
+
+!!! Note
+    Trying to load a non-existent waveform index using a qua variable will result in unexpected behavior.
+
+!!! Note
+    If a pulse contains two waveforms (e.g., `I` & `Q`), then it is possible to have one of them as `"type": "array"`, in which case only it would change when using the `load_waveform` command.
+    If both waveforms are defined as `"type": "array"`, then both would be loaded with the same index.
 ## Dynamic Port Allocation
 
 It is possible to define an element with multiple inputs. At runtime, you can select to which port you want to play.
