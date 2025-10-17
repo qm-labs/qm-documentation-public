@@ -7,7 +7,7 @@ Here you can find release notes and version files for the latest version of {{ r
 ### QOP 2.5.0
 For an in-depth review of the version's new features and upgrades, please see [the release notes](assets/QOP2.5_Release_Notes.pdf).
 
-- QOP 2.5.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOP/QOP2.5.0/1754209957-6wuxhq/QOP2.5.0.tar.gz.age).
+- QOP 2.5.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOP/QOP2.5.0/1754209957-6wuxhq/QOP2.5.0.tar.gz.age). Please follow the [QOP Installation Guide](qop_installation_guide.md).
 - It is recommended to use with {{requirement("QUA", "1.2.3")}} or newer.
 
 ??? note "Octave users upgrading from {{requirement("OPX+", "2.2.X")}} and below"
@@ -26,7 +26,7 @@ For an in-depth review of the version's new features and upgrades, please see [t
 ### QOP 2.4.4
 For an in-depth review of the version's new features and upgrades, please see [the release notes](assets/QOP_Release_Notes_V2_4_4.pdf).
 
-- QOP 2.4.4 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOP/QOP2.4.4/1742888094-z7k1up/QOP2.4.4.tar.gz.age).
+- QOP 2.4.4 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOP/QOP2.4.4/1742888094-z7k1up/QOP2.4.4.tar.gz.age). Please follow the [QOP Installation Guide](qop_installation_guide.md).
 
 ??? note "Octave users"
     - Starting with this version, the Octave clock is managed automatically, as explained in the 
@@ -41,7 +41,7 @@ For an in-depth review of the version's new features and upgrades, please see [t
 For an in-depth review of the version's new features and upgrades, please see [the release notes](assets/QOP_Release_Notes_V2_2.pdf).
 
 ### QOP 2.2.2
-- QOP 2.2.2 can be downloaded from [here](https://qmachines-artifacts.s3.amazonaws.com/device-updates/QOP/QOP2.2.2/QOP222.tar.gz.age).
+- QOP 2.2.2 can be downloaded from [here](https://qmachines-artifacts.s3.amazonaws.com/device-updates/QOP/QOP2.2.2/QOP222.tar.gz.age). Please follow the [QOP Installation Guide](qop_installation_guide.md).
 
 **Added**
 
@@ -58,7 +58,7 @@ For an in-depth review of the version's new features and upgrades, please see [t
     {{ requirement("QUA", "1.1.5") }} is required for those who use {{ requirement("QOP", "2.2.2") }} and have an Octave in the cluster.
 
 ### QOP 2.2.0
-- QOP 2.2.0 can be downloaded from [here](https://qmachines-artifacts.s3.amazonaws.com/device-updates/versions/QOP220.tar.gz.age).
+- QOP 2.2.0 can be downloaded from [here](https://qmachines-artifacts.s3.amazonaws.com/device-updates/versions/QOP220.tar.gz.age). Please follow the [QOP Installation Guide](qop_installation_guide.md).
 
 - See 2.2 release notes above.
 

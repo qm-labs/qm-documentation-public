@@ -1408,7 +1408,7 @@ An arbitrary waveform has to be declared as overridable in advance in the config
 !!! Note
     The number of samples in the new waveform has to be the same as in the old waveform.
     It is currently not possible to change the bandwidth of an overridable arbitrary waveform. Therefore, the
-    `samplingRate` and `max_allowed_error` properties are not supported when "`is_overridable`: True".
+    `sampling_rate` and `max_allowed_error` properties are not supported when "`is_overridable`: True".
 
 ## Compilation Options
 

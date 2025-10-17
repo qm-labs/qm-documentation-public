@@ -262,12 +262,19 @@ Within each element's dictionary, we set the input and output parameters, we map
 
 ```python
 'qubit1': {
+    'mixInputs': {
+            'I': ('con1', 1),
+            'Q': ('con1', 2),
+            'mixer': 'mixer1',
+            'lo_frequency': 5.1e9,
+        },
     'intermediate_frequency': qubit_IF,
     'operations': {
         'saturation': 'saturation_pulse',
         'pi': 'pi_pulse',
         'pi_half': 'pi_half_pulse',
     },
+},
 ```
 
 First, in the `'mixInput'` dictionary, we configure which hardware port is connected to the qubit, as "seen" from
