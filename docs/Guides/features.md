@@ -499,9 +499,7 @@ with port_condition(I>0):
 It is important to note that unlike the `if_` statement, the play command will take the same amount of time to execute regardless of the condition. This implies that a false condition will be equivalent to a wait command.
 
 !!! Note
-
-    Pulses played using the port condition suffer a few (1-2) ns of instabilities at the beginning and end of the pulse. 
-    It is there important to pad these pulses with zeros at their beginning and end, and/or calibrate these pulses with the port condition.
+    The fast digital switch being used has a few ns of instability. For optimal port condition performance, pad the waveform with two additional 0 samples from each side, and make sure to calibrate the pulse with the port condition.
 
 #### Ternary Operator
 
@@ -972,7 +970,7 @@ It is also possible to add a "self-crosstalk term", this will cause an amplitude
 === "OPX1000"
 
     !!! Warning
-        Using the crosstalk matrix adds a delay of 6 cycles (24 ns).
+        Using the crosstalk matrix adds a delay of 8 cycles (32 ns).
         Adding a crosstalk term to any LF-FEM output port will delay **all** analog pulses coming out from all LF-FEM analog ports.
         It is possible to add the [compilation flag](features.md#compilation-options) `disable-crosstalk-matrix-ports-alignment` to only delay the ports that participate in the Crosstalk Correction Matrix.
         

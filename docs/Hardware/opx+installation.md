@@ -139,7 +139,14 @@ The multi OPX+ system has four required connectivity groups. Clock & sync, Inter
     Click on each configuration to see the **preferred** connectivity scheme.
 
     !!! Note
-        The following is only a recommendation. Every configuration that establishes all-to-all connectivity is valid.
+        The following is only a recommendation. Every configuration that establishes all-to-all connectivity is valid. if an invalid configuration is used, programs that share variables between multiple OPXs will fail to compile.
+    
+    !!! Note
+        If not all 12 ports are in use, a warning will show during the health check when connecting to a qmm in Python. This warning can be ignored if an all-to-all connection is established. 
+        For example:
+        ```
+        Health check warning: Inter-OPX connectivity issue in OPX: con1. Missing ports are: 12, 11.
+        ```
       
 
     === "2 OPX+"

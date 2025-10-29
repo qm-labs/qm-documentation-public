@@ -44,12 +44,12 @@ This has the following implications:
 The analog outputs can operate in one of two modes, set in the config at the output port using the field `output_mode`:
 
 * `direct` - The output range is between -0.5 V to 0.5 V.
-* `amplified` - The output range is between -2.5 V to 2.5 V, the hardware filters are optimized for a cleaner step response.
+* `amplified` - The output range is between -2.5 V to 2.5 V. This mode does not amplify your waveform values; it merely allows higher amplitudes to be set. The hardware filters are also optimized for a cleaner step response.
 
 !!! Note
     The `direct` mode is optimized for modulated signals with high SFDR and hence is not exactly 50Ω matched.
     Connecting to a 50Ω matched line will produce the exact applied output voltage without distortions, but connecting it to a High-Z load will not give the expected doubling of the voltage applied at 50 Ω.
-    The `amplified` mode is optimized for improved step response characteristics and is 50 Ω matched.
+    The `amplified` mode is optimized for improved step response characteristics and is 50 Ω matched. 
 
 ## Microwave FEM (MW-FEM)
 The MW-FEM module features 8 analog outputs at a quadrature sampling rate of 1 GSa/s which are digitally unconverted to 
@@ -113,15 +113,25 @@ In the elements `MWInput` field, the user can set the `upconverter` field, the d
 
 Each analog input port must define a `downconverter_frequency` field with a frequency in the port's band.
 
+### Optimized Readout
+
+For achieving the highest readout SNR, it is recommended to perform the readout by using the following channel combinations:
+
+* Playing from Output 1 & Reading from Input 2
+* Playing from Output 8 & Reading from Input 1
+
+If using both inputs, ensure that the downconverters' frequencies are different by at least 10 MHz.
+
 !!! Note
-    Note that it is not possible to measure IF frequencies which are <=|5| MHz.
+    It is not possible to measure intermediate frequencies which are `<= |5| MHz`.
 
 ### Output Power
 
 The analog output power is defined using the field `full_scale_power_dbm`, which can be set between `-11` and `16` dBm 
 with a 3 dB granularity.
 This will set the power delivered to a 50 ohm load when the waveform is set to full scale (`[-1, 1]`). 
-The amplitude itself is linear in voltage and not power. Therfore, for a given wavforem, its shape should be identical between the LF- and the MW- FEMs (and OPX+) up to a gain factor.
+The amplitude itself is linear in voltage and not power. 
+Therefore, for a given waveform, its shape should be identical between the LF-FEMs and the MW-FEMs (and OPX+) up to a gain factor.
 
 !!! Note
     For best analog performance, it is recommended to work with the `full_scale_power_dbm` set to a value between 1 and 10 dBm.
