@@ -28,13 +28,13 @@ you reach the desired release.
 
         === "QOPA"
             1. In the web GUI, navigate to `Preferences > QOPA`.
-            1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOPA package. Please make sure you have installed the QOPA version which is compatible with the QOP version . 
+            1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOPA package. Please make sure you have installed the QOPA version which is compatible with the QOP version. 
             1. Once the version is uploaded, select the target cluster (if applicable) from the drop-down menu.
             1. Hover over the newly uploaded version and click `Install`.
 
         === "QOP"
             1. In the web GUI, navigate to `Preferences > QOP`.
-            1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package. Please make sure you have installed the QOPA version which is compatible with the QOP version . 
+            1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package. Please make sure you have installed the QOPA version which is compatible with the QOP version. 
             1. Once the version is uploaded, select the target cluster (if applicable) from the drop-down menu.
             1. Hover over the newly uploaded version and click `Install`.
 
