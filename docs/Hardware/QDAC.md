@@ -13,12 +13,14 @@ Below you can find the links to the manuals and firmware updates for the QDAC-II
 
 === "QDAC-II (Compact)"
 
-    - PDF version of the latest QDAC-II User Manual: [QDAC-II manual](https://qm.quantum-machines.co/hubfs/QDAC%20II%20-%20User%20manual%20v2.2%20(2024-01-17).pdf)
-    - Firmware update version 13-1.57:
-        - [Firmware updater windows*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update_13-1.57.exe)
-        - [Firmware updater MacOS*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-macos_13-1.57)
-        - [Firmware updater Linux*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-linux_13-1.57)
-    - [Firmware release notes](https://6821620.hubspotpreview-na1.com/hubfs/QDAC-II%20Firmware%20release%20notes.pdf)
+    - PDF version of the latest QDAC-II Compact User Manual: [QDAC-II Compact manual](https://qm.quantum-machines.co/hubfs/QDAC%20II%20Compact%20-%20Operation%20manual%20-%20v1.3%20(2025-20-06).pdf)
+    - PDF version of the latest QDAC-II User Manual: [QDAC-II manual](https://qm.quantum-machines.co/hubfs/QDAC%20II%20-%20User%20manual%20-%20v2.4%20(2025-20-06).pdf)
+    - PDF command reference for QDAC-II Compact: [QDAC-II Compact Command Reference](https://qm.quantum-machines.co/hubfs/QDAC%20II%20(Compact)%20-%20Command%20reference%20-%20v1.2%20(2025-20-06).pdf)
+    - Firmware update version 14-1.70:
+        - [Firmware updater windows*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update_14-1.70.exe)
+        - [Firmware updater MacOS*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-macos_14-1.70)
+        - [Firmware updater Linux*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-linux_14-1.70)
+    - [Firmware release notes](https://qm.quantum-machines.co/hubfs/QDAC-II%20Firmware%20release%20notes.pdf?hsLang=en)
     
     !!! Important
         $*$ Please follow the instructions in the user manual on how to perform a firmware update.
@@ -33,6 +35,10 @@ Below you can find the links to the manuals and firmware updates for the QDAC-II
 
 === "Previous firmware versions (QDAC-II)"
 
+    - 13-1.57
+        - [Firmware 13-1.57 updater Windows](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update_13-1.57.exe)
+        - [Firmware 13-1.57 updater MacOS](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-macos_13-1.57)
+        - [Firmware 13-1.57 updater Linux](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-linux_13-1.57)
     - 13-1.54
         - [Firmware 13-1.54 updater Windows](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update_13-1.54.exe) 
         - [Firmware 13-1.54 updater MacOS](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-macos_13-1.54)

@@ -1065,8 +1065,11 @@ The 'duration' parameter can accept a general mathematical expression composed o
 numbers, QUA variables and QUA functions (such as cos and sin).
 
 !!! Warning
-    When playing an arbitrary waveform, if the value of the duration parameter is set to below the original pulse
+    - When playing an arbitrary waveform, if the value of the duration parameter is set to below the original pulse
     length, corrupted output may occur.
+    - Arbitrary waveforms cannot be compressed and can only be expanded up to $2^{24}-1$ clock cycles (67ms).
+        - When using a qua variable for the duration, using a value above the allowed range will result in an unexpected output.
+        - When using a python literal for the duration, using a value above the allowed range will result in an error.
 
 ## Truncate Pulses
 

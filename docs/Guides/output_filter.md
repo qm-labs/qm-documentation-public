@@ -100,9 +100,9 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
     In most cases, it is better to set $A_{dc}$ to a small non-zero value, and $A_{1}=1-A_{dc}$, which would lead to a long decay with a time constant of $\frac{\tau_{hp}}{A_{dc}}$.
     e.g. if $A_{dc}=\frac{\tau_{hp}}{0.5 s}$, the decay time will be 0.5 seconds.
 
-    This filter does not fully compensate the high-pass filter. However, the voltage error at the output of the high-pass filter is proportional to the deviation from net-zero over the timescale of the exponential decay, and is bounded by $A_{dc} \cdot V_{max}$, where $V_{max}$ is the max voltage at the output of the high-pass filter.
+    This filter does not fully compensate the high-pass filter. The voltage error at the output of the high-pass filter is the deviation from net-zero weighted by an exponential decay with the chosen time constant:
     
-    The exact value of the error is $e(t) = \frac{A_{dc}^2}{\tau_\text{hp}} \cdot \int_\infty^t x(\tilde{t})e^{-A_{dc} \frac{t-\tilde{t}}{\tau_\text{hp}}} \,d\tilde{t}$
+    $e(t) = \frac{A_{dc}}{\tau_\text{hp}} \cdot \int_{-\infty}^t x(\tilde{t})e^{-A_{dc} \frac{t-\tilde{t}}{\tau_\text{hp}}} \,d\tilde{t}$
 
 ## Using The Filters
 

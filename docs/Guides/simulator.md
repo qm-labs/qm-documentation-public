@@ -68,18 +68,6 @@ For example, the following adds noise with variance 1 $V^2$ and 100 ns latency. 
 qmm.simulate(config, prog, SimulationConfig(duration, simulation_interface=LoopbackInterface([("con1", 1, "con1", 2)], noisePower=1, latency=100))
 ```
 
-#### Raw ADC interface
-
-It is possible to explicitly specify the signal passed into the OPX in the simulation.
-This is quite similar to the LoopbackInterface described above and supports the same options.
-
-For example, the code snippet below plays a 1 microsecond signal to input 1 of the device called `"con1"`.
-
-```python
-signal = np.linspace(0, 0.2, 1000).tolist()
-qmm.simulate(config, prog, SimulationConfig(duration, simulation_interface=RawInterface([("con1",1,signal)], noisePower=1, latency=100))
-```
-
 ### Simulating Multiple Controllers
 
 To simulate a system of multiple controllers, the inter-controller optical connectivity needs to be specified. 

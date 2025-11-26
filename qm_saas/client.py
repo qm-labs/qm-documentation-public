@@ -499,6 +499,7 @@ class QmSaas:
         password: str = None,
         auto_cleanup: bool = True,
         log: logging.Logger = None,
+        protocol: str = "https",
     ):
         """
         Create a QmSaas client.
@@ -511,16 +512,20 @@ class QmSaas:
             auto_cleanup: If true (default), automatically delete the simulator instance when the context manager exits
                           otherwise it will be left running until it timeouts or is manually closed.
             log: The logger to use for logging messages. If not provided, a default logger will be used.
+            protocol: The protocol used to communicate with the simulator instance. Must be either 'https' or 'http'.
         """
+        if protocol not in ("https", "http"):
+            raise ValueError("Protocol must be either 'https' or 'http'")
+
         self.log = log or logging.getLogger(__name__)
         self.auto_cleanup = auto_cleanup
         self._client = Client(
-            protocol="https",
+            protocol=protocol,
             host=host,
             port=port,
             email=email,
             password=password,
-            log=self.log
+            log=self.log,
         )
 
     def simulator(self, version: any = None, cluster_config: ClusterConfig = None) -> QmSaasInstance:

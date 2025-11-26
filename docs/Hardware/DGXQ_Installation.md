@@ -107,7 +107,7 @@ If the system was previously configured, you can skip directly to step 4.
     1. Check the version by running:
 
         ```
-        opnic version
+        opnic -vv version
         ```
 
     2. Validate that the output indeed shows the latest FPGA and PLL images:

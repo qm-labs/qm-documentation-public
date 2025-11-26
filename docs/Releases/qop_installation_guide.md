@@ -45,7 +45,9 @@ you reach the desired release.
     {{ requirement("QOP", "2.0") }} 
     
     ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_2.x.x.png)
-
+    
+    !!! Note "Important note"
+        For the best performence, please make sure to update the QOPA version to the latest one.
 
     1. In the web GUI, navigate to `Preferences > Versions`.
     1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package.
