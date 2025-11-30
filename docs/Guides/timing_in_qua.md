@@ -97,9 +97,6 @@ It is also possible to indicate to the compiler sections in which it is critical
 
 ### Strict Timing
 
-!!! Note
-    {{ requirement("QOP", "2") }} The strict timing feature only exists in the OPX+
-
 Any command written inside a {{f("qm.qua.strict_timing_")}} block will be required to be played without gaps.
 In cases where this is not possible, an error will be raised indicating the gaps.
 It is possible to add the flag `not-strict-timing` to the execution to raise warnings instead of errors.
