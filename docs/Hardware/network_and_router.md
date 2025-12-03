@@ -325,4 +325,9 @@ These settings ensure uninterrupted communication with the OPX for both HTTP (We
     3. Save the file and run `source ~/.bashrc` or `source ~/.bash_profile`.
 
 !!! Note
+    The `no_proxy` environment variable is used globally by many applications, to determine which addresses should bypass the proxy.
+    It is also possible to set the environment variable `no_grpc_proxy` instead of `no_proxy` to specifically target Python (gRPC) connections which are used to communicate with the OPX1000 for job execution.
+    If both `no_proxy` and `no_grpc_proxy` are set and, then Python (gRPC) would ignore the `no_proxy` setting.
+    
+!!! Note
     It is also possible to force the python client to ignore the proxy set by the environment variables by setting the `async_trust_env` parameter of the `QuantumMachinesManager` to `False`.

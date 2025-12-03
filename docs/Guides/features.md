@@ -1124,9 +1124,9 @@ Example configuration:
 !!! Note
     All waveforms listed in the `samples_array` must be of the same length
 
-### Pre-loading a Waveform in QUA
+### Preloading a Waveform in QUA
 
-To load one of these waveforms at runtime, use the {{f("qm.qua._dsl.load_waveform")}} function. The duration of this command is non-deterministic and should be used outside of a strict timing block, allowing you to prepare waveforms before a "shot" and without affecting the precise timing of the sequence.
+To load one of these waveforms at runtime, use the {{f("qm.qua.load_waveform")}} function. The duration of this command is non-deterministic and should be used outside of a strict timing block, allowing you to prepare waveforms before a "shot" and without affecting the precise timing of the sequence.
 
 Parameters:
 

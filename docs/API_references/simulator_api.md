@@ -9,6 +9,8 @@ search:
 
 ::: qm.simulate.loopback.LoopbackInterface
 
+::: qm.simulate.raw.RawInterface
+
 ::: qm.results.simulator_samples.SimulatorControllerSamples
 
 ## Cloud Simulator API
