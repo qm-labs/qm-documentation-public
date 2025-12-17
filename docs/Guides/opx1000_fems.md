@@ -47,8 +47,9 @@ The analog outputs can operate in one of two modes, set in the config at the out
 * `amplified` - The output range is between -2.5 V to 2.5 V. This mode does not amplify your waveform values; it merely allows higher amplitudes to be set. The hardware filters are also optimized for a cleaner step response.
 
 !!! Note
-    The `direct` mode is optimized for modulated signals with high SFDR and hence is not exactly 50Ω matched.
-    Connecting to a 50Ω matched line will produce the exact applied output voltage without distortions, but connecting it to a High-Z load will not give the expected doubling of the voltage applied at 50 Ω.
+    The `direct` mode is optimized for modulated signals and is designed to achieve high SFDR, but it results in an output impedance of 35 Ω.
+    Despite being 35 Ω, the specification is given for a 50 Ω matched load.
+    Connecting to a 50 Ω matched line will produce the exact applied output voltage without distortion, but connecting it to a High-Z load will not yield the expected doubling of the applied voltage at 50 Ω.
     The `amplified` mode is optimized for improved step response characteristics and is 50 Ω matched. 
 
 ## Microwave FEM (MW-FEM)
@@ -129,7 +130,7 @@ If using both inputs, ensure that the downconverters' frequencies are different 
 
 The analog output power is defined using the field `full_scale_power_dbm`, which can be set between `-11` and `16` dBm 
 with a 3 dB granularity.
-This will set the power delivered to a 50 ohm load when the waveform is set to full scale (`[-1, 1]`). 
+This will set the power delivered to a 50 Ω load when the waveform is set to full scale (`[-1, 1]`). 
 The amplitude itself is linear in voltage and not power. 
 Therefore, for a given waveform, its shape should be identical between the LF-FEMs and the MW-FEMs (and OPX+) up to a gain factor.
 
@@ -139,7 +140,7 @@ Therefore, for a given waveform, its shape should be identical between the LF-FE
     Going above 10 dBm will start to degrade the SFDR, while going below 1 dBm will degrade the SNR. 
 
 !!! Note
-    To calculate the voltage that will be seen on a scope set to 50 ohm, first convert the power to voltage:
+    To calculate the voltage that will be seen on a scope set to 50 Ω, first convert the power to voltage:
 
     \begin{eqnarray}
     x_{mw} = 10^{\frac{x_{dbm}}{10}} \\

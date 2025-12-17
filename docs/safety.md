@@ -24,7 +24,7 @@
         - Do not attempt to repair the product yourself. Contact a QM's service technician.
         - Do not remove any covers or panels from the product. This may expose you to dangerous voltage or other hazards.
         - This device has a class 1 laser component (SFPs optical transceivers).  Invisible laser radiation might be emitted from the unterminated connector of a fiber-optic cable. To avoid injury to your eye, do not view the fiber optics with a magnifying optical device. Contact a QM's service technician.
-        - Disconnect power before servicing (Only by QM's technician)
+        - Disconnect all power sources before servicing (Only by QM's technician)
         - Do not use the system or perform any service on it while the system is extended on the slide rails.
     4. Use
         - Only use SFPs that are safety approved to IEC 60825 and which are CDRH registered.        
@@ -62,7 +62,7 @@
         - Ne pas essayer de réparer le produit vous-même. Veuillez contacter le service support de Quantum Machines.
         - Ne pas démonter le capot ou toute autre partie de l’instrument, sous peine d’être exposé à un risque d’électrocution ou à d’autres dangers.
         - Ce produit possède un composant laser de classe 1 (émetteurs/récepteurs optiques). De la lumière invisible peut être émise d’un connecteur de fibre optique non branché ou non protégé. Pour éviter tout risque de blessure, ne pas regarder l’extrémité de la fibre optique avec un système optique grossissant. Contacter le service support de Quantum Machines.
-        - Déconnecter le câble d’alimentation avant toute intervention (seulement de la part du service support de Quantum Machines).
+        - Déconnecter toutes les sources d’alimentation avant toute intervention (seulement de la part du service support de Quantum Machines).
         - Ne pas utiliser le système ou effectuer une maintenance sur celui-ci lorsque le système est étendu sur les rails coulissants.
     4. Utilisation
         - N'utilisez que des modules enfichables de faible encombrement (SFP) conformes à la norme IEC 60825 et enregistrés par le Centre pour les appareillages radiologiques du Ministère (CDRH).
@@ -100,7 +100,7 @@
         - 제품을 직접 수리하려 하지 마십시오. QM 서비스 기술자에게 문의하십시오.
         - 제품에서 커버나 패널을 제거하지 마십시오. 위험한 전압이나 기타 위험에 노출될 수 있습니다.
         - 이 장치는 클래스 1 레이저 부품(SFP 광 트랜시버)을 포함하고 있습니다. 광섬유 케이블의 단자에 연결되지 않은 커넥터에서 보이지 않는 레이저 방사선이 방출될 수 있습니다. 눈 부상을 피하기 위해 광섬유를 확대경등의 광학 장치로 보지 마십시오. QM 서비스 기술자에게 문의하십시오.
-        - 정비 전에 전원을 분리하십시오(QM 기술자만 수행).
+        - 정비 전에 모든 전원 공급원을 분리하십시오(QM 기술자만 수행).
         - 시스템이 슬라이드 레일에서 확장된 상태에서는 시스템을 사용하거나 어떠한 정비도 수행하지 마십시오.
     4. 사용 시 주의사항
         - IEC 60825에 따라 안전 인증을 받고 CDRH에 등록된 SFP만 사용하십시오.

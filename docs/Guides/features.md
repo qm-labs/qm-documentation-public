@@ -987,20 +987,16 @@ The crosstalk terms can be configured at the OPX configuration file, with a diff
 To configure, add a `crosstalk` term in the `analog_outputs` field:
 
 ```python
-'controllers': {
-        'con1': {
-            'analog_outputs': {
-                1: {'offset': 0.0},
-                2: {'offset': 0.0, 'crosstalk': {1: 0.2}},
-                3: {'offset': 0.0, 'crosstalk': {1: -0.1}},
-            },
-        }
-}
+    'analog_outputs': {
+        1: {'offset': 0.0},
+        2: {'offset': 0.0, 'crosstalk': {1: 0.2}},
+        3: {'offset': 0.0, 'crosstalk': {1: -0.1}},
+    },
 ```
 
 In the example above, any pulse played to output number 1 would also come out from ports 2 & 3 with an amplitude factor of 0.2 and -0.1 respectively, as seen in the following example:
 
-!!![crosstalk_output](assets/crosstalk_output.png)
+![crosstalk_output](assets/crosstalk_output.png)
 
 ## Pulse Memory Compression
 
@@ -1425,7 +1421,7 @@ The following is a short list of optional flags and their description:
 - 'skip-loop-rolling' - Disables another optimization over loop iterations. This gives faster compilation time at the cost of more program memory use.
 - 'skip-add-implicit-align' - Removes the automatically added [implicit align](timing_in_qua.md#the-implicit-align) from all control flows.
 - 'not-strict-timing' - {{ requirement("QOP","2") }} Gaps within a {{f("qm.qua.strict_timing_")}} block will not block execution by raising warnings instead of errors. Read more about the strict timing feature [here](timing_in_qua.md#strict-timing).
-- 'enable-reset-all-phases-at-program-start' - {{ requirement("QOP","3.3") }} Adds a {{f("qm.qua.reset_global_phase")}} at the beginning of the program, which will reset the MW-FEM upconverters phase.
+- 'enable-reset-all-phases-at-program-start' - {{ requirement("QOP","3.3") }} Adds a {{f("qm.qua.reset_global_phase")}} at the beginning of the program, which will reset the MW-FEM upconverters phase. Starting from {{ requirement("QOP","3.6") }}, this is the default behavior.
 
 The way to use these compilation options depends on the `qm-qua` Python package version. Choose your version below to see how:
 
@@ -1437,11 +1433,4 @@ my_compiler_options = CompilerOptionArguments(flags=['flag1', 'flag2'])
 qm.execute(prog, compiler_options=my_compiler_options) # execution
 qm.compile(prog, compiler_options=my_compiler_options)  # compilation
 qmm.simulate(config, prog, SimulationConfig(duration), compiler_options=my_compiler_options) # simulation
-```
-
-For example, in the following code, we execute a program with the automatic core allocation compilation option:
-
-```python
-my_compiler_options = CompilerOptionArguments(flags=['auto-element-thread'])
-qm.execute(prog, compiler_options=my_compiler_options)  # execution
 ```

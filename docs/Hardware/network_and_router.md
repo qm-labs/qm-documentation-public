@@ -303,6 +303,9 @@ These settings ensure uninterrupted communication with the OPX for both HTTP (We
          (Replace `192.168.88.0/24` with your LAN subnet, if it is different)
     3. Save the file and run `source ~/.zshrc` or `source ~/.bash_profile`.
 
+    !!! Note
+        If you are using PyCharm, ensure these variables are explicitly added under: Run → Edit Configurations → EnvirVariables.
+
 === "Linux"
 
     ### Browser Access to the Admin Panel
@@ -324,10 +327,13 @@ These settings ensure uninterrupted communication with the OPX for both HTTP (We
          (Replace `192.168.88.0/24` with your LAN subnet, if it is different)
     3. Save the file and run `source ~/.bashrc` or `source ~/.bash_profile`.
 
+    !!! Note
+        If you are using PyCharm, ensure these variables are explicitly added under: Run → Edit Configurations → EnvirVariables.
+
 !!! Note
     The `no_proxy` environment variable is used globally by many applications, to determine which addresses should bypass the proxy.
-    It is also possible to set the environment variable `no_grpc_proxy` instead of `no_proxy` to specifically target Python (gRPC) connections which are used to communicate with the OPX1000 for job execution.
-    If both `no_proxy` and `no_grpc_proxy` are set and, then Python (gRPC) would ignore the `no_proxy` setting.
+    Configuring `no_proxy`, as shown above, is typically sufficient.
+    It is also possible to set `no_grpc_proxy` in case Python (gRPC) related issues persist; when both are defined, `no_grpc_proxy` takes precedence for Python-based gRPC clients.
     
 !!! Note
     It is also possible to force the python client to ignore the proxy set by the environment variables by setting the `async_trust_env` parameter of the `QuantumMachinesManager` to `False`.

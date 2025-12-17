@@ -81,7 +81,7 @@ Below you can find the links to the manuals and firmware updates for the QDAC-II
     ![QDAC-II Front](assets/QDAC II front.jpg "QDAC-II Front Panel")
 
     The front panel has 24 BNC connectors as the voltage outputs.
-    Their shields are connected to the common chassis ground and the output series resistance is 50 ohms.
+    Their shields are connected to the common chassis ground and the output series resistance is 50 Ω.
     In addition, three trigger outputs (no. 1-3) are in the right most column.
     Their shields and signals are galvanically isolated from the rest of the QDAC, to avoid ground loops.
 
@@ -91,7 +91,7 @@ Below you can find the links to the manuals and firmware updates for the QDAC-II
 
     ![QDAC-II Compact Back](assets/QDAC II compact back.png "QDAC-II Compact Back Panel")
 
-    On the left side of the back panel is the 24 channel Fischer connector carrying the QDAC-II Compact voltage outputs. The shields of all channels are connected to the common chassis ground and the output series resistance is 50 ohms for each channel.
+    On the left side of the back panel is the 24 channel Fischer connector carrying the QDAC-II Compact voltage outputs. The shields of all channels are connected to the common chassis ground and the output series resistance is 50 Ω for each channel.
     Furthermore, you can find the power, the USB, and LAN connectors on the back panel.
     The power is supplied by the Quantum Machines QPSU, which is a linear power supply with galvanic isolation to mains ground.
     Both the LAN and USB connectors feature galvanic isolation for both ground and signals, to avoid ground loops.

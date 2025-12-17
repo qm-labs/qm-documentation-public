@@ -40,7 +40,7 @@ Using the following diagram one can plan the connections to and from an octave t
 
 
 !!! important
-    - Ports `synth 1/2/3` should always be kept terminated to 50Ω when not in use
+    - Ports `synth 1/2/3` should always be kept terminated to 50 Ω when not in use
     - For best performance, one should maintain a space of 1/3U at least above each octave
     - Network should only be connected to `Ethernet 2`
     - Use only the supplied power supplier

@@ -18,6 +18,11 @@ For more information, see [OPX1000 FEMs Guide](../Guides/opx1000_fems.md)
 
 {{ read_csv("docs/Hardware/assets/lffem_port_spec.csv") }}
 
+!!! Note
+    The `direct` mode is optimized for modulated signals and is designed to achieve high SFDR, but it results in an output impedance of 35 Ω.
+    Despite being 35 Ω, the specification is given for a 50 Ω matched load.
+    Connecting to a 50 Ω matched line will produce the exact applied output voltage without distortion, but connecting it to a High-Z load will not yield the expected doubling of the applied voltage at 50 Ω.
+
 {{ read_csv("docs/Hardware/assets/mwfem_port_spec.csv") }}
 
 

@@ -76,7 +76,7 @@ Alternatively, a digital output of one OPX can be used to trigger another OPX by
 
     The trigger in the OPX1000 should be connected to the port labeled Ext. Trig 2 (the right trigger port), as seen in the figure below.
 
-    The threshold for trigger detection is 2 V. It is 10 KOhm terminated, and max allowed voltage is 5.5 V.
+    The threshold for trigger detection is 2 V. It is 10 kΩ terminated, and max allowed voltage is 5.5 V.
 
 
     ![ext_trigger_OPX1000](assets/external_trigger_opx1000.png)

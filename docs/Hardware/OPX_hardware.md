@@ -40,20 +40,20 @@ The signal source can be either AC or DC coupled:
 
 === "DC coupled signal source"
 
-    If the signal source is DC coupled and has 50 ohm DC resistance to ground,
+    If the signal source is DC coupled and has 50 Ω DC resistance to ground,
     it can be directly connected to the analog input. This can be seen in Option 1
     of Fig. 1
 
 === "AC coupled signal source"
 
-    If the signal source is AC coupled and does not have a 50 ohm resistance to
+    If the signal source is AC coupled and does not have a 50 Ω resistance to
     ground, a bias T is needed in order to bias the input amplifier. The
     required setup can be seen in option 2 of Fig. 1. In this case, the source
-    will still need to have a 50 ohm AC impedance throughout its bandwidth for
+    will still need to have a 50 Ω AC impedance throughout its bandwidth for
     proper operation.
 
 !!! important
-    The OPX & OPX+ input has a common-mode voltage of 0.25 V when measured with 50 ohm.
+    The OPX & OPX+ input has a common-mode voltage of 0.25 V when measured with 50 Ω.
 
 ### Setting the voltage gain
 

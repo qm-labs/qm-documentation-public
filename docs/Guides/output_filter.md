@@ -135,13 +135,20 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
         ```python
         'controllers': {
             'con1': {
-                'analog_outputs': {
-                    1: {
-                        ...,
-                        'filter': {
-                            'feedforward': [0.8, 0.3],
-                            'exponential': [(A1, tau1), (A2, tau2), ...],
-                            'exponential_dc_gain': A_dc
+                'type':'opx1000',
+                'fems': {
+                    1 :{
+                        'type': 'LF',
+                        'analog_outputs': {
+                            1: {
+                                ...,
+                                'filter': {
+                                    'feedforward': [0.8, 0.3],
+                                    'exponential': [(A1, tau1), (A2, tau2), ...],
+                                    'exponential_dc_gain': A_dc
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -154,8 +161,14 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
         ```python
         'controllers': {
             'con1': {
-                'analog_outputs': {
-                    1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[], 'exponential_dc_gain':None}},
+                'type':'opx1000',
+                'fems': {
+                    1 :{
+                        'type': 'LF',
+                        'analog_outputs': {
+                            1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[], 'exponential_dc_gain':None}},
+                        },
+                    },
                 },
             },
         }
