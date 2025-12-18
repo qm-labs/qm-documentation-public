@@ -46,9 +46,9 @@ The instance is created with the latest available QOP version, but can be called
 
 ```python
 from qm import QuantumMachinesManager
-from qm_saas import QOPVersion
+from qm_saas import *
 
-with client.simulator(QmSaas.latest_version()) as instance:
+with client.simulator(client.latest_version()) as instance:
     # Use the instance object to simulate QUA programs
     qmm = QuantumMachinesManager(host=instance.host,
                                  port=instance.port,
@@ -137,8 +137,8 @@ Therefore, the command can be used to ensure that an instance is opened in case 
 
 The QM SaaS supports the simulation of multiple versions of both OPX+ and OPX1000. 
 This is handled by the `QOPVersion` object, which accepts a string in the format `vX_Y_Z`.
-To see all available versions, use `QmSaas.versions()`.
-It is also possible to get on the latest QOP version by using `QmSaas.latest_version()`.
+To see all available versions, use `client.versions()`.
+It is also possible to get on the latest QOP version by using `client.latest_version()`.
 
 !!! Note
     The latest version will be the one with the highest version number, e.g. `v3_3_0` is higher than `v2_4_3`.
