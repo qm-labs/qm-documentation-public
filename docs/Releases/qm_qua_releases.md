@@ -6,14 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## 1.2.4a1 - 2025-12-03
+## 1.2.4 - 2025-12-21
 - Requires Python >=3.9, <3.13
-- Tested against QOP 3.6.0
+- Tested against QOP 2.6.0, 3.6.0
 
 **Added**
 
 - Added a warning message when opening a `QuantumMachinesManager` with an outdated `qm-qua` compared to the QOP version.
 - Creating programs with the context manager is now thread safe. Multiple programs can be generated in parallel.
+- QOP 3.7 - Added keys `min_voltage_limit` and `max_voltage_limit` to the LF-FEM analog output port configuration.
+- Added info-level log when a job is successfully enqueued.
+- Added info-level log when a QM instance is successfully opened.
+- Using an in-place operator on a QUA variable or QUA array cell (e.g. `I += i`) will now return an error instead of causing unwanted behavior. Note that doing `I = I + 1` is not caught and will cause unwanted behavior.
 
 **Changed**
 
@@ -27,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed an issue in `qm.set_element_correction` when sending the configuration update request to the QOP.
 - Resolved an issue where `qm.get_config()` returned an incorrect analog input sampling rate.
 - Improved error handling for Octave calibration, raising en exception instead of hanging in some cases.
+- Fixed a bug in setting the downconversion LO-source in case it was not provided.
 - Added support for time of flight parameter in case element has only digital outputs.
 
 **Removed**

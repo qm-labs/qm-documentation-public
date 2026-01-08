@@ -3,6 +3,13 @@
 Here you can find release notes and version files for the latest version of QOP Admin (QOPA).
 Note that the admin was taken out of the QOP package and is a separate package starting from QOP 2.5 and QOP 3.3.
 
+## QOPA 1.5.1
+
+QOPA 1.5.1 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1766137065-lm2z6u/QOPA1.5.1.tar.gz.age).
+
+**Added**
+- Add support for QOP 2.6.0
+
 ## QOPA 1.5.0
 
 QOPA 1.5.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1764772641-fd38mr/QOPA1.5.0.tar.gz.age).
