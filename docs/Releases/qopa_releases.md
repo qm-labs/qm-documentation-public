@@ -8,6 +8,7 @@ Note that the admin was taken out of the QOP package and is a separate package s
 QOPA 1.5.1 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1766137065-lm2z6u/QOPA1.5.1.tar.gz.age).
 
 **Added**
+
 - Add support for QOP 2.6.0
 
 ## QOPA 1.5.0
@@ -15,15 +16,18 @@ QOPA 1.5.1 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/
 QOPA 1.5.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1764772641-fd38mr/QOPA1.5.0.tar.gz.age).
 
 **Added**
+
 - Added an option to unlock locked channels in FEMs.
 - Added visual and audible indications for operations and state changes of the OPX1000 system.
 - Added IP-based rate limiting to the QOPA API.
 
 **Changed**
+
 - Ensured that cluster changes or updates can not be started if one or more devices are not reachable.
 - Changed the shutdown and restart operations to completely power down the entire system.
 
 **Fixed**
+
 - Fixed Octave network configuration to not lose connectivity on older software versions.
 - Fixed a problem that caused the process of adding an Octave to an existing OPX+ cluster to fail.
 - Fixed an issue where cluster-level status messages were not being displayed in the topology view.

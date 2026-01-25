@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
+## 1.1.7 - 2026-01-21
+
+**Added**
+
+- Added support for Python 3.13
+
+**Changed**
+
+- Decreased dependency of urrlib3 to `>=1.26`
+
 ## 1.1.6 - 2025-09-25
 
 **Added**
