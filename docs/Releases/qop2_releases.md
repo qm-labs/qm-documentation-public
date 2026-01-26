@@ -2,6 +2,25 @@
 
 Here you can find release notes and version files for the latest version of {{ requirement("OPX+",2) }}
 
+## QOP 2.6.X
+
+### QOP 2.6.0
+- QOP 2.6.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOP/QOP2.6.0/1766318308-7x9itz/QOP2.6.0.tar.gz.age). Please follow the [QOP Installation Guide](qop_installation_guide.md).
+- Required to use with QOPA 1.5.1  [here](https://qmpublic.s3.amazonaws.com/QOPA/1766137065-lm2z6u/QOPA1.5.1.tar.gz.age).
+- It is recommended to use with {{requirement("QUA", "1.2.4")}} or newer.
+
+#### **High Impact Issues Resolved:**
+
+* Resolved an issue where QUA calculations could produce incorrect values. <!-- PB-338 -->
+* Fixed a rare issue that caused core‑to‑core data transfers to return erroneous results. <!-- PB-385 -->
+* Resolved a bug where consecutive frame rotations ignored the Python literal rotation when mixing literal and QUA variables. <!-- PB-75 -->
+* Fixed a behavior that generated unexpected pulse sequences in switch/case blocks inside `for` loops ending with a frame rotation. <!-- PB-512 -->
+* Fixed an issue where specific OPD channels inflated the number of reported tags. <!-- PB-223 -->
+* Resolved a failure caused by oversized gRPC messages, such as long waveforms, integration weights, or large data payloads. <!-- PB-194 -->
+* Fixed an issue arising when combining `elif` conditionals with variable assignments and save operations. <!-- PB-533 -->
+* Corrected a condition where logically unreachable statements were still executed and played. <!-- PB-537 -->
+* Addressed a sequencing issue where rotate/reset frame operations did not execute in the expected order. <!-- PB-28 -->
+
 ## QOP 2.5.X
 
 ### QOP 2.5.0

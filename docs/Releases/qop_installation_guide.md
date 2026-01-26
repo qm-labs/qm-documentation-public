@@ -24,17 +24,17 @@ you reach the desired release.
         1. Hover over the newly uploaded version and click `Install`.
     
     === "{{ requirement("QOP", "3.3.0") }} and above"
-        Before installing the desired QOP package, ensure that you have compatible version of QOPA as shown in the flowchart. If not, please update the QOPA version before proceeding to install QOP package. 
+        Before installing the desired QOP package, ensure that you have a compatible version of QOPA as shown in the flowchart. If not, please update the QOPA version before proceeding to install QOP package. 
 
         === "QOPA"
             1. In the web GUI, navigate to `Preferences > QOPA`.
-            1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOPA package. Please make sure you have installed the QOPA version which is compatible with the QOP version. 
+            1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOPA package. Please make sure you have installed the QOPA version that is compatible with the QOP version. 
             1. Once the version is uploaded, select the target cluster (if applicable) from the drop-down menu.
             1. Hover over the newly uploaded version and click `Install`.
 
         === "QOP"
             1. In the web GUI, navigate to `Preferences > QOP`.
-            1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package. Please make sure you have installed the QOPA version which is compatible with the QOP version. 
+            1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package. Please make sure you have installed the QOPA version that is compatible with the QOP version. 
             1. Once the version is uploaded, select the target cluster (if applicable) from the drop-down menu.
             1. Hover over the newly uploaded version and click `Install`.
 
@@ -42,17 +42,29 @@ you reach the desired release.
 
 === "OPX+"
     
-    {{ requirement("QOP", "2.0") }} 
-    
-    ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_2.x.x.png)
-    
-    !!! Note "Important note"
-        For the best performence, please make sure to update the QOPA version to the latest one.
+    === "QOP>=2.5.0"
+        ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_250_and_above.png)
+        
+        1. In the web GUI, navigate to `Preferences > QOPA`
+        1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOPA package.
+        1. Once the version is uploaded, select the target cluster from the drop-down menu.
+        1. Hover over the newly uploaded version and click `Install`.
+        1. Once the QOPA update is finished, navigate to `Preferences > QOP`
+        1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package.
+        1. Once the version is uploaded, select the target cluster from the drop-down menu.
+        1. Hover over the newly uploaded version and click `Install`.
 
-    1. In the web GUI, navigate to `Preferences > Versions`.
-    1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package.
-    1. Once the version is uploaded, select the target cluster (if applicable) from the drop-down menu.
-    1. Hover over the newly uploaded version and click `Install`.
+            !!! Note "Important note"
+                For the best performance, please make sure to update the QOPA version to the latest one.
+    
+    === "QOP<=2.4.4"
+                
+        ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_244_and_below.png)
+    
+        1. In the web GUI, navigate to `Preferences > Versions`.
+        1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package.
+        1. Once the version is uploaded, select the target cluster from the drop-down menu.
+        1. Hover over the newly uploaded version and click `Install`.
 
 !!! Note "Important notes"
     - The exact steps may vary slightly depending on your QOP Admin (QOPA) version.
