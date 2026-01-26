@@ -54,7 +54,8 @@ of the channel.
 The most common filters are the exponential compensation filters and high-pass compensation filters.
 
 #### Exponential Compensation Filter
-The exponential compensation filter is used to compensate for an exponential decaying over/undershoot of the signal, which can occur due to passing the signal through the DC port of a bias-tee, or due to the signal passing through many other electronic components (Attenuators, parasitic capacitance, on-chip responses, etc.).
+The exponential compensation filter is used to compensate for an exponential decaying over/undershoot of the signal. 
+These can occur due to the signal passing through the DC port of a bias-tee, or other electronic components (Attenuators, parasitic capacitance, on-chip responses, etc.).
 The distortion is given by the following step response: 
 
 $$s(t) = \left(1 + Ae^{-\frac{t}{\tau}}\right)\cdot u(t)$$
@@ -80,7 +81,7 @@ Where $\tau_\text{hp}$ is the time constant of the filter.
 
 #### General Form For Multiple Exponential Filters
 
-Multiple exponential and a highpass response can be modeled by the following step response:
+Multiple exponential and a high-pass response can be modeled by the following step response:
 
 $$s(t) = \left(A_{dc} + \sum_{n=1}^N A_n e^{-\frac{t}{\tau_n}}\right)\cdot u(t)$$
 
@@ -111,12 +112,12 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
     {{ requirement("QOP", "3.3") }}
     
     The OPX1000 output filter consists of one FIR filter with 48 taps, and 6 IIR filters, each with a single feedback tap.
+    The IIR filters can cover exponential decays and high-pass compensation filters with time constants ranging from 1 ns to 1 second.
     The filters always operate at 2 GSa/s, and each FIR tap is 0.5 ns.
-    There are a total of 6 IIR filters, which can cover exponential decays and high-pass compensation filters with time constants ranging from 1 ns to 1 second.
     
     Note that the filters are applied after the [Crosstalk Correction Matrix](../Guides/features.md/#crosstalk-correction-matrix) and before the DC Offset.
 
-    ![output_filter_OPX1000](output_filter_qop3.png)
+    ![output_filter_OPX1000](assets/output_filter_qop3.png)
 
     The filter for every output channel can be configured at the OPX configuration file under `filter` in the `analog_outputs` field.
 
@@ -126,12 +127,14 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
 
         * To configure the FIR filter, set the taps directly in the `feedforward` field. Feedforward taps are limited to the range (-2,2).
         * To configure the IIR filters, set the filter parameters in the `exponential` and `exponential_dc_gain` fields.
-            * The `exponential` field accepts a list of tuples of the form `[(A1, tau1), ...]`, where `A` is the amplitude and `tau` is the time constant (see above).
+            * The `exponential` field accepts a list of tuples of the form `[(A1, tau1), ...]`, where `A` is the amplitude and `tau` is the time constant (see [above](#general-form-for-multiple-exponential-filters)).
+                * There are no strict hard limits for the values of the parameters, but for achieving good performance with a single exponent it is recommended to keep `-0.8<A<4`. 
+                * Exponents with `tau`s that are close in value "affect" each other, so this slightly changes the limits of the `A`s in multi-exponent cases.
+                * There are combinations of (A, tau) that cannot be supported and will give an error, but this is not expected in realistic scenarios.
             * The `exponential_dc_gain` field accepts a single value `A_dc`, and its default value is `1`.
             * The `high_pass` field can also be used, but only when the `exponential_dc_gain` is not set. 
-                It accepts a single value `tau_hp`, the time constant of the high-pass filter.
-                Using it is equivalent to setting `exponential_dc_gain` to $\frac{\tau_{hp}}{0.5 s}$ and adding to the exponential list the value ($1 - \frac{\tau_{hp}}{0.5 s}$, $\tau_{hp}$). 
-    
+                * It accepts a single value `tau_hp`, the time constant of the high-pass filter.
+                * Using it is equivalent to setting `exponential_dc_gain` to $0$ and adding to the exponential list the value ($1$, $\tau_{hp}$). 
         ```python
         'controllers': {
             'con1': {
@@ -155,9 +158,9 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
             },
         }
         ```
-    
+
         To disable a filter, we simply omit it from the configuration or set it to an empty list/None in the following way:
-        
+
         ```python
         'controllers': {
             'con1': {
@@ -183,7 +186,7 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
 
         * To configure the FIR filter, set the taps directly in the `feedforward` field. Feedforward taps are limited to the range (-2,2).
         * To configure the IIR filters, set the filter parameters in the `exponential` and `high-pass` fields.
-            * The `exponential` field accepts a list of tuples of the form `[(A1, tau1), ...]`, where `A` is the amplitude and `tau` is the time constant (see above).
+            * The `exponential` field accepts a list of tuples of the form `[(A1, tau1), ...]`, where `A` is the amplitude and `tau` is the time constant (see [above](#general-form-for-multiple-exponential-filters)).
             * The `high_pass` field accepts a single value `tau_hp`, the time constant of the high-pass filter. Note that a decay of 0.5 seconds is automatically added to the high-pass filter.
     
         ```python
@@ -376,7 +379,7 @@ When using the [compilation flag](features.md#compilation-options) `disable-filt
 
 We emphasize a few important consequences:
 
-- The delayed readout pulse results in a longer [time-of-flight](demod.md#timing-of-the-measurement-operation). By default, The delay will be **automatically and implicitly** added to the time of flight value in the configuration. This compensation will re-ensure maximal overlap between the incoming readout pulse and the ADC acquiring window. Using ['disable-filtered-ports-alignment' flag](features.md#compilation-options) will disable the automatic adjustment.
-- In order to keep the digital pulses in sync with the analog pulses, the [digital delay parameter](../Introduction/qua_overview.md#configuring-a-digital-pulse) is **automatically** updated accordingly. Using ['disable-filtered-ports-alignment' flag](features.md#compilation-options) will disable the automatic adjustment.
+- The delayed readout pulse results in a longer [time-of-flight](demod.md#timing-of-the-measurement-operation). By default, The delay will be **automatically and implicitly** added to the time of flight value in the configuration. This compensation will re-ensure maximal overlap between the incoming readout pulse and the ADC acquiring window. Using ["disable-filtered-ports-alignment" flag](features.md#compilation-options) will disable the automatic adjustment.
+- In order to keep the digital pulses in sync with the analog pulses, the [digital delay parameter](../Introduction/qua_overview.md#configuring-a-digital-pulse) is **automatically** updated accordingly. Using ["disable-filtered-ports-alignment" flag](features.md#compilation-options) will disable the automatic adjustment.
 - The delay associated with the IIR filters will be the full value stated above even when the FIR filter is not configured.
 - When performing demodulation, the delayed readout pulse will change the phase of the demodulated signal. This can be compensated by rotating the integration weights by $\phi=-2\pi*f_{IF}*\Delta t$, where $f_{IF}$ is the intermediate frequency of the qubit and $\Delta t$ is the delay time. More information about rotating the IQ plane can be found [here](demod.md#rotating-the-iq-plane).

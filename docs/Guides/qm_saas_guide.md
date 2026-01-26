@@ -104,27 +104,27 @@ Serialization and saving can be handled by the `pickle` module in Python.
 Within the first Python interpreter execution, the instance object can be serialized and stored to a file:
 
 ```python
-    import pickle
-    instance = client.simulator()
-    instance.spawn()
-    pickle.dump(instance, open("path/to/instance.pkl", "wb"))
-    ...
-    # Use the instance to simulate
-    ...
+import pickle
+instance = client.simulator()
+instance.spawn()
+pickle.dump(instance, open("path/to/instance.pkl", "wb"))
+...
+# Use the instance to simulate
+...
 ```
 
 In the next python interpreter execution, the instance object can be loaded and used for simulation:
 
 ```python
-    import pickle
-    instance = pickle.load(open("path/to/instance.pkl", "rb"))
-    # The spawn command will not trigger the creation of a new instance if there is already an instance opened with the
-    # same id.
-    instance.spawn()
-    ...
-    # Use the instance to simulate
-    ...
-    instance.close()
+import pickle
+instance = pickle.load(open("path/to/instance.pkl", "rb"))
+# The spawn command will not trigger the creation of a new instance if there is already an instance opened with the
+# same id.
+instance.spawn()
+...
+# Use the instance to simulate
+...
+instance.close()
 ```
 
 The saving and loading saves the time that it takes to spawn a new instance in the cloud and allows sharing the same instance across multiple Python interpreter executions. 
