@@ -1,64 +1,107 @@
 
-# DGX Quantum Guide
+# OPNIC Hybrid Link Guide
 
 ## Overview
 
-DGX Quantum (DGX-Q) integrates a Grace Hopper HPC with a quantum processing unit (QPU) via OPX1000 control.
+The **OPNIC** (OP-Network Interface Card) connects QM's low-latency data network to classical compute resources based on an industry-standard PCIe interface.
 
-The low latency RDMA communication enables the materialization of state-of-the-art algorithms running on powerful accelerators (CPU/GPU) for controlling and reading scalable quantum operations
+Low latency RDMA communication enables the materialization of state-of-the-art algorithms running on powerful accelerators (CPU/GPU/FPGA) for controlling and reading scalable quantum operations.
 
-## DGX Quantum Components
+**OPNIC** Hybrid Link supports a comprehensive range of classical‑computing capabilities, spanning high‑level frameworks to low‑level software‑stack tools. It enables the integration of custom classical algorithms and machine‑learning implementations in languages such as C++, CUDA, or Python.
 
-- **GH200**: The Grace Hopper Supercharged High Performance Computer driving the classical computation
+The quantum–classical interconnect architecture natively supports **NVQLink**, integrates **CUDA‑Q** as a device‑level SDK, enabling hybrid execution and orchestration across QPUs, GPUs, and CPUs.
+
+## Components
+
+- **Server**: Server hosting the OPNIC, supported GPU and CPU
 - **OPX1000**: Ultra low latency Quantum control and readout controller
-- **OPNIC**: OP Network Interface Card, installed in the GH200 PCIe port
+- **OPNIC**: OP Network Interface Card, installed in the server
 
-![DGX Connectivity and Block diagram](assets/DGXQ.png)
+![OPNIC Connectivity and Block diagram](assets/OPNIC_FlowSketch.png)
+
+
+## Supported Architectures:
+
+OPNIC supports a wide range of server architectures and can be deployed on modern X86‑based systems as well as NVIDIA ARM‑based servers.
+
+*Contact QM for a recommended supported server that would fit your needs.*
+
+The **DGX Quantum** platform introduces OPX1000 controller interface with NVIDIA’s Grace Hopper 200 super-chip through the OPNIC card.
+
 
 ## Setup and Installation
-Pre-requisites: Setup, SW and FW initialization and Hardware Installation - [See guide](../Hardware/DGXQ_Installation.md)
+Pre-requisites:
 
-### Pairing The OPX1000 with the GH200
-The GH200 server containing the OPNIC must be paired with an OPX1000 cluster.
-When in doubt or after restart or failure, please follow the next steps:
+1. Setup, SW and FW initialization and Hardware Installation - [See guide](../Hardware/OPNIC_Installation.md)
 
-??? "OPX1000 Pair and Restart steps"
+2. Pairing The OPX1000 with the OPNIC host server:
+
+The server hosting the OPNIC must be paired with an OPX1000 cluster.
+When in doubt or after a restart or a failure, please follow the next steps:
+
+??? "One time - Pair/Unpair Sequence"
+
+    **Action required on initial connection or disconnection**
+
     1. Click on operations
-    2. Select Cluster connected to the GH200
+    2. Select Cluster connected to the server
     3. Verify DGX-Q status is 'Paired to OPX1000' or click on 'Pair'
-    4. Press restart
-    ![Restart QOP](./assets/AdminPairAndRestart.png)
+    4. The cluster will *Automatically* restart
+    5. Top complete initial pairing - follow steps described in next section: OPX1000 to OPNIC host server synchronization steps.
 
-### Initialization & Sync
-To begin working with DGX-Q, the OPX1000 and the GH200 need to be synced. This only needs to happen once after the system boots
-??? "OPX1000 to the GH200 Synchronization steps"
+    ![Paring Sequence QOP](./assets/OPNIC_Pair.png)
 
-    1. From the OPX1000 side, make sure the OPX1000 is paired with the GH200 in the admin panel, as explained [here](#pairing-the-opx1000-with-the-gh200).
+## Communication Initialization
 
-    2. From the GH200 side, run the sync command by executing the following command in the terminal:
+!!! Note - Sync is required on every cluster or server boot
+    To initialize the flow and start-up the cluster - OPX1000 and the OPNIC host server need to be synced.
+
+
+??? "OPX1000 to OPNIC host server synchronization steps"
+
+    1. From the OPX1000 side - QOPA:
+
+        - Make sure the OPX1000 is paired with the Server in the admin panel, as explained [here](#pairing-the-opx1000-with-the-opnic-host-server).
+
+        - Restart the OPX1000 Cluster and wait for 'Waiting for OPNIC Pairing' status:
+
+        ![Startup Sequence QOPA](./assets/OPNIC_Restart_Sequence.png)
+
+    2. From the Server side:
+
+        - Run the sync command by executing the following command in the terminal:
         ```
         opnic sync <ip_address_of_qop OR host_name> <port>
         ```
-        - Current status can be seen by: ```opnic status```
-        - Available commands: ```opnic --help```
+
+        - default port is 8080
+
+        - example and expected output:
+            ``` bash
+            > opnic sync 10.0.0.10 8080
+            [=======================] ✔ Connected to QOP
+            [=======================] ✔ QOP is synced
+            [=======================] ✔ Sync Started
+            ```
+
+    3. OPX1000 boot sequence will continue after synchronization
 
 ## Basic Syntax and Examples
-DGX-Q facilitates interaction with the Quantum system via the OPX.
 The system enables running algorithms using GPU, CPU and supported combinations coded in C++ and/or CUDA.
 
 The examples below provide the basic building blocks for connecting the GPU or CPU to QUA.
 
-### DGX Quantum Streams and Packets
-In the context of DGX-Q, we define a stream as a logical channel of asynchronous flow between OPX1000 and the GH200.
+### OPNIC Streams and Packets
+In the context of OPNIC communication, we define a stream as a logical channel of asynchronous flow between OPX1000 and the server.
 Each stream has:
 
 - A unique identifier (int, between 1 and 1023 (stream 0 is reserved))
-- A direction (OPX1000-to-GH200, or GH200-to-OPX1000)
+- A direction (OPX1000-to-SERVER, or SERVER-to-OPX1000)
 - A constant packet structure
     - Packet structure must contain vectors of data (even if there's only 1 variable)
     - Supported data types: int, bool, fixed point (real)
 
-For both sides (OPX1000 and GH200) we are required to:
+For both sides (OPX1000 and SERVER) we are required to:
 
 1. Declare a packet structure
 2. Followed by a stream declaration which uses that packet structure.
@@ -117,10 +160,10 @@ For both sides (OPX1000 and GH200) we are required to:
         const auto my_outgoing_stream = qm::initialize_stream<outgoing_stream>(OUTGOING_STREAM_ID);
     ```
 
-### OPX1000 ⟷ GH200 Handshake
-At the beginning of each program, we need to do a handshake between the OPX1000 and GH200.
-Every QUA program with a DGX stream will implicitly cause the OPX1000 to send the handshake at the beginning and wait
-until it receives the handshake from the GH200.
+### OPX1000 ⟷ OPNIC Handshake
+At the beginning of each program, a handshake between the OPX1000 and the server is required.
+Every QUA program with an OPNIC stream will implicitly cause the OPX1000 to send the handshake prompt to the server at the beginning, and wait
+until it receives the handshake back from the server.
 
 ```cpp
 qm::sync(); // blocking call, will wait for the OPX1000 to initialize the streams and send the handshake
@@ -172,9 +215,9 @@ qm::sync(); // blocking call, will wait for the OPX1000 to initialize the stream
     }
     ```
 
-### Hello DGX Quantum
+### Hello OPNIC Interface Quantum
 In this example, we will show how to declare a packet, initialize a stream,
-send a variable from OPX1000 to the GH200, do something with it, and send it back.
+send a variable from OPX1000 to the server, do something with it, and send it back.
 
 #### QUA Code Example
 ??? "QUA Code Example"
@@ -210,7 +253,7 @@ send a variable from OPX1000 to the GH200, do something with it, and send it bac
         # Assign a value to the packet
         assign(out_struct.data[0], 554)
 
-        # Send the packet to the GH200
+        # Send the packet to the server
         send_to_external_stream(out_stream, out_struct)
 
         # Wait for the result. This is a blocking call
@@ -251,11 +294,11 @@ send a variable from OPX1000 to the GH200, do something with it, and send it bac
 
 
     int main(){
-        // Initialize the streams. This part configures the GH200 HW and prepares it for execution
+        // Initialize the streams. This part configures the server hardware and prepares it for execution
         const auto my_incoming_stream = qm::initialize_stream<incoming_stream>(INCOMING_STREAM_ID);
         const auto my_outgoing_stream = qm::initialize_stream<outgoing_stream>(OUTGOING_STREAM_ID);
 
-        // Mandatory sync bewteen OPX1000 and GH200. This is a handshake that
+        // Mandatory sync bewteen OPX1000 and server. This is a handshake that
         // 1. Makes sure both sides configured the same streams/packets.
         // 2. Makes sure both sides start at the same time (no packets are sent before HW is initialized)
         //
@@ -373,11 +416,11 @@ send a variable from OPX1000 to the GH200, do something with it, and send it bac
             return -1;
         }
 
-        // Initialize the streams. This part, configures the GH200 HW and making it ready for execution
+        // Initialize the streams. This part configures the server hardware and makes it ready for execution
         auto in_stream = qm::initialize_stream<InStream>(INCOMING_STREAM_ID);
         auto out_stream = qm::initialize_stream<OutStream>(OUTGOING_STREAM_ID);
 
-        // Mandatory sync bewteen OPX1000 and GH200. This is a handshake that
+        // Mandatory sync between the OPX1000 and the server. This is a handshake that
         // 1. Makes sure both sides configured the same streams/packets.
         // 2. Makes sure both sides start at the same time (no packets are sent before HW is initialized)
         //
@@ -421,7 +464,7 @@ send a variable from OPX1000 to the GH200, do something with it, and send it bac
     add_executable(hello_cpu ${CMAKE_SOURCE_DIR}/hello_cpu.cpp)
 
     # Link the application to the opnic SDK.
-    # If the library was built for a GH200 without a GPU, link to qm::opnic instead
+    # If the library was built for a server without a GPU, link to qm::opnic instead
     target_link_libraries(hello_cpu PRIVATE qm::opnic-cuda)
     ```
 

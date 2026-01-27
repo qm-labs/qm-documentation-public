@@ -1,34 +1,40 @@
-# DGX Quantum Installation Guide
-The following page describes the installation procedure of a DGX Quantum (DGX-Q) server, including connectivity to OPX1000, configuration, and initialization.
+# OPNIC Installation Guide
+The following page describes the installation procedure of an OPNIC - including connectivity to the OPX1000, configuration, and initialization.
 
 ## Components
-### DGX Quantum Physical Components
-- **GH200**: The Grace Hopper Supercharged High Performance Computer driving the classical computation. Also referred to as the "**DGX-Q server**"
+### OPNIC Hybrid Link - Physical Components
+- **OPNIC**: OP Network Interface Card, installed in the host server's PCIe port
+- **Server**: Server / Computer driving the classical computation. Also referred to as the "**OPNIC host server**"
 - **OPX1000**: Ultra low latency Quantum control and readout controller
-- **OPNIC**: OP Network Interface Card, installed in the GH200 PCIe port
 
-### DGX Quantum Software & Firmware Components
-The DGX-Q software on the server consists of three open-source software components that are required to be installed on the server:
+### Server Installation
+The OPNIC host server must be configured to communicate for it to function.
+If it is not yet configured, follow the instructions [here](#appendix-1-server-installation)
+
+### OPNIC Hybrid Link Software & Firmware Components
+Software on the server consists of three open-source software components that are required to be installed on the server:
 
 1. OPNIC Driver: A kernel driver for the OPNIC PCIe card
 2. OPNIC SDK: A shared library that is used by user’s application on the server
 3. OPNIC CLI tool: A CLI interface for managing the OPNIC (for example, a one-time sync with QOP, updating card FW, etc.)
 
 !!! Warning
-    Avoid running `sudo apt upgrade` on the Grace Hopper server, as it may trigger unintended driver updates that are incompatible with the provided OPNIC drivers.
+    Avoid running `sudo apt upgrade` on the server, as it may trigger unintended driver updates that are incompatible with the provided OPNIC drivers.
 
-## OPNIC Installation in the DGX-Q Server
+## OPNIC Installation in the host server
 
 Step 4 can be used to update the OPNIC firmware.
 If the system was previously configured, you can skip directly to step 4.
 
 ??? "Step 1: OPNIC Mechanical Assembly"
 
-    * Follow the mechanical assembly manual [OPNIC Assembly Guide](assets/opnic_installation_in_a_server.pdf)
+    The assembly instructions apply to a specific tray-based riser configuration. Server types and PCIe mounts may differ; always follow the manufacturer’s instructions for your model.
 
-??? "Step 2: DGX-Q Connection Schema"
+    * Mechanical assembly manual - tray-based riser server [OPNIC Assembly Guide](assets/opnic_installation_in_a_server.pdf)
 
-    The DGX-Q system requires an Ethernet connection between the OPX1000 chassis and the server and an optical connection between the OPNIC and the OPX1000 chassis. Please follow these guidelines:
+??? "Step 2: OPNIC Connection Schema"
+
+    OPNIC communication requires an Ethernet connection between the OPX1000 chassis and the server and an optical connection between the OPNIC and the OPX1000 chassis. Please follow these guidelines:
 
     * Make sure slot 1 is populated by an FEM or contact Quantum Machines support for an alternative connectivity configuration.
     * Connect the 2 QSFP-MPO adapters to the relevant ports in the OPNIC.
@@ -38,7 +44,7 @@ If the system was previously configured, you can skip directly to step 4.
 
         - **Make sure both MPO optical cables are identical and of the same length.**
 
-        ![DGX-Q Connection](assets/DGX_Q_Connection.png)
+        ![OPNIC-OPX1000 Connection](assets/OPNIC_Connection.png)
 
         !!! Note
             The sketch illustrates the connection to a Rev. C chassis.
@@ -49,7 +55,7 @@ If the system was previously configured, you can skip directly to step 4.
 
         **Make sure you can ping the OPX1000 from the server. The easiest way is to ensure they are on the same subnet. Alternatively, routing can be defined, please contact your IT department for support.**
 
-??? "Step 3: Software Configuration"
+??? "Step 3: OPNIC Drivers Installation and Update"
 
     1. Copy the OPNIC software package provided by Quantum Machines into the server
     2. Add execute permissions:
@@ -75,8 +81,8 @@ If the system was previously configured, you can skip directly to step 4.
         ```bash
         sudo apt install libssl-dev
         cd opnic-sdk
-        cmake . -B build -G Ninja
-        sudo cmake --build build --target install
+        cmake --preset cuda
+        sudo cmake --build build -- install
         cd ..
         ```
 
@@ -111,35 +117,53 @@ If the system was previously configured, you can skip directly to step 4.
         ```
 
     2. Validate that the output indeed shows the latest FPGA and PLL images:
-        
+
         ```
-        Image version: 05.00.52
+        Image version: 05.00.57
         PLL Version: 0xac
         ```
 
-    3. If any of the versions is wrong, Flash the latest image:
-    
+    3. Update by flashing the latest image when versions are outdated:
+
         ```
         opnic flash --image <path_to_image>
         opnic flash --pll <path_to_pll_file>
         ```
 
-    4. Once the flash has ended, reset the card by doing:
-    
+        !!! Note
+            Applicable when installing a new system or updating from a version earlier than *5.00.57*
+
+            while connected to the internet run:
+            ```
+            sudo update-pciids
+            ```
+
+    4. Once the flash has ended, reset the card by running:
+
         ```
         opnic reset-card
         ```
 
     5. Restart the server:
-    
+
         ```
         sudo reboot
         ```
 
-    6. Repeat Validation - see point 2 above.
+    6. Firmware update is supported by new drivers.
+
+        * Follow the driver installation steps described in Step 3.
+        * Repeat Firmware validation upon completion.
+
 
 ## Appendix 1: Server Installation
-DGX-Q server minimal configuration:
+OPNIC host server minimal configuration:
+
+
+* OS:
+
+    * UBUNTU Ver. 22.04.5, 24.04
+    * Fedora CoreOS 42.2x with GNU compiler 15.2.1
 
 * UBUNTU Ver. 22.04.5
 * GCC13
@@ -149,10 +173,13 @@ DGX-Q server minimal configuration:
 * Cuda toolkit 12-8
 
 ### Recommended Installation Steps
-Note that these steps are for a specific GH200 server by QCT, exact details may vary based on the server model and configuration.
+!!! Note
+
+    Next steps are for a specific GH200 server by QCT, exact details may vary based on the server model and configuration.
+
 ??? "1. Preparations"
 
-    * Connect the GH200 with two power cables.
+    * Connect the server with two power cables.
     * Connect an ethernet cable to the Baseboard Management Controller (BMC) panel. This is next to the front power button.
     * Connect an ethernet cable to a free ethernet port, this should be in the same subnet as the OPX.
     * Connect a screen and keyboard to find the BMC IP through the BIOS - ![example](assets/GH_BMC_IP.png)
@@ -160,6 +187,9 @@ Note that these steps are for a specific GH200 server by QCT, exact details may 
 ??? "2. Firmware updates"
 
     Update the server's firmware, full steps (for a specific update) can be found in this [guide](assets/GH_S74G-2U_FW%20update_revE_v4.pdf)
+
+!!! Warning
+    The following installation notes apply to Ubuntu 22.04 on an arm64 system. Make sure to install the NVIDIA drivers that match your configuration. Applying the wrong configuration may stall your system.
 
 ??? "3. Linux installation"
 
@@ -234,6 +264,8 @@ Note that these steps are for a specific GH200 server by QCT, exact details may 
     ```
 
 ??? "7. Install and update Nvidia driver"
+    !!!Warning
+        Make sure to install the NVIDIA drivers that match your configuration. Applying the wrong configuration may stall your system.
 
     Run the following commands to update the system and install the NVIDIA optimized Ubuntu kernel variant and reboot:
     ```bash
@@ -250,7 +282,7 @@ Note that these steps are for a specific GH200 server by QCT, exact details may 
     sudo dpkg -i cuda-keyring*.deb
     sudo apt-get update
     sudo apt-get install cuda-toolkit-12-8 -y
-    sudo apt-get install nvidia-kernel-open-535 cuda-drivers-535 -y
+    sudo apt-get install nvidia-kernel-open-575 cuda-drivers-575 -y
     sudo reboot
     ```
 
