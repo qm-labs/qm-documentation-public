@@ -51,6 +51,8 @@ The values it can take, in 1 dB granularity, are:
 !!! Note
     In the LF-FEM, when changing the gain, the input DC offset needs to be recalibrated.
 
+
+
 ## Back Panel Description
 
 The back panel of the OPX1000 is the interface for control, power and connectivity to other devices.
@@ -64,3 +66,36 @@ The following section details the back panel of the OPX1000 chassis.
     If the external trigger requires a low impedance port, its is advised to add a 50 $\Omega$ terminator to the line.
     See [Guide on External Triggering](../Guides/external_trigger.md) for more details regarding the usage of external triggering in the OPX.
 
+## LED Indicators
+
+### Boot Sequence
+
+🟢 Chassis LED
+
+* Blinks green when chassis is off
+* Solid green when booting
+
+🔵 FEM QM Logo - Solid blue once FEM boot begins
+
+
+### Error Indications
+
+🔴 Chassis Critical Error or Boot Failure
+
+* Chassis LED turns solid red
+
+🔴 Chassis Warning - Chassis LED blinks red at 0.5 Hz
+
+* e.g.: missing fan, over‑voltage/current
+
+### Update Indicators
+
+🔄 QOP/Admin Update:
+
+* Chassis LED blinks twice
+
+🔄 BSP Update:
+
+* Chassis LED flash twice every second during update.
+
+    Upon completion, LED will be constant

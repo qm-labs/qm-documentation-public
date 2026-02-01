@@ -5,6 +5,14 @@ Here you can find release notes and version files for the latest version of {{ r
 !!! Note
     Attempting to use qm-qua <1.2.2a3 with QOP 3.3.0 or higher will result in the inability to fetch results from the OPX1000.
 
+## QOP 3.6.x
+
+- Latest version: **QOP 3.6.1**
+- Please see [the release notes page](../../hidden_pages/QOP36x.md) for more information about this version and for the download link.
+- [QOPA](qopa_releases.md) 1.5.1 (or newer) must be installed before installing QOP 3.5.x.
+- [QOPF](qopf_releases.md) 1.1.0 (or newer) must be installed before installing QOP 3.5.x.
+- Use with `qm-qua==1.2.5` or newer.
+
 ## QOP 3.5.x
 
 - Latest version: **QOP 3.5.1**
