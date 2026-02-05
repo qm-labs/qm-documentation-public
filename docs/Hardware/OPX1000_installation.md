@@ -47,7 +47,7 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
     5. Connect the OPX1000 and Octaves to the power outlet. It is generally recommended to connect the OPX1000 power supplies to separate power outlets. See the [opx1000 power requirements section below](#opx1000-power-requirements) for more information.
     6. Connect the OPX1000 and Octaves grounding post to the grounding point. More information can be found [here](#rack-mounting-and-grounding-installation-guide).
 6. Turn on all the devices.
-7. When using new devices, download the [latest QOP version](../Releases/qop3_releases.md) and upload it to the device via the admin panel.
+7. Please follow the [QOP installation guide](../Releases/qop_installation_guide.md) and install your desired QOP version.
 8. Configure the cluster, as shown [below](#configuring-opx1000-and-octave). This step will also install the latest version and can take ~30 minutes.
 9. Once clustered, the system will start calibrations, and the boot sequence should take a few minutes.
 10. Open a browser and type the system's IP in the address field to access the admin panel where you can configure the system, check its status and more. See the [network overview section below](network_and_router.md#network-overview-and-configuration) for more details on how to access the cluster.

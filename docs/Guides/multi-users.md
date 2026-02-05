@@ -147,7 +147,7 @@ qm.queue.get_by_user_id(user_id) # returns a QmPendingJob object
 ### Interacting with a Pending Job Object
 
 A pending job object allows access to its run state and other information.
-This, for example allows to perform a blocking wait until the job completes:
+This, for example, allows one to perform a blocking wait until the job completes:
 
 ```python
 pending_job = qm.queue.get_at(2)

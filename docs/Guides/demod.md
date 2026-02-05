@@ -323,7 +323,7 @@ config['integration_weights']['minus_sin']['sine'] = w_minus
 with program() as prog:
     I = declare(fixed)
     Q = declare(fixed)
-    measure('readout', 'resonator', None,
+    measure('readout', 'resonator',
             dual_demod.full('cos', 'out1', 'sin', 'out2', I),
             dual_demod.full('minus_sin', 'out1', 'cos', 'out2', Q))
     save(I, 'I')
@@ -362,7 +362,7 @@ config['integration_weights']['minus_sin']['sine'] = w_minus_cos
 with program() as prog:
     I = declare(fixed)
     Q = declare(fixed)
-    measure('readout', 'resonator', None,
+    measure('readout', 'resonator',
             dual_demod.full('cos', 'out1', 'sin', 'out2', I),
             dual_demod.full('minus_sin', 'out1', 'cos', 'out2', Q))
     save(I, 'I')

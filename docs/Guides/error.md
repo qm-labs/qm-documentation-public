@@ -88,7 +88,7 @@ This is a known false error and can be ignored. If you encounter in addition any
 
 % Starting from version 0.6, the behavior of the analog output when an overflow is that the output
 
-% will be clipped to the maximal value rather than wrap-around (e.g 0.5 will not be wrapped around to -0.5
+% will be clipped to the maximal value rather than wrap-around (e.g., 0.5 will not be wrapped around to -0.5
 
 % but will instead be clipped to 0.5 - 2^-16).
 

@@ -23,7 +23,7 @@ QOPA 1.5.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/
 
 **Changed**
 
-- Ensured that cluster changes or updates can not be started if one or more devices are not reachable.
+- Ensured that cluster changes or updates cannot be started if one or more devices are not reachable.
 - Changed the shutdown and restart operations to completely power down the entire system.
 
 **Fixed**

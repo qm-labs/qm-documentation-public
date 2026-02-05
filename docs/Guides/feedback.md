@@ -35,8 +35,8 @@ The OPX makes it seamless to pass data between different controllers/FEM (Front 
         feedback_cond = declare(bool, value=True)
         
         with while_(feedback_cond):  # Looping until the feedback condition is met (repeat until success)
-            measure('readout', 'resonator1', None, dual_demod.full('cos', 'sin', I1))
-            measure('readout', 'resonator2', None, dual_demod.full('cos', 'sin', I2))
+            measure('readout', 'resonator1', dual_demod.full('cos', 'sin', I1))
+            measure('readout', 'resonator2', dual_demod.full('cos', 'sin', I2))
     
             assign(s1, I1 > th1)  # Assigning the condition (qubit state) to a boolean variable
             assign(s2, I2 > th2)  # Assigning the condition (qubit state) to a boolean variable
@@ -63,8 +63,8 @@ The OPX makes it seamless to pass data between different controllers/FEM (Front 
         feedback_cond = declare(bool, value=True)
         
         with while_(feedback_cond):  # Looping until the feedback condition is met (repeat until success)
-            measure('readout', 'resonator1', None, dual_demod.full('cos', 'sin', I1))
-            measure('readout', 'resonator2', None, dual_demod.full('cos', 'sin', I2))
+            measure('readout', 'resonator1', dual_demod.full('cos', 'sin', I1))
+            measure('readout', 'resonator2', dual_demod.full('cos', 'sin', I2))
         
             assign(s1, I1 > th1)  # Assigning the condition (qubit state) to a boolean variable
             assign(s2, I2 > th2)  # Assigning the condition (qubit state) to a boolean variable

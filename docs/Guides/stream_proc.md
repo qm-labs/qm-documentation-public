@@ -19,7 +19,7 @@ Consider, as a simple example, a case where we would like to characterize the su
 We want to play the pulse, read-out the qubit's state and decide whether it is a $|1\rangle$
 or a $|0\rangle$. We then repeat this a large number of times, say $1 \times 10^5$.
 Collecting the results of all $10^5$ experiments is not so interesting.
-Instead, we can  only collect the final average of the set of experiments or how this average develops as data is accumulated.
+Instead, we can only collect the final average of the set of experiments or how this average develops as data is accumulated.
 
 A running average is a straightforward example, but many other manipulations are possible.
 The "stream processing" allows for arithmetic operations and data reshaping to occur on server,
@@ -265,7 +265,7 @@ The default values for `fetch_results` are:
         n = declare(int)
         with for_(n, 0, n < 1e9, n + 1):
             for k in range(num_of_streams):
-                measure('readout', 'q1', None, dual_demod.full('cos', 'sin', Is[k]))
+                measure('readout', 'q1', dual_demod.full('cos', 'sin', Is[k]))
                 save(Is[k], I_streams[k])
         with stream_processing():
             for idx, stream in enumerate(I_streams):

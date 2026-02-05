@@ -64,7 +64,7 @@ The program will be paused at this point until the trigger signal arrives.
 ## Trigger in Multiple OPX's
 
 In a system with $N$ OPX's, there are essentially $N$ trigger ports that can accommodate $N$ separate trigger signals.
-However, each trigger signal can only trigger elements that are configured in the same OPX, i.e., where the elements has it's inputs.
+However, each trigger signal can only trigger elements that are configured in the same OPX, i.e., where the elements have their inputs.
 If we want a trigger signal to trigger elements in multiple controllers we can either use the align method.
 Alternatively, a digital output of one OPX can be used to trigger another OPX by directly connecting it to the other's trigger port.
 

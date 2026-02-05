@@ -43,8 +43,8 @@ measure([pulse], [element], [stream],
 Examples:
 
 ```python
-measure("readout", "RR", None, demod.full("cos", I, "out1"))
-measure("readout", "RR", None, demod.full("cos", I, "out1"), demod.full("sin", Q, "out1"))
+measure("readout", "RR", demod.full("cos", I, "out1"))
+measure("readout", "RR", demod.full("cos", I, "out1"), demod.full("sin", Q, "out1"))
 ```
 
 #### Sliced demodulation
@@ -74,11 +74,11 @@ Examples:
 A = declare(fixed, size=10)
 B = declare(fixed, size=4)
 C = declare(fixed, size=4)
-measure("readout", "RR", None,
+measure("readout", "RR",
     demod.sliced("cos", A, 6, "out1"))
 # The integration weights are, constant, of length 10*4*6 = 240
 
-measure("readout", "RR", None,
+measure("readout", "RR",
     demod.sliced("arb_integW", B, 11, "out1"),
     demod.sliced("sin", C, 11, "out1"))
 # Integration weights are length 4*4*11 = 176
@@ -114,8 +114,8 @@ Examples:
 A = declare(fixed, size=10)
 B = declare(fixed, size=4)
 C = declare(fixed, size=4)
-measure("readout", "RR", None, demod.accumulated("integW1", A, 7, "out1"))
-measure("readout", "RR", None,
+measure("readout", "RR", demod.accumulated("integW1", A, 7, "out1"))
+measure("readout", "RR",
     demod.accumulated("arb_integW", A, 11, "out1"),
     demod.accumulated("sin", A, 11, "out1"))
 ```
@@ -154,8 +154,8 @@ Examples:
 A = declare(fixed, size=10)
 B = declare(fixed, size=4)
 C = declare(fixed, size=4)
-measure("readout", "RR", None, demod.moving_window("cos", A, 5, 3, "out1"))
-measure("readout", "RR", None,
+measure("readout", "RR", demod.moving_window("cos", A, 5, 3, "out1"))
+measure("readout", "RR",
         demod.moving_window("arb_integW", B, 7, 2, "out1"),
         demod.moving_window("sin", C, 7, 2, "out1"))
 ```
@@ -856,7 +856,7 @@ The element `qe1` is defined as a sticky pulse and the resulting waveform is the
 
 ## Frequency Chirp
 
-This feature allows to perform a linear sweep of the element's intermediate frequency in time. Chirp parameters can be updated in run-time, inside a QUA program.
+This feature allows one to perform a linear sweep of the element's intermediate frequency in time. Chirp parameters can be updated in run-time, inside a QUA program.
 
 Basic usage of this feature is performed as follows:
 
