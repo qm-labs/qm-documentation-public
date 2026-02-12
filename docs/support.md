@@ -6,6 +6,9 @@ Join us in our QUA Discord server {{ discord }}. You are welcome to ask question
 
 ## Serializing QUA Programs
 
+Generating a serialized version of a QUA program can be very helpful in debugging your code and control flow.
+Serialization will resolve Python control flow, make parametrization explicit, and transform your program into a standardized format.
+
 It is possible to serialize a QUA program and a config file using these commands:
 
 [comment]: <> (!!! Note)

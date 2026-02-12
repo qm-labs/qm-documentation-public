@@ -7,7 +7,7 @@ search:
 
 Before diving into the many features and possibilities of QUA, it is important to understand the importance and the
 basics of the configuration in QUA.
-In the following tutorial, we describe the components of the configuration and the principles behind it.
+In the following tutorial, we describe the configuration components and the principles behind it.
 
 !!! Note
     The configuration may vary significantly from project to project. The examples below demonstrate the general
@@ -25,13 +25,13 @@ In the following tutorial, we describe the components of the configuration and t
     
     The configuration is divided into two parts: the controller config and the logical config.
     
-    The controller config is where we define the physical hardware connected to the controllers, and the basic properties of the channels.
-    The logical config is where we define all the user-defined elements, pulses, waveforms, and other logical entities that are used in the QUA program.
+    The controller config defines the physical hardware connected to the controllers and the basic properties of the channels.
+    The logical config defines all user-defined elements, pulses, waveforms, and other logical entities used in the QUA program.
 
     These are the configuration's components:
 
     ```python
-    physical_config = {
+    controller_config = {
         'controllers': {...},
         'octaves': {...},
         'mixers': {...},
@@ -48,8 +48,7 @@ In the following tutorial, we describe the components of the configuration and t
 
 === "OPX+"
 
-    The configuration is a crucial piece of the QOP which enables writing advanced QUA protocols simply and intuitively,
-    using 'human language.'
+    The configuration is a crucial part of the QOP, enabling the writing of advanced QUA protocols simply and intuitively using 'human language.'
 
     As described in the [conceptual overview](./qop_overview.md), the configuration is
     where we define our 'Quantum machine' with its elements and their operations.
@@ -59,9 +58,9 @@ In the following tutorial, we describe the components of the configuration and t
     
     In the configuration we will define (partial list):
 
-    - The setup connectivity and associated dc offsets
+    - The setup, connectivity, and associated DC offsets
     - Intermediate frequencies of the qubit and resonator
-    - Waveforms, amplitudes, and lengths of both control and measurements pulses
+    - Waveforms, amplitudes, and lengths of both control and measurement pulses
     - IQ mixer correction parameters
     - Octave configuration (if used)
     
@@ -151,7 +150,7 @@ This is an example of the powerful 'set and forget' approach of QUA.
     
         The controller's dictionary sets the input and output ports of the control hardware (i.e., your OPX).
         We define and configure the ports that participate in the quantum machine for every controller and Front End Module (FEM).
-        In the example below, we use 1 analog outputs, 1 analog inputs, and 1 digital output of an MW-FEM situated in slot 2 of the controller.
+        In the example below, we use 1 analog output, 1 analog input, and 1 digital output of an MW-FEM situated in slot 2 of the controller.
         
         ```python
         'controllers': {
@@ -350,22 +349,22 @@ To see how the internal mapping from OPX I&Q ports ot the relevant RF outputs of
 In the OPX1000, each port receives an address point in the format `(controller name, FEM number, port number)`. 
 For example, `("con1", 1, 2)` refers to port 2 on the FEM in slot 1 of controller 1 (chassis number 1).
 
-##### LF FEM
+##### LF-FEM
 
 In the LF-FEM case, there are no differences compared to the OPX cases above (`mixInputs`, `singleInput`, `octave`), except for the port address discussed above.
 
-##### MW FEM
+##### MW-FEM
 
-In the MW FEM, we define the ports as follows:
+In the MW-FEM, we define the ports as follows:
 
 ```python
-"resonator": {
-    "MWInput": {
-        "port: ("con1", 5, 2),
-        "upconverter": 2  # optional, if not specified, the default will be 1  
+'resonator': {
+    'MWInput': {
+        'port': ('con1', 5, 2),
+        'upconverter': 2  # optional, if not specified, the default will be 1  
     },
-    "MWOutput": {
-        "port": ("con1", 5, 1),  # Output (FEM input) has only a single downconveter, so there is no need to specify it
+    'MWOutput': {
+        'port': ('con1', 5, 1),  # Output (FEM input) has only a single downconveter, so there is no need to specify it
     },
 }
 
@@ -436,7 +435,7 @@ You can read more about the integration weights usage in the [Guide on measure s
 ### Waveforms
 
 In this section we define the waveforms to be used in the pulses. We can define either a constant value waveform or an arbitrary one.
-An arbitrary waveform needs to be provided with a list of samples with length which is equal to the pulse duration. i.e. A Gaussian.
+An arbitrary waveform needs to be provided with a list of samples with length which is equal to the pulse duration, e.g. a Gaussian.
 Note that in both cases, we define the envelope of the pulse before the modulation by the IF frequency.
 For example, in the code below we define a constant 0.4 Volt waveform and an arbitrary waveform.
 

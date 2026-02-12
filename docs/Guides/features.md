@@ -2,7 +2,7 @@
 
 This document describes QUA language features that go beyond the simple use-case described in the QUA overview section.
 
-For easier navigation, we recommend using the table of contents to the left.
+For easier navigation, we recommend using the table of contents to the right.
 
 
 ## Measure statement features
@@ -485,18 +485,17 @@ It is important to note that unlike the `if_` statement, the play command will t
 
 {{ requirement("QOP", "3.2") }}
 
-The MW-FEM allows for a faster conditional play mechanism. 
+The MW-FEM allows for a faster conditional play mechanism. To use, open a context manager via `port_condition` and include all the relevant elements. 
 When sending several pulses to the same port (multiplexing), it is impossible to only block one of them. 
-To use, open a context manager and include all the relevant elements. 
 Failure to include an element playing to the port will result in an error.
 For example:
 
 ```python
-with port_condition(I>0):
+with port_condition(I>0): # context manager for fast conditional play
     play('pi', 'qubit')
 ```
 
-It is important to note that unlike the `if_` statement, the play command will take the same amount of time to execute regardless of the condition. This implies that a false condition will be equivalent to a wait command.
+Again, it is important to note that unlike the `if_` statement, the play command will take the same amount of time to execute regardless of the condition. This implies that a false condition will be equivalent to a wait command.
 
 !!! Note
     The fast digital switch being used has a few ns of instability. For optimal port condition performance, pad the waveform with two additional 0 samples from each side, and make sure to calibrate the pulse with the port condition.

@@ -177,7 +177,7 @@ It is possible to define a custom FEM configuration of the simulator instance.
 This is done by creating a `ClusterConfig` object and adding the required controllers and FEMs to it. 
 Initially, a controller needs to be added to the configuration via `ClusterConfig.controller()`. 
 The FEMs can then be added to this controller object via the `lf_fem(List[int])` and `mw_fem(List[int])` methods. 
-Available slots are 1-8, and both LF FEMs and MW FEMs can be added. 
+Available slots are 1-8, and both LF-FEMs and MW-FEMs can be added. 
 Attempting to add two FEMs to a single slot will result in an error.
 
 !!! Note
@@ -199,7 +199,7 @@ controller.lf_fems(1, 2, 3, 4)
 controller.mw_fems(5, 6, 7, 8)
 
 with client.simulator(QOPVersion("v3_3_0"), cluster_config) as instance:
-    # Use the instance object to simulate QUA programs on a config of 4 LF and 4 MW FEMs
+    # Use the instance object to simulate QUA programs on a config of 4 LF and 4 MW-FEMs
     qmm = QuantumMachinesManager(host=instance.host,
                                  port=instance.port,
                                  connection_headers=instance.default_connection_headers)

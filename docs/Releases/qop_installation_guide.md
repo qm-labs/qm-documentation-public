@@ -18,17 +18,6 @@ you reach the desired release.
 
 === "OPX1000"
 
-    === "QOP<=3.2.X"
-        
-        Please follow the steps listed until you reach QOP version 3.3.1, and then move on to the "3.3.0 and above" tab.
-        
-        ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_32x_and_below.png)
-        
-        1. In the Admin Panel, navigate to `Preferences > Versions`.
-        1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package.
-        1. Once the version is uploaded, select the target cluster (if applicable) from the drop-down menu.
-        1. Hover over the newly uploaded version and click `Install`.
-    
     === "QOP>=3.3.X"
         Before installing the desired QOP package, ensure that you have a compatible version of QOPF installed. You can check the
         requirements for each version on the [OPX1000 releases page](qop3_releases.md)
@@ -54,6 +43,18 @@ you reach the desired release.
             1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package. Please make sure you have installed the QOPA version that is compatible with the QOP version. 
             1. Once the version is uploaded, select the target cluster (if applicable) from the drop-down menu.
             1. Hover over the newly uploaded version and click `Install`.
+
+    === "QOP<=3.2.X"
+            
+        Please follow the steps listed until you reach QOP version 3.3.1, and then move on to the "3.3.0 and above" tab.
+            
+        ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_32x_and_below.png)
+            
+        1. In the Admin Panel, navigate to `Preferences > Versions`.
+        1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package.
+        1. Once the version is uploaded, select the target cluster (if applicable) from the drop-down menu.
+        1. Hover over the newly uploaded version and click `Install`.
+    
 
 
 
