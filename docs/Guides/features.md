@@ -596,9 +596,12 @@ current_vals = np.linspace(1e-3, 5e-3, 100)
 for val in current_vals:
     while not job.is_paused():
         time.sleep(0.001)
-    qm.set_io1(val)
+    job.set_io1_value(val)
     job.resume()
 ```
+
+!!! Note
+    Pausing the QUA program is required to properly set an IO variable with `job.set_io_values(val1, val2)`. Setting it while the program is running may result in unexpected behavior. 
 
 ### Reading an IO variable
 
@@ -620,10 +623,13 @@ In Python, we can have a code block that iteratively checks the IO value and act
 job = qm.execute(prog)
 while not job.is_paused():
     time.sleep(0.001)
-LO = get_io2_value()
+LO = job.get_io2_value()
 # do something with new LO
 job.resume()
 ```
+
+!!! Note
+    Pausing the QUA program is required to properly read an IO variable with `get_io_values()`. Reading it while the program is running may result in unexpected behavior. 
 
 
 ## Input streams
@@ -1264,12 +1270,27 @@ In addition, it is also possible to define two elements that [share an oscillato
 
         The LF-FEM has $N_{cores}=16$, which limits the maximum number of elements that can be used simultaneously.
         A single-input element requires one core and a mixed-input (IQ) element uses two cores, one for each port.
-        Working with a sampling rate of 2 GSa/s will consume double the amount of cores, see more [here](opx1000_fems.md#sampling-rate).
+        Working with a sampling rate of 2 GSa/s will consume double the amount of cores, see more [here](opx1000_fems.md#sampling-rate). 
+
+        If an element uses input, output, and/or digital resources, the required number of cores is the maximum of these values (they are not cumulative).
+            - SingleInput 1 GSPS: 1
+            - SingleInput 2 GSPS: 2
+            - MixInput 1 GSPS: 2
+            - MixInput 2 GSPS: 4
+            - Readout process 1 GSPS (integration, demod, dual_demod, time_tagging): 1
+            - Readout process 2 GSPS (integration, demod, dual_demod): 2 
+            - Readout process 2 GSPS (time_tagging): 1
+            - Digital: 1
 
     === "MW-FEM"
 
-        The MW-FEM has $N_{cores}=8$, which limits the maximum number of elements that can be used simultaneously.
-        Each element requires one core.
+        The MW-FEM has $N_{cores}=8$ complex cores, which limits the maximum number of elements that can be used simultaneously.
+        Each element with input and/or output requires one core. Digital only elements require only half a core.
+
+        If an element uses input, output, and/or digital resources, the required number of cores is the maximum of these values (they are not cumulative).
+            - MWInput: 1
+            - Readout process (integration, demod, dual_demod): 1
+            - Digital: 0.5
     Each core has $N_{oscillators}=6$ internal oscillators.
     Note that an oscillator is needed also for baseband pulses and for performing integration on the readout signal.
     If two (or more) elements with an intermediate frequency [share a core](#sharing-cores), they will each use a separate oscillators, unless they are explicitly defined to [share an oscillator](#sharing-oscillators).
@@ -1278,7 +1299,13 @@ In addition, it is also possible to define two elements that [share an oscillato
 === "OPX+"
 
     The OPX+ has $N_{cores}=18$, which limits the maximum number of elements that can be used simultaneously.
-    A single-input element requires one core and a mixed input (IQ) element uses two cores, one for each channel.
+    A single-input element requires one core and a mixed-input (IQ) element uses two cores, one for each channel.
+
+    If an element uses input, output, and/or digital resources, the required number of cores is the maximum of these values (they are not cumulative).
+        - SingleInput: 1
+        - MixInput: 2
+        - Readout process (integration, demod, dual_demod, time_tagging): 1
+        - Digital: 1
 
     There are $N_{oscillators}=18$ oscillators shared by all cores.
     This limits the number of elements **with an intermediate frequency**.
@@ -1286,10 +1313,15 @@ In addition, it is also possible to define two elements that [share an oscillato
 === "OPX"
 
     The OPX has $N_{cores}=10$, which limits the maximum number of elements that can be used simultaneously.
-    A single-input element requires one core and a mixed input (IQ) element uses two cores, one for each channel.
+    A single-input element requires one core and a mixed-input (IQ) element uses two cores, one for each channel.
 
     There are $N_{oscillators}=10$ oscillators shared by all cores.
     This limits the number of elements **with an intermediate frequency**.
+
+!!! Note
+    Readout processes are an exception to the non-cumulative rule above.
+    When multiple readout processes (integration, demod, dual_demod, time_tagging) run simultaneously, i.e. within the same `measure()` call, the total number of required cores is the sum of the cores required by each individual process.
+    For example, executing `measure("op", "qel", demod.sliced(...), demod.sliced(...), integration.full(...))` on the LF-FEM with 2 GSPS requires 6 cores in total (3 readout processes x 2 cores each).
 
 ### Sharing Cores
 

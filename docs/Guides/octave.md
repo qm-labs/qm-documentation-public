@@ -24,12 +24,12 @@ This is done using the following steps:
     
     qmm = QuantumMachinesManager(..., octave_calibration_db_path=path)
     ```
-    A file `calibraion_db.json` is created at the given path. 
+    A file `calibration_db.json` is created at the given path. 
     This file will be used for saving the calibration parameters. 
     See [the calibration section](../Guides/octave.md#automatic-calibration) for more information. 
 
     ??? Tip
-        - One can save `calibraion_db.json` file at the current working directory by setting `path=os.getcwd()`
+        - One can save `calibration_db.json` file at the current working directory by setting `path=os.getcwd()`
         - Different users of the same octave can have different calibration databases.
         - Multiple users can share the same calibration database file by either using the same path for it or simply sharing it with each other after calibration.
         - Instead of using our built-in calibration database (and providing a path for it), It is also possible to supply your own calibration database and supply it (as an object) instead. To do so, the calibration database must implement `AbstractCalibrationDB` which can be imported from `qm.octave`. Please see its docstrings for more information.
@@ -60,12 +60,12 @@ This is done using the following steps:
     octave_config.set_calibration_db(path)
 
     ```
-    a file `calibraion_db.json` is created at the given path. 
+    a file `calibration_db.json` is created at the given path. 
     This file will be used for saving the calibration parameters. 
     See [the calibration section](../Guides/octave.md#automatic-calibration) for more information. 
 
     ??? Tip
-        - One can save `calibraion_db.json` file at the current working directory by setting `path=os.getcwd()`
+        - One can save `calibration_db.json` file at the current working directory by setting `path=os.getcwd()`
         - Different users of the same octave can have different calibration databases.
         - Multiple users can share the same calibration database file by either using the same path for it or simply sharing it with each other after calibration.
     3. Pass the Octave Config to the Quantum Machine Manager.
@@ -614,6 +614,20 @@ To do so:
         qm.calibrate_element(element, {LO: (IF,)})  
         ```
 
+        It is possible to view the result of the calibration and plot the LO suppresion and image rejection in dependence of the correction parameters using the `CalibrationResultPlotter`: 
+
+        ```python
+        from qualang_tools.octave_tools.calibration_result_plotter import CalibrationResultPlotter
+        qmm = QuantumMachinesManager(host = qop_ip, cluster_name = cluster_name, octave_calibration_db_path=os.getcwd())
+        qm = qmm.open_qm(config)
+        calib_output = qm.calibrate_element(element)
+        plotter = CalibrationResultPlotter(calib_output)
+        plotter.show_image_rejection_calibration_result()
+        plt.show()
+        plotter.show_lo_leakage_calibration_result()
+        plt.show()
+        ```
+
         !!! success " "
             * If one doesn't specify LO and IF, i.e. 
         
@@ -670,7 +684,7 @@ To do so:
 
 !!! Info
     * When running this command, the OPX sends pulses through the analog outputs to the octave. Those pulses gets up converted and are sent internally to the down converters modules. Then, the down converted signal is sent to the OPX through the `IFOUT1`, `IFOUT2` ports. The calculation is done on the OPX's FPGA and the calibrated parameters and saved in the `calibration_db.json` file. 
-    * When the user opens a quantum machine, the calibrated parameters are taken automatically from the `calibraion_db.json` file. 
+    * When the user opens a quantum machine, the calibrated parameters are taken automatically from the `calibration_db.json` file. 
 
 ## Example 
 

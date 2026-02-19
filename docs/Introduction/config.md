@@ -437,7 +437,7 @@ You can read more about the integration weights usage in the [Guide on measure s
 In this section we define the waveforms to be used in the pulses. We can define either a constant value waveform or an arbitrary one.
 An arbitrary waveform needs to be provided with a list of samples with length which is equal to the pulse duration, e.g. a Gaussian.
 Note that in both cases, we define the envelope of the pulse before the modulation by the IF frequency.
-For example, in the code below we define a constant 0.4 Volt waveform and an arbitrary waveform.
+For example, in the code below we define a constant 0.4 amplitude waveform and an arbitrary waveform.
 
 ```python
 'waveforms': {
@@ -451,6 +451,14 @@ For example, in the code below we define a constant 0.4 Volt waveform and an arb
         'samples': [0, 1.2486367355980437e-05, 2.6352133635387178e-05, ... , 2.6352133635387273e-05, 1.248636735598048e-05, 0]
    },
 ```
+
+For the OPX+ or a LF-FEM using the waveform, the sample values give the output in volts and must be within [-0.5, 0.5] (or [-2.5, 2.5] for the LF-FEM in amplified mode). 
+For a MW-FEM using the waveform, the sample values give the output amplitude as a fraction of the `full_scale_power_dbm` and must be within [-1.0, 1.0].
+
+!!! Note
+    In LF-FEM, OPX+, and OPX1.0, waveform amplitude translates directly into Voltage. Considering the example from the snippet above `sample: 0.4` translates to 0.4 V in the mentioned instruments. Note that the LF-FEM
+    module has both direct (output limited to +/- 0.5 V) and amplified mode (limited to +/- 2.5 V). In the case of the MW-FEM, the output voltage is calculated in an interplay between `full_scale_power_dbm` and the `sample/samples`
+    values themselves; for example, with `full_scale_power_dbm = 10 dBm` and `sample : 0.1` the voltage output (into 50 Ohm) would be 0.1 V.
 
 !!! Note
     It is possible to compress the pulse memory by using two parameters: `max_allowed_error` and `sampling_rate`. For further information see [Pulse Memory Compression](../Guides/features.md#pulse-memory-compression)

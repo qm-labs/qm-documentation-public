@@ -129,10 +129,11 @@ If using both inputs, ensure that the downconverters' frequencies are different 
 ### Output Power
 
 The analog output power is defined using the field `full_scale_power_dbm`, which can be set between `-11` and `16` dBm 
-with a 3 dB granularity.
-This will set the power delivered to a 50 Ω load when the waveform is set to full scale (`[-1, 1]`). 
-The amplitude itself is linear in voltage and not power. 
-Therefore, for a given waveform, its shape should be identical between the LF-FEMs and the MW-FEMs (and OPX+) up to a gain factor.
+with a 1 dB granularity (QOP >= 3.3.x).
+This will set the power delivered to a 50 Ω load when the waveform is set to full scale (`{-1, 1}`). 
+The amplitude itself is linear in voltage and not power. For example, `full_scale_power_dbm = 10 dBm` and `wf_amplitude=0.1` outputs (to 50 Ohm) `100 mV`, thus keeping
+the same `full_scale_power_dbm` value and setting `wf_amplitude=0.2` outputs (to 50 ohm) `200 mV`.
+Therefore, for a given waveform, its voltage-shape should be identical between the LF-FEMs and the MW-FEMs (and OPX+) up to a gain factor.
 
 !!! Note
     For best analog performance, it is recommended to work with the `full_scale_power_dbm` set to a value between 1 and 10 dBm.
@@ -140,7 +141,7 @@ Therefore, for a given waveform, its shape should be identical between the LF-FE
     Going above 10 dBm will start to degrade the SFDR, while going below 1 dBm will degrade the SNR. 
 
 !!! Note
-    To calculate the voltage that will be seen on a scope set to 50 Ω, first convert the power to voltage:
+    To calculate the ampltiude-voltage that will be seen on a scope set to 50 Ω, first convert the power to voltage:
 
     \begin{eqnarray}
     x_{mw} = 10^{\frac{x_{dbm}}{10}} \\
@@ -149,4 +150,6 @@ Therefore, for a given waveform, its shape should be identical between the LF-FE
 
     Where $x_{dbm}$ is the value written in the config. This is then multiplied by the waveform amplitude and any
     realtime modification done in QUA.
+
+    For example, given `full_scale_power_dbm = 10 dBm`, leads to x_{mw} = 10 and x_v = \sqrt{\frac{2 \cdot 50 \cdot 10}{1000}} = 1 (Volt)
 

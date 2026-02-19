@@ -22,7 +22,7 @@ you reach the desired release.
         Before installing the desired QOP package, ensure that you have a compatible version of QOPF installed. You can check the
         requirements for each version on the [OPX1000 releases page](qop3_releases.md)
         
-        ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_33x_and_above.png)
+        ![QOP_Versions_Flowchart](assets/QOP_Versions_Diagram_v3.png)
 
         === "QOPA"
             1. In the Admin Panel, navigate to `Preferences > QOPA`.
@@ -46,7 +46,7 @@ you reach the desired release.
 
     === "QOP<=3.2.X"
             
-        Please follow the steps listed until you reach QOP version 3.3.1, and then move on to the "3.3.0 and above" tab.
+        Please follow the steps listed until you reach QOP version 3.3.1, and then move on to the `QOP>=3.3.X` tab.
             
         ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_32x_and_below.png)
             

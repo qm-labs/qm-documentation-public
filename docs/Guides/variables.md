@@ -25,6 +25,17 @@ i = declare(int)  # creates a variable named "i" of type integer
     # big_number is now -2^31
     ```
 
+!!! Note
+    Mixing arithmetics of a QUA integer with python literals of type float will keep the integer type. 
+    
+    ```python
+    i = declare(int, value=3)  # creates a variable named "i" of type integer with value 3
+    assign(i, i + 0.7)  # i stays a QUA integer, 0.7 is rounded down, and the value of i remains 3
+    assign(i, 10 * (i + 1.2))  # i stays a QUA integer, 1.2 is rounded down to 1, and this results in "10 * 4"
+    # when the bracket is expanded it will yield a different result
+    assign(i, 10 * i + 10 * 1.2)  # "10 * 1.2" is being calculated first, so this results in "10 * i + 12"
+    ```
+
 ### Fixed point numbers
 
 Fixed point numbers in QUA are in 4.28 format. There are 4 integer bits, including a sign bit, and 28 fractional bits.
