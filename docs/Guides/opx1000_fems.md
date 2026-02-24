@@ -53,7 +53,7 @@ The analog outputs can operate in one of two modes, set in the config at the out
     The `amplified` mode is optimized for improved step response characteristics and is 50 Ω matched. 
 
 ## Microwave FEM (MW-FEM)
-The MW-FEM module features 8 analog outputs at a quadrature sampling rate of 1 GSa/s which are digitally unconverted to 
+The MW-FEM module features 8 analog outputs at a quadrature sampling rate of 1 GSa/s which are digitally upconverted to 
 MW frequencies, 2 analog inputs at a sampling rate of 1 GSa/s, and 8 digital outputs at a sampling rate of 1 GSa/s.
 For more information about the panel and the connectors, see [OPX1000 Hardware](../Hardware/OPX1000_hardware.md).
 
