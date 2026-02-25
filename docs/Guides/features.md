@@ -1270,7 +1270,7 @@ In addition, it is also possible to define two elements that [share an oscillato
 
         The LF-FEM has $N_{cores}=16$, which limits the maximum number of elements that can be used simultaneously.
         A single-input element requires one core and a mixed-input (IQ) element uses two cores, one for each port.
-        Working with a sampling rate of 2 GSa/s will consume double the amount of cores, see more [here](opx1000_fems.md#sampling-rate). 
+        Working with a sampling rate of 2 GSa/s will consume double the number of cores, see more [here](opx1000_fems.md#sampling-rate). 
 
         If an element uses input, output, and/or digital resources, the required number of cores is the maximum of these values (they are not cumulative).
             - SingleInput 1 GSPS: 1
@@ -1450,6 +1450,7 @@ The following is a short list of optional flags and their description:
 - 'disable-crosstalk-matrix-ports-alignment' - Starting from version {{ requirement("QOP","2.1") }} on OPX+, this flag will disable the temporal alignment between analog ports that participate in the Crosstalk Correction Matrix and those that are not. This will reduce latency for these ports when using the Crosstalk Correction Matrix. In addition, this flag will disable the automatic adjustment of the time-of-flight and digital delays parameters in the configuration. Read more about the latency in the [crosstalk correction matrix guide](#crosstalk-correction-matrix).
 - 'skip-loop-unrolling' -  Disables an optimization over loop iterations. This gives faster compilation time at the cost of more program memory use and possibly more gaps.
 - 'skip-loop-rolling' - Disables another optimization over loop iterations. This gives faster compilation time at the cost of more program memory use.
+- 'skip-amp-loop-optimization' - {{ requirement("QOP","3.6.2") }} Disables loop optimizations related to pulse amplitude calculations. While in most cases this optimization reduces gaps, it can create gaps between loop iterations when amplitude modulation is performed first; disabling the optimization can remove those gaps.
 - 'skip-add-implicit-align' - Removes the automatically added [implicit align](timing_in_qua.md#the-implicit-align) from all control flows.
 - 'not-strict-timing' - {{ requirement("QOP","2") }} Gaps within a {{f("qm.qua.strict_timing_")}} block will not block execution by raising warnings instead of errors. Read more about the strict timing feature [here](timing_in_qua.md#strict-timing).
 - 'enable-reset-all-phases-at-program-start' - {{ requirement("QOP","3.3") }} Adds a {{f("qm.qua.reset_global_phase")}} at the beginning of the program, which will reset the MW-FEM upconverters phase. Starting from {{ requirement("QOP","3.6") }}, this is the default behavior.

@@ -146,7 +146,7 @@ We will present five examples in order to demonstrate the timing in qua:
 5. Two pulses from the same element.
 
 !!! Note
-    For the executable examples look at [timing tutorial](https://github.com/qua-platform/qua-libs/tree/main/Tutorials/intro-to-timing/readme/).
+    For the executable examples look at [timing tutorial](https://github.com/qua-platform/qua-libs/blob/main/Tutorials/intro-to-timing/readme.md).
 
 ### Example #1
 

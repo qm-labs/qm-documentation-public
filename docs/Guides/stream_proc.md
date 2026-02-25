@@ -541,7 +541,7 @@ If the `flat_struct` flag is used on zipped streams, each named field will have 
 
 It is possible to use the server to perform arithmetic operations on a single stream or between different streams.
 A complete list of the possible operations can be found in {{f("qm.qua._dsl.stream_processing.stream_processing.ResultStream")}}. In general, an operation
-can be performed between a stream to itself, two different streams or a stream and a scalar. The operation is done
+can be performed between a stream and itself, two different streams, or a stream and a scalar. The operation is done
 element-wise, so both streams need to be buffered identically. In the case of an operation between a stream and a scalar,
 the operations must be done before buffering the stream.
 

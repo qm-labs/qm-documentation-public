@@ -7,7 +7,7 @@ Here you can find release notes and version files for the latest version of {{ r
 
 ## QOP 3.6.x
 
-- Latest version: **QOP 3.6.1**
+- Latest version: **QOP 3.6.2**
 - Please see [the release notes page](../../hidden_pages/QOP36x.md) for more information about this version and for the download link.
 - [QOPA](qopa_releases.md) 1.5.1 (or newer) must be installed before installing QOP 3.6.x.
 - [QOPF](qopf_releases.md) 1.1.0 (or newer) must be installed before installing QOP 3.6.x.

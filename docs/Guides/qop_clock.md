@@ -32,9 +32,9 @@ When we want to synchronize two or more OPX modules to one clock or use a clock 
     !!! Note
         The OPX1000 can receive an external clock at two frequencies: 10 MHz, and 2000 MHz (2 GHz).
     
-        The 10 MHz clock must have its peak-to-peak voltage be between 0.35 to 2.3 V (-5 to 11 dBm).
+        The 10 MHz clock must have its peak-to-peak voltage be between 0.35 and 2.3 V (-5 to 11 dBm).
     
-        The 2000 MHz clock must have its peak-to-peak voltage be between 0.45 to 1.25 V (-3 to 6 dBm).
+        The 2000 MHz clock must have its peak-to-peak voltage be between 0.45 and 1.25 V (-3 to 6 dBm).
         
         The external clock input is AC coupled and the clock input impedance must be 50 Ω.
 
@@ -155,8 +155,8 @@ When we want to synchronize two or more OPX modules to one clock or use a clock 
     
     The QOP can receive an external clock at three frequencies: 10, 100, and 1000MHz (1GHz).
     The clock input impedance must be 50 Ω.
-    The 10 or 100 MHz clock must have its peak-to-peak voltage be between 0.35 to 2.3 V (-5 to 11 dBm).
-    The 1000 MHz clock must have its peak-to-peak voltage be between 0.45 to 1.25 V (-3 to 6 dBm).
+    The 10 or 100 MHz clock must have its peak-to-peak voltage be between 0.35 and 2.3 V (-5 to 11 dBm).
+    The 1000 MHz clock must have its peak-to-peak voltage be between 0.45 and 1.25 V (-3 to 6 dBm).
     
     !!! Note
         The external clock input is AC coupled
