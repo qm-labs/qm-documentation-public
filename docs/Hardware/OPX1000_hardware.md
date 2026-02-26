@@ -18,8 +18,6 @@ For more information, see [OPX1000 FEMs Guide](../Guides/opx1000_fems.md)
 
 {{ read_csv("docs/Hardware/assets/lffem_port_spec.csv") }}
 
-For more information regarding the analog input stage of the LF-FEM, see [OPX+ Analog Input Stage](OPX_hardware.md#analog-input-stage).
-
 !!! Note
     The `direct` mode is optimized for modulated signals and is designed to achieve high SFDR, but it results in an output impedance of 35 Ω.
     Despite being 35 Ω, the specification is given for a 50 Ω matched load.
