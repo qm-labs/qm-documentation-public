@@ -69,6 +69,10 @@ Boolean operations can be used, but using the operators below ('&', '|', etc) an
     Attempting to use Pythonic operators on QUA variables, or attempting to evaluate QUA variables directly
     (for example, in a Pythonic '`if`' statement), would result in an error.
 
+!!! Note
+    For a detailed explanation of when Python control flow is evaluated versus when QUA control flow is evaluated, see
+    [Python vs QUA control flow](features.md#python-vs-qua-control-flow-compile-time-vs-run-time).
+
 | Operator | Symbol | Example |
 | -------- | :----: | ------- |
 | AND      | &      | a & b   |

@@ -11,6 +11,11 @@ The rack and power requirements can be found [here](assets/OPX1000%20Rack%20and%
 
 Instructions for rack mounting and grounding the OPX1000 can be found [here](assets/OPX1000%20Rack%20Mounting%20and%20Installation%20Guide.pdf).
 
+!!! Note
+    OPX1000 chassis shipped before May 2024 use an older rail revision that is not mechanically compatible with newer chassis.
+    If you are rearranging the rack and have older chassis, please keep each rail pair with its original chassis.
+    Do not leave rails installed in the rack and mount a different chassis generation on them.
+
 ## Cluster
 
 A **cluster** is a synced and fully-connected system of OPX1000 Chassis, Octaves, and other QM devices.
@@ -421,4 +426,3 @@ Make sure to press the optical cables firmly into the ports until a click is hea
 ### Configuring the QM router
 
 See [this page](network_and_router.md#configuring-the-qm-router).
-

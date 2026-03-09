@@ -859,6 +859,11 @@ with qm.octave.batch_mode():
 This code snippet sends all the commands in one message and can at some cases, especially for more than a few octaves in one cluster, be much faster than sending each command separately.
 
 
-## Examples and Usage Tutorials 
+## Examples and Usage Tutorials
+
+!!! Tip "Physics Insight"
+    Special care is required when working with superconducting transmons. Given the negative anharmonicity, the energy ladder for a transmon goes from high to lower frequency values. Thus, even after mixer calibration,
+    it is recommended to set the analog LO value at a frequency >= 50 MHz than the 0-1 frequency of the transmon. That is, the drive frequency will be attained with a negative value of `intermediate frequency`. In relation
+    to superconducting resonators, it can be customary to place the analog LO below all the resonators' frequencies as long as the `intermediate frequency` bandwidth allows the user to address all of the needed resonators.
 
 Take a look at the octave tutorial in our [GitHub repository](https://github.com/qua-platform/qua-libs/tree/main/Tutorials/intro-to-octave), where you can find a template for integrating the octave within your experiments! 

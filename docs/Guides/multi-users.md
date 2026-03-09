@@ -47,7 +47,7 @@ qm2.close()
 
 ### Multi-QMs with shared ports
 
-In {{ requirement("QOP", "2") }}, multiple `qms` are allowed to share ports. The port sharing must be explicitly defined in **both** configurations.
+In {{ requirement("QOP", "2") }}{{ requirement("QOP", "3") }}, multiple `qms` are allowed to share ports. The port sharing must be explicitly defined in **both** configurations.
 Sharing ports between `qms` allows two users (or two experiments) to access the resources, which
 could be useful for multiplexing or for monitoring.
 To enable port sharing, you need to add `"shareable": True` in the port's dictionary. For example:

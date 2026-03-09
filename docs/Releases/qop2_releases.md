@@ -9,7 +9,7 @@ Here you can find release notes and version files for the latest version of {{ r
 - Required to use with QOPA 1.5.1  [here](https://qmpublic.s3.amazonaws.com/QOPA/1766137065-lm2z6u/QOPA1.5.1.tar.gz.age).
 - It is recommended to use with {{requirement("QUA", "1.2.4")}} or newer.
 
-#### **High Impact Issues Resolved:**
+**Fixed**
 
 * Resolved an issue where QUA calculations could produce incorrect values. <!-- PB-338 -->
 * Fixed a rare issue that caused core‑to‑core data transfers to return erroneous results. <!-- PB-385 -->

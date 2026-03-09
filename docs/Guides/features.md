@@ -369,6 +369,45 @@ measure([pulse], [element], [stream],
 
 ## Flow control
 
+### Python vs QUA control flow (compile-time vs run-time)
+
+When writing a QUA program in Python, it is important to distinguish between two evaluation stages:
+
+1. **Python evaluation (before compilation):** regular Python statements (`if`, `for`, etc.) are evaluated on the client machine before the QUA program is compiled.
+2. **QUA evaluation (during execution):** QUA statements (`if_`, `for_`, `while_`, etc.) are compiled and then evaluated in real time on the OPX/OPX1000.
+
+This distinction determines whether a decision is fixed at compile time or can depend on runtime values (for example, measurement results).
+
+```python
+# Python control flow (compile-time decision)
+if use_pulse_a:
+    play("pulse_a", "el")
+else:
+    play("pulse_b", "el")
+```
+
+In the example above, only one branch is added to the compiled QUA program, based on the Python variable `use_pulse_a`.
+
+```python
+# QUA control flow (run-time decision)
+a = declare(fixed)
+with if_(a > 0):
+    play("pulse_a", "el")
+with else_():
+    play("pulse_b", "el")
+```
+
+In this case, both branches are part of the compiled program, and the branch is chosen during runtime according to the QUA variable `a`.
+
+Python loops can still be useful as a metaprogramming tool to generate repeated QUA code:
+
+```python
+for i in range(100):
+    play("pulse", "el")
+```
+
+This is equivalent to writing the `play(...)` command 100 times in the program body. Note that this is not a recommended use case; it is included here as an example.
+
 ### Branching
 
 #### If, Elif & Else

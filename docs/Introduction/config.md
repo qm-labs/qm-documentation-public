@@ -143,6 +143,9 @@ This is an example of the powerful 'set and forget' approach of QUA.
         Moreover, we can define LF-FEM specific parameters such as `'sampling_rate'`, `'output_mode'`, and `'upsampling_mode'`.
         For more information on the FEM-specific parameters, please refer to the [FEMs guide](../Guides/opx1000_fems.md).
 
+        `offset` defines the channel's **idle value**: the DC voltage applied to the port between jobs.
+        See the [Output Idle Values guide](../Guides/output_idle_values.md) for details on how this value persists and how to update it at runtime.
+
         For more information on the `filter` capabilities, please refer to the [Guide on output filters](../Guides/output_filter.md).
 
 
@@ -189,6 +192,9 @@ This is an example of the powerful 'set and forget' approach of QUA.
         holding some port-specific configuration. We can set an `'offset'`, `'delay'` to the port in units of ns.
         Moreover, we can define MW-FEM specific parameters such as `'band'`, `'full_scale_power_dbm'` and `'upconverters'`.
         For more information on the FEM-specific parameters, please refer to the [FEMs guide](../Guides/opx1000_fems.md).
+
+        `offset` defines the channel's **idle value**: the DC voltage applied to the port between jobs.
+        See the [Output Idle Values guide](../Guides/output_idle_values.md) for details on how this value persists and how to update it at runtime.
     
 
 === "OPX+"
@@ -222,13 +228,16 @@ This is an example of the powerful 'set and forget' approach of QUA.
     
     Each analog output port is defined with a `key:item` pair, where the key is the port number and the item is a Python dictionary
     holding some port-specific configuration. We can set an `'offset'`, a `'filter'`, and in {{ requirement("QOP","2") }} we can also specify a `'delay'` to the port in units of ns.
-    
+
     For example, we can define an analog output with a 20 mV offset and a 71 ns delay as follows:
-    
+
     ```python
     1: {'offset': 0.02, 'delay': 71}
     ```
-    
+
+    `offset` defines the initial DC voltage on this port when the QM is opened.
+    See the [Output Idle Values guide](../Guides/output_idle_values.md) for details on persistence behaviour across jobs and QM lifecycles.
+
     For more information on the `filter` capabilities, please refer to the [Guide on output filters](../Guides/output_filter.md).
 
 ### Elements

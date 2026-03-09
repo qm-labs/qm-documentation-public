@@ -12,7 +12,9 @@ The QOP is designed to meet the extremely demanding requirements of quantum cont
 
 A **Quantum Machine (QM)** is created with a **controller configuration**—a Python dictionary that defines the physical hardware resources such as controllers, octaves, and mixers, along with their associated idle values.
 This configuration determines which resources the QM will reserve. 
-Once opened, the QM locks these physical resources so no other QM can use them, enforces default outputs idle state (e.g. DC offsets) which are set between jobs, and manages a job queue to prevent conflicts between concurrent executions.
+Once opened, the QM locks these physical resources so no other QM can use them, enforces default output idle states (e.g. DC offsets, digital polarity) between jobs, and manages a job queue to prevent conflicts between concurrent executions.
+The idle values are loaded from the controller config when the QM is opened and restored to the hardware after every job completes.
+See the [Output Idle Values guide](../Guides/output_idle_values.md) for the full lifecycle.
 
 The **logical configuration** defines abstract, program-level elements such as pulses, waveforms, oscillators, and measurement definitions.
 This configuration is typically needed when executing a job, but can also be supplied to the QM, alongside the physical controller config, as a convenience for simple or single-user workflows.

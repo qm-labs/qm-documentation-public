@@ -74,10 +74,16 @@ Where $\tau_\text{hp}$ is the time constant of the filter.
 
     {{ requirement("QOP", "3.5") }}
     The OPX1000 allows the user to configure an ideal high-pass compensation filter, which is inherently **not** a BIBO filter (Bounded Input, Bounded Output).
+    In the general form, this ideal high-pass case is obtained when $A_{dc}=0$.
     It would lead to an overflow eventually unless the signal is "net-zero" (i.e., the average of the signal is zero).
     Even slight variations from "net-zero", e.g. due to fixed-point signal manipulation in the Pulse Processor before the exponential filters, can accumulate, and would result in an accumulating error.
     In addition, the filter will keep its state between different pulses and or programs, which could lead to a drifting "DC offset".
-    It is possible to reset the filter state between programs using the {{f("qm.api.v2.qm_api.QmApi.reset_digital_filters")}} command.
+    It is possible to reset the filter state between programs using the {{f("qm.api.v2.qm_api.QmApi.reset_digital_filters")}} command (see [Resetting Digital Filter State](#resetting-digital-filter-state)).
+
+#### Resetting Digital Filter State
+
+To reset the accumulated state of the digital filters between programs, call {{f("qm.api.v2.qm_api.QmApi.reset_digital_filters")}}.
+This is especially important when using high-pass compensation settings near the ideal case ($A_{dc}\approx0$), where small non-net-zero components can accumulate over time.
 
 #### General Form For Multiple Exponential Filters
 
@@ -96,7 +102,7 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
 
 !!! Note
 
-    Due to the nature of the ideal high-pass filter ($A_{dc}=0$, $A_{1}=1$, $\tau_1=\tau_{hp}$), which would diverge for any signal that is not "net-zero", we recommend using it with care. See the note [above](#high-pass-compensation-filter).
+    Due to the nature of the ideal high-pass filter ($A_{dc}=0$, $A_{1}=1$, $\tau_1=\tau_{hp}$), which would diverge for any signal that is not "net-zero", we recommend using it with care. See [High-Pass Compensation Filter](#high-pass-compensation-filter) and [Resetting Digital Filter State](#resetting-digital-filter-state).
     
     In most cases, it is better to set $A_{dc}$ to a small non-zero value, and $A_{1}=1-A_{dc}$, which would lead to a long decay with a time constant of $\frac{\tau_{hp}}{A_{dc}}$.
     e.g. if $A_{dc}=\frac{\tau_{hp}}{0.5 s}$, the decay time will be 0.5 seconds.

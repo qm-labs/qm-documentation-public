@@ -13,8 +13,8 @@ This should open the Admin Panel. You can find your current QOP version displaye
 1. Based on your OPX, refer to the flowcharts below and install each intermediate version until 
 you reach the desired release. 
 
-!!! Note
-    Please allow the booting process to finish before updating to a different QOP version
+!!! Warning
+    Please allow the booting process to finish after each step, and only move on to the next step once the device is "Operational".
 
 === "OPX1000"
 
