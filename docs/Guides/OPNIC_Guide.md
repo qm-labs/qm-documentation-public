@@ -7,9 +7,9 @@ The **OPNIC** (OP-Network Interface Card) connects QM's low-latency data network
 
 Low latency RDMA communication enables the materialization of state-of-the-art algorithms running on powerful accelerators (CPU/GPU/FPGA) for controlling and reading scalable quantum operations.
 
-**OPNIC** Hybrid Link supports a comprehensive range of classical‑computing capabilities, spanning high‑level frameworks to low‑level software‑stack tools. It enables the integration of custom classical algorithms and machine‑learning implementations in languages such as C++, CUDA, or Python.
+**OPNIC** Hybrid Link is part of the **QM Open Acceleration Stack** and supports a comprehensive range of classical‑computing capabilities, spanning high‑level frameworks to low‑level software‑stack tools. It enables the integration of custom classical algorithms and machine‑learning implementations in languages such as C++, CUDA, or Python.
 
-The quantum–classical interconnect architecture natively supports **NVQLink**, integrates **CUDA‑Q** as a device‑level SDK, enabling hybrid execution and orchestration across QPUs, GPUs, and CPUs.
+The quantum-classical interconnect architecture is **NVQLink compatible** and integrates **CUDA-Q** as a device-level SDK, enabling hybrid execution and orchestration across QPUs, GPUs, and CPUs.
 
 ## Components
 
@@ -20,22 +20,23 @@ The quantum–classical interconnect architecture natively supports **NVQLink**,
 ![OPNIC Connectivity and Block diagram](assets/OPNIC_FlowSketch.png)
 
 
-## Supported Architectures:
+## Supported Architectures
 
 OPNIC supports a wide range of server architectures and can be deployed on modern X86‑based systems as well as NVIDIA ARM‑based servers.
 
 *Contact QM for a recommended supported server that would fit your needs.*
 
-The **DGX Quantum** platform introduces OPX1000 controller interface with NVIDIA’s Grace Hopper 200 super-chip through the OPNIC card.
+The **DGX Quantum** platform introduced an OPX1000 controller interface with NVIDIA’s Grace Hopper 200 super-chip through the OPNIC card as the initial POC system. Many more server platforms are also supported.
 
 
 ## Setup and Installation
 Pre-requisites:
 
-1. Setup, SW and FW initialization and Hardware Installation - [See guide](../Hardware/OPNIC_Installation.md)
+1. All installation steps completed - [See guide](../Hardware/OPNIC_Installation.md)
 
-2. Pairing The OPX1000 with the OPNIC host server:
+2. The OPX1000 and the OPNIC host server are paired, see below.
 
+### Pairing the OPX1000 with the Opnic Host Server
 The server hosting the OPNIC must be paired with an OPX1000 cluster.
 When in doubt or after a restart or a failure, please follow the next steps:
 
@@ -45,9 +46,9 @@ When in doubt or after a restart or a failure, please follow the next steps:
 
     1. Click on operations
     2. Select Cluster connected to the server
-    3. Verify DGX-Q status is 'Paired to OPX1000' or click on 'Pair'
+    3. Verify server status is 'Paired to OPX1000' or click on 'Pair'
     4. The cluster will *Automatically* restart
-    5. Top complete initial pairing - follow steps described in next section: OPX1000 to OPNIC host server synchronization steps.
+    5. To complete initial pairing, follow the steps in the next section: OPX1000 to OPNIC host server synchronization steps.
 
     ![Paring Sequence QOP](./assets/OPNIC_Pair.png)
 
@@ -487,4 +488,3 @@ send a variable from OPX1000 to the server, do something with it, and send it ba
         CUDA::cudart
     )
     ```
-

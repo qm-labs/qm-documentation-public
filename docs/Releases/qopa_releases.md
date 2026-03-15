@@ -94,7 +94,7 @@ QOPA 1.2.1 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/
 
 **Added**
 
-- Added an option to pair a Grace-Hopper server to create a DGX-Quantum cluster.
+- Added an option to pair a Grace-Hopper server as an OPNIC accelerator host.
 - The FEMs serial numbers will now be displayed in the topology view.
 
 **Fixed**

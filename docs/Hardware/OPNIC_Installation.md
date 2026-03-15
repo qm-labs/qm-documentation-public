@@ -1,5 +1,5 @@
 # OPNIC Installation Guide
-The following page describes the installation procedure of an OPNIC - including connectivity to the OPX1000, configuration, and initialization.
+The following page describes the installation procedure of an OPNIC - including connectivity to the OPX1000, configuration, and initialization as part of the QM Open Acceleration Stack.
 
 ## Components
 ### OPNIC Hybrid Link - Physical Components
