@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Requires Python >=3.9, <3.13
 - Tested against QOP 2.6.0, 3.6.0, 3.6.1, 3.6.2
 
+**Fixed**
+
+- Correctly report QOP 3.6.2 version using `qmm.version_dict()`.
+
 ## 1.2.5 - 2026-01-29
 - Requires Python >=3.9, <3.13
 - Tested against QOP 2.6.0, 3.6.0, 3.6.1
