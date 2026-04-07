@@ -27,7 +27,18 @@ For examples, to simulate a program for 10 us (2500 cycles), we would use:
 simulated_job = qmm.simulate(config, prog, SimulationConfig(duration=2500))
 ```
 
-To obtain the simulates samples use the {{f("qm.jobs.simulated_job.SimulatedJob.get_simulated_samples")}} function of the simulated job object.
+To obtain the simulated samples use the {{f("qm.jobs.simulated_job.SimulatedJob.get_simulated_samples")}} function of the simulated job object.
+
+!!! Note "Interpreting the time axis"
+    The arrays returned in `samples.<controller>.analog[...]` are raw samples. When you analyze them directly, convert sample index to time with the per-port `analog_sampling_rate` in {{f("qm.results.simulator_samples.SimulatorControllerSamples")}}. The built-in `plot()` method already applies this conversion and labels the x axis in ns.
+
+    For example, OPX1000 LF-FEM analog outputs are sampled at `2e9`, so adjacent samples are `0.5 ns` apart:
+
+    ```python
+    samples = job.get_simulated_samples()
+    port = "1-1"  # FEM 1, port 1
+    dt_ns = 1e9 / samples.con1.analog_sampling_rate[port]
+    ```
 
 !!! Note
     Until {{ requirement("QOP", "3.5") }}, the simulate command was a blocking command that would not return until the simulation was done. As consequences, attempting to simulate a long program would result in a gRPC timeout error.

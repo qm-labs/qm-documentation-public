@@ -28,7 +28,7 @@ QOPA 1.5.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/
 
 **Fixed**
 
-- Fixed Octave network configuration to not lose connectivity on older software versions.
+- Fixed Octave network configuration to not lose connectivity on earlier software versions.
 - Fixed a problem that caused the process of adding an Octave to an existing OPX+ cluster to fail.
 - Fixed an issue where cluster-level status messages were not being displayed in the topology view.
 - Fixed the QOPF installation procedure to ensure it functions correctly over a Link-local connection.

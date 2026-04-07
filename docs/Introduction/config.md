@@ -178,7 +178,7 @@ This is an example of the powerful 'set and forget' approach of QUA.
                             1: {}
                         },
                         "analog_inputs": {
-                            1: {"band": 2, "downconverter_frequency": 5e9},
+                            1: {"band": 2, "downconverter_frequency": 5e9, "lo_mode": "auto"},
                         }
                     }
                 }
@@ -195,6 +195,14 @@ This is an example of the powerful 'set and forget' approach of QUA.
 
         `offset` defines the channel's **idle value**: the DC voltage applied to the port between jobs.
         See the [Output Idle Values guide](../Guides/output_idle_values.md) for details on how this value persists and how to update it at runtime.
+
+        **Analog Inputs**
+
+        Each analog input port is defined with a `key:item` pair, where the key is the port number and the item is a Python dictionary
+        holding some port-specific configuration.
+        We can define MW-FEM specific parameters such as `'band'`, `'downconverter_frequency'`, and starting from {{ requirement("QOP","3.7") }}, `'lo_mode'`.
+        The `'lo_mode'` field controls whether the downconversion LO is gated automatically around measurements (`'auto'`, default) or kept enabled whenever the QM is open (`'always_on'`, the earlier default behavior).
+        For more information on the FEM-specific parameters, please refer to the [FEMs guide](../Guides/opx1000_fems.md).
     
 
 === "OPX+"

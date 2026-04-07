@@ -211,8 +211,8 @@ Using this feature, we can demodulate a complex signal given as an IQ pair, usin
 The syntax of a dual demodulation operation is as follows:
 
 ```python
-measure('meas_pulse', 'qe', adc_stream,
-        dual_demod.full('integ_w1', 'integ_w2', demod_res))
+measure('meas_pulse', 'qe', dual_demod.full('integ_w1', 'integ_w2', demod_res),
+        adc_stream=adc_stream)
 ```
 
 !!! Note
@@ -221,8 +221,8 @@ measure('meas_pulse', 'qe', adc_stream,
     This is equivalent to:
 
     ```python
-    measure('meas_pulse', 'qe', adc_stream,
-            dual_demod.full('integ_w1', 'out1', 'integ_w2', 'out2', demod_res))
+    measure('meas_pulse', 'qe', dual_demod.full('integ_w1', 'out1', 'integ_w2', 'out2', demod_res),
+            adc_stream=adc_stream)
     ```
 
     Note that 'integ_w1' and 'integ_w2' each contain two sets of weights, 'cosine' and 'sine'.

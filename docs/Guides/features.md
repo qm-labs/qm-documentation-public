@@ -327,7 +327,7 @@ If the `signalPolarity` would be changed to `Above`, the rising edge would be de
 ##### Basic time-tagging
 
 === "OPX1000"
-    Starting from {{ requirement("QOP", "3.5") }}, the basic time tagging has a resolution of 0.5 ns with a dead time of 1 ns. Previously, the resolution was 1 ns.
+    Starting from {{ requirement("QOP", "3.5") }}, the basic time-tagging result is returned in 0.5 ns units, with a dead time of 1 ns. The values in `times` remain integers, so a value of `420` represents `210 ns`. Previously, the returned values were in 1 ns units.
 
 === "OPX+"
     Basic time tagging has a resolution of 1 ns with a dead time of 2 ns.
@@ -340,7 +340,7 @@ times = declare(int, size=10)
 measure([pulse], [element], [stream], time_tagging.analog(times, max_time, counts)
 ```
 
-- `times` is a vector of integers into which the times of the detected pulses are saved (the units depend on the QOP version).
+- `times` is a vector of integers into which the times of the detected pulses are saved. For basic time tagging on OPX1000 starting from {{ requirement("QOP", "3.5") }}, each increment is 0.5 ns, so divide the value by 2 to convert it to ns. In the other basic time-tagging modes, each increment is 1 ns.
 - `max_time` gives the maximum time window, in ns, during which the statement waits for tag arrival.
 - `counts` is a variable that is populated with the number of tags which arrived during the measurement.
 
@@ -674,14 +674,16 @@ job.resume()
 ## Input streams
 
 {{ requirement("QOP", "2") }}
-Input streams are a queue data structure that allows passing data from the client computer to a running job in the OPX+ with minimal latency.
-To use one, you must first declare it in the QUA program using the {{f("qm.qua.declare_input_stream")}} command.
-The declaration is similar to the declaration of a normal QUA variable. You need to define its type (int, fixed, bool), its name, and optionality, its size or values.
-Once declared, you can use it as you would use any other QUA variable, with the exception that you have two new available commands:
+Input streams are a queue data structure that allows passing data from the client computer to a running job in the OPX with minimal latency.
+Use {{f("qm.qua.declare_input_stream")}} with the `"client"` endpoint to declare one in a QUA program.
+The declaration is similar to the declaration of a normal QUA variable: define the type (`int`, `fixed`, or `bool`), the stream ID, and optionally the size or initial values.
+For OPNIC streams, see the [OPNIC Hybrid Link](OPNIC_Guide.md) guide.
+Once declared, you can use it as you would use any other QUA variable, with the exception that you have two additional operations:
 
 1. Outside the QUA program, in Python, you can use {{f("qm.jobs.base_job.QmBaseJob.push_to_input_stream")}} from the job API to pass data into the QUA program queue. 
    Note that you can pass multiple values through successive calls of this method (one for each entry) and later access them one by one in QUA.
-2. Inside the QUA program, you can use {{f("qm.qua.advance_input_stream")}} function to access the next available data in the queue. 
+2. Inside the QUA program, use {{f("qm.qua.receive_from_stream")}} to consume the next available value from the queue.
+   For `client` streams, this is equivalent to {{f("qm.qua.advance_input_stream")}}.
    If there is no available data, this command will pause the OPX and wait until data is available.
 
 !!! Note
@@ -691,12 +693,12 @@ For example:
 
 ```python
 with program() as example_input_stream:
-    truth_table = declare_input_stream(bool, name='truth_table_input_stream', size=10)
-    tau = declare_input_stream(int, name='tau_input_stream')
+    truth_table = declare_input_stream("client", "truth_table_input_stream", bool, size=10)
+    tau = declare_input_stream("client", "tau_input_stream", int)
     ...
     with while_(some_qua_cond):
-        advance_input_stream(tau)
-        advance_input_stream(truth_table)
+        receive_from_stream(tau)
+        receive_from_stream(truth_table)
         play('operation', 'element0', duration=tau, condition=truth_table[0])
         play('operation', 'element1', duration=tau, condition=truth_table[1])
         play('operation', 'element2', duration=tau, condition=truth_table[2])
@@ -742,8 +744,8 @@ and this variable can be used for further processing. For example, let us look a
 ```python
 with program() as prog:
     # define timestamp streams
-    s_play = declare_stream()
-    s_measure = declare_stream()
+    s_play = declare_output_stream()
+    s_measure = declare_output_stream()
     play('pulse', 'qe', timestamp_stream=s_play)
     measure('readout', 'readout_element', timestamp_stream=s_measure)
     

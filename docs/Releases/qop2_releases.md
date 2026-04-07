@@ -7,7 +7,7 @@ Here you can find release notes and version files for the latest version of {{ r
 ### QOP 2.6.0
 - QOP 2.6.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOP/QOP2.6.0/1766318308-7x9itz/QOP2.6.0.tar.gz.age). Please follow the [QOP Installation Guide](qop_installation_guide.md).
 - Required to use with QOPA 1.5.1  [here](https://qmpublic.s3.amazonaws.com/QOPA/1766137065-lm2z6u/QOPA1.5.1.tar.gz.age).
-- It is recommended to use with {{requirement("QUA", "1.2.4")}} or newer.
+- It is recommended to use with {{requirement("QUA", "1.2.4")}} or later.
 
 **Fixed**
 
@@ -27,7 +27,7 @@ Here you can find release notes and version files for the latest version of {{ r
 For an in-depth review of the version's new features and upgrades, please see [the release notes](assets/QOP2.5_Release_Notes.pdf).
 
 - QOP 2.5.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOP/QOP2.5.0/1754209957-6wuxhq/QOP2.5.0.tar.gz.age). Please follow the [QOP Installation Guide](qop_installation_guide.md).
-- It is recommended to use with {{requirement("QUA", "1.2.3")}} or newer.
+- It is recommended to use with {{requirement("QUA", "1.2.3")}} or later.
 
 ??? note "Octave users upgrading from {{requirement("OPX+", "2.2.X")}} and below"
     Octave users upgrading from QOP version 2.2.X or earlier are encouraged to review the
@@ -84,4 +84,3 @@ For an in-depth review of the version's new features and upgrades, please see [t
 ## QOP 2.0.X
 
 For an in-depth review of the version's new features and upgrades, please see [the release notes](assets/QOP_V2.0_Release_Notes.pdf).
-

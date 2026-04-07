@@ -112,6 +112,12 @@ For both sides (OPX1000 and SERVER) we are required to:
     There can be more than one stream using the same packet structure.
 
 ### Packet declaration example
+Use {{f("qm.qua.qua_struct")}} to define the packet schema carried by the OPNIC stream.
+Each field must be declared as a `QuaArray[type, size]`, even when the packet contains only one value.
+Inside the QUA program, create packet variables with {{f("qm.qua.declare_struct")}}.
+These packet variables are the objects passed to {{f("qm.qua.send_to_stream")}} and to the `target_variable`
+argument of {{f("qm.qua.receive_from_stream")}}.
+
 - QUA Struct:
     ```python
     @qua_struct
@@ -135,10 +141,13 @@ For both sides (OPX1000 and SERVER) we are required to:
     ```
 
 ### Stream declaration example
+The preferred QUA API uses {{f("qm.qua.declare_input_stream")}} and {{f("qm.qua.declare_output_stream")}} with the `"opnic"` endpoint.
+The older `declare_external_stream()`, `send_to_external_stream()`, and `receive_from_external_stream()` functions are deprecated aliases.
+
 - QUA Struct:
     ```python
-    incoming_stream = declare_external_stream(MyPacket, stream_id_incoming, QuaStreamDirection.INCOMING)
-    outgoing_stream = declare_external_stream(MyPacket, stream_id_outgoing, QuaStreamDirection.OUTGOING)
+    incoming_stream = declare_input_stream("opnic", stream_id_incoming, MyPacket)
+    outgoing_stream = declare_output_stream("opnic", stream_id_outgoing, MyPacket)
     ```
 - C++ Struct:
     ```cpp
@@ -150,8 +159,8 @@ For both sides (OPX1000 and SERVER) we are required to:
 
 - QUA Struct:
     ```python
-    incoming_stream = declare_external_stream(MyPacket, stream_id_incoming, QuaStreamDirection.INCOMING)
-    outgoing_stream = declare_external_stream(MyPacket, stream_id_outgoing, QuaStreamDirection.OUTGOING)
+    incoming_stream = declare_input_stream("opnic", stream_id_incoming, MyPacket)
+    outgoing_stream = declare_output_stream("opnic", stream_id_outgoing, MyPacket)
     ```
 
 - C++ Struct:
@@ -173,9 +182,9 @@ qm::sync(); // blocking call, will wait for the OPX1000 to initialize the stream
 ### Send and Receive packets
 - QUA
     ```python
-    send_to_external_stream(outgoing_stream, outgoing_pkt)
+    send_to_stream(outgoing_stream, outgoing_pkt)
     # Receiving a packet will block the PPU core until it is received.
-    receive_from_external_stream(incoming_stream, incoming_pkt)
+    receive_from_stream(incoming_stream, target_variable=incoming_pkt)
     ```
 - C++
     ```cpp
@@ -248,17 +257,17 @@ send a variable from OPX1000 to the server, do something with it, and send it ba
         out_struct = declare_struct(TestPacket)
 
         # Define the incoming and outgoing streams, which use the above packet structure
-        inc_stream = declare_external_stream(TestPacket, stream_id_incoming, QuaStreamDirection.INCOMING)
-        out_stream = declare_external_stream(TestPacket, stream_id_outgoing, QuaStreamDirection.OUTGOING)
+        inc_stream = declare_input_stream("opnic", stream_id_incoming, TestPacket)
+        out_stream = declare_output_stream("opnic", stream_id_outgoing, TestPacket)
 
         # Assign a value to the packet
         assign(out_struct.data[0], 554)
 
         # Send the packet to the server
-        send_to_external_stream(out_stream, out_struct)
+        send_to_stream(out_stream, out_struct)
 
         # Wait for the result. This is a blocking call
-        receive_from_external_stream(inc_stream, inc_struct)
+        receive_from_stream(inc_stream, target_variable=inc_struct)
 
         # Save both values - the one that was sent and the one that was received
         save(inc_struct.data[0], "inc_data")

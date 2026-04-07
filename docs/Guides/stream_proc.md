@@ -25,6 +25,11 @@ A running average is a straightforward example, but many other manipulations are
 The "stream processing" allows for arithmetic operations and data reshaping to occur on server,
 in parallel to OPX experimental runs.
 
+!!! Note
+    For common sweep patterns, the Sweep Program APIs can generate the matching save and buffering logic automatically.
+    Use {{f("qm.qua.declare_with_stream")}} together with the iterators in the [Sweep Program guide](sweep_program.md) when the result structure follows the loop structure.
+    Use manual {{f("qm.qua.stream_processing")}} when you need explicit pipeline operators or a custom result layout.
+
 ## Basic Syntax and Examples
 
 To use the server processing feature, a *stream* must be defined. A stream consists of a *stream variable*, a *pipeline*
@@ -32,11 +37,13 @@ and a *terminal*. The processed stream items can be accessed on the client PC, w
 by creating *result handles* on the client PC.
 In what follows, we introduce each of these components and explain how they are used.
 
-To initiate a stream, we use {{f("qm.qua.declare_stream")}} to declare a stream variable, using the following syntax inside a QUA program:
+To initiate a client output stream, use {{f("qm.qua.declare_output_stream")}} inside a QUA program:
 
 ```python
-my_stream = declare_stream()
+my_stream = declare_output_stream()
 ```
+
+Older code may still use `declare_stream()`, but it is deprecated.
 
 To pass a variable to a stream, we use the {{f("qm.qua.save")}} statement or the {{f("qm.qua.measure")}} statement.
 This creates a data transfer path through which *stream items* are processed and then saved to either
@@ -47,12 +54,12 @@ manipulates it and stores the results to terminals. In addition, you can take a 
 
 ```python
 with program() as prog:
-    my_stream1 = declare_stream(adc_trace=True)
-    my_stream2 = declare_stream()
+    my_stream1 = declare_output_stream()
+    my_stream2 = declare_output_stream()
     a = declare(fixed)
     assign(a, 0.3)
     save(a, my_stream2)
-    measure('my_pulse', 'qe', my_stream1)
+    measure('my_pulse', 'qe', adc_stream=my_stream1)
     with stream_processing():
         my_stream1.input1().with_timestamps().save('adc_results')
         my_stream2.save_all('a_results')
@@ -93,7 +100,7 @@ Note that both these methods are called on a result handle. This structure and i
 
     ```python
     with program() as prog:
-        my_stream = declare_stream()
+        my_stream = declare_output_stream()
         a = declare(fixed)
         assign(a, 0.3)
         save(a, my_stream)
@@ -126,15 +133,16 @@ The following is a simple example of a program that acquires a single raw ADC tr
 
 ```python
 with program() as prog:
-    adc_stream = declare_stream(adc_trace=True)
-    measure('my_pulse', 'qe', adc_stream)
+    adc_stream = declare_output_stream()
+    measure('my_pulse', 'qe', adc_stream=adc_stream)
 
     with stream_processing():
         adc_stream.input1().save('raw_adc')
 ```
 
-By setting `adc_trace=True` we specify that data should be grouped into individual ADC
-traces and not passed on a sample-by-sample manner, such that each trace will be of size `(1, measurement_duration)`.
+When a client output stream is passed to the `adc_stream` argument of `measure()`, QUA treats it as an ADC trace and groups the data into individual traces instead of passing samples one by one.
+Each trace has size `(1, measurement_duration)`.
+You can still set `adc_trace=True` explicitly when declaring the stream, but this is usually not necessary in new code.
 Next, to populate the stream with results, we specify the relevant stream in the `measure` statement. Finally, in the
 `stream_processing` context, the pipeline specifies that we acquire data from analog input 1, and save it with the tag `raw_adc`
 which we can later refer to in the client PC.
@@ -232,7 +240,7 @@ A simple usage example:
 ```python
 with program() as basic_example:
     Is = [declare(fixed) for _ in range(num_of_streams)]
-    I_streams = [declare_stream() for _ in range(num_of_streams)]
+    I_streams = [declare_output_stream() for _ in range(num_of_streams)]
     for k in range(num_of_streams):
         assign(Is[k], k)
         save(Is[k], I_streams[k])
@@ -261,7 +269,7 @@ The default values for `fetch_results` are:
     ```python
     with program() as basic_example_loops:
         Is = [declare(fixed) for _ in range(num_of_streams)]
-        I_streams = [declare_stream() for _ in range(num_of_streams)]
+        I_streams = [declare_output_stream() for _ in range(num_of_streams)]
         n = declare(int)
         with for_(n, 0, n < 1e9, n + 1):
             for k in range(num_of_streams):
@@ -753,4 +761,3 @@ res.my_stream.has_data_loss()
 ### Result Handle
 
 : An object through which results can be fetched
-

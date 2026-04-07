@@ -112,6 +112,20 @@ a `upconverters` field, with up to 2 upconverters per port:
 In the elements `MWInput` field, the user can set the `upconverter` field; the default is 1.
 
 Each analog input port must define a `downconverter_frequency` field with a frequency in the port's band.
+Starting from {{ requirement("QOP","3.7") }}, MW-FEM analog inputs also support the `lo_mode` field:
+
+* `auto` - the default. The downconversion LO is enabled automatically before a measurement and disabled when no measurement is active, including between programs. This changes the default behavior from earlier releases, where the LO remained enabled whenever the QM was open.
+* `always_on` - the downconversion LO remains enabled whenever the QM is open. This preserves the earlier default behavior.
+
+```python
+"analog_inputs": {
+    1: {"band": 2, "downconverter_frequency": 5e9, "lo_mode": "auto"},
+    2: {"band": 2, "downconverter_frequency": 5.1e9, "lo_mode": "always_on"},
+}
+```
+
+!!! Note
+    In `auto` mode, the ADC trace includes a short 5 MHz ringing transient. This is only an artifact on the ADC trace and not an output signal from the MW-FEM.
 
 ### Optimized Readout
 
@@ -127,8 +141,10 @@ If using both inputs, ensure the downconverters' frequencies differ by at least 
 
 ### Output Power
 
-The analog output power is defined using the field `full_scale_power_dbm`, which can be set between `-11` and `16` dBm 
-with a 1 dB granularity (QOP >= 3.3.x).
+The analog output power is defined using the field `full_scale_power_dbm`.
+Starting from {{ requirement("QOP","3.7") }}, it can be set between `-11` and `18` dBm with a 1 dB granularity.
+In earlier QOP 3.x releases, the upper limit is `16` dBm.
+Note that output power above `16` dBm is not guaranteed across the entire frequency range.
 This will set the power delivered to a 50 Ω load when the waveform is set to full scale (`{-1, 1}`). 
 The amplitude is linear in voltage, not power. For example, `full_scale_power_dbm = 10 dBm` and `wf_amplitude=0.1` outputs (to 50 Ohm) `100 mV`, thus keeping
 the same `full_scale_power_dbm` value and setting `wf_amplitude=0.2` outputs (to 50 Ohm) `200 mV`.
@@ -151,4 +167,3 @@ Therefore, for a given waveform, its voltage-shape should be identical between t
     real-time modification done in QUA.
 
     For example, given `full_scale_power_dbm = 10 dBm`, leads to x_{mw} = 10 and x_v = \sqrt{\frac{2 \cdot 50 \cdot 10}{1000}} = 1 (Volt)
-

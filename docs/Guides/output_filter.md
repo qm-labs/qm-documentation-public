@@ -127,7 +127,7 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
 
     The filter for every output channel can be configured at the OPX configuration file under `filter` in the `analog_outputs` field.
 
-    === "QOP 3.5 and newer"
+    === "QOP 3.5 and later"
 
         {{ requirement("QOP", "3.5") }}
 
@@ -183,7 +183,7 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
         }
         ```
         
-    === "QOP 3.4 and older"
+    === "QOP 3.4 and earlier"
 
         The filters are cascaded sequentially, such that the output of one filter is the input of the next one.
         !!! Note
@@ -355,13 +355,13 @@ When using the [compilation flag](features.md#compilation-options) `disable-filt
 
 === "OPX1000"
 
-    === "QOP 3.5 and newer"
+    === "QOP 3.5 and later"
 
         - FIR Filter: The delay is 8 cycles (32 ns).
         - IIR Filters: The delay is 17 cycles (68 ns), regardless of the number of IIR filters used.
         - FIR + IIR Filters: The delay is 25 cycles (100 ns).
 
-    === "QOP 3.4 and older"
+    === "QOP 3.4 and earlier"
 
         - FIR Filter: The delay is 8 cycles (32 ns).
         - IIR + FIR Filters: Using any number of IIR filters will add 21 cycles (84 ns) to the delay. Note that this includes the FIR filters, as it is not possible to use the IIR without using the FIR.

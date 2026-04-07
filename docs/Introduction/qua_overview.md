@@ -454,6 +454,11 @@ When using the MW-FEM, one can also reset the global phase using {{f("qm.qua.res
 reset_global_phase()
 ```
 
+!!! Note
+    {{f("qm.qua.reset_if_phase")}} is applied with the next `play()` or `align()` involving the element, including an implicit align.
+    {{f("qm.qua.reset_global_phase")}} is a standalone global instruction, so it is not a drop-in replacement inside loops.
+    For the detailed phase model and guidance on when to use each command, see [Phase and Frame in QUA](../Guides/phase_and_frame.md#global-phase).
+
 ### Updating the frame phase
 
 Adding a fixed phase $\phi_F$ is possible using the {{f("qm.qua.frame_rotation_2pi")}} function:
@@ -597,4 +602,3 @@ in two cases:
    to affect the playing of an element in a different controller.
 
 When transferring arrays, the latency will also increase with the length of the array.
-

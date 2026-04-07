@@ -28,6 +28,9 @@ where $\tilde{\omega_{IF}}$ and $\tilde{t}$ are the intermediate frequency of th
 in which the command {{f("qm.qua.reset_if_phase")}} was applied. From that point forward the phase $\tilde{\phi}$
 is subtracted from the global phase of the element.
 
+The reset is applied with the next `play()` or `align()` involving that element.
+This also includes an [implicit align](timing_in_qua.md#the-implicit-align), such as the one added at the beginning of flow-control branches that involve several elements.
+
 !!! Note
     This means that the intermediate phase after the {{f("qm.qua.reset_if_phase")}} command will be $\phi_{IF} = \omega_{IF} \cdot t - \tilde{\omega_{IF}} \cdot \tilde{t}$,
     where $\tilde{\omega_{IF}}$ and $\tilde{t}$ are defined according to the last {{f("qm.qua.reset_if_phase")}} command used in the sequence.
@@ -36,10 +39,20 @@ is subtracted from the global phase of the element.
 
 {{ requirement("QOP", "3") }} {{ requirement("MW") }}
 Using {{f("qm.qua.reset_global_phase")}} would also subtract the phase associated with the MW-FEM upconverter, in addition to the intermediate phase.
-For any element which is not using the MW-FEM, {{f("qm.qua.reset_global_phase")}} is equivalent to {{f("qm.qua.reset_if_phase")}}
 
-!!! Note
-    If the absolute phase of the element is important and needs to be identical between programs, it is recommended to use the {{f("qm.qua.reset_global_phase")}} command at the beginning of the program.
+Unlike {{f("qm.qua.reset_if_phase")}}, {{f("qm.qua.reset_global_phase")}} is a standalone global instruction that affects all elements in the program.
+Starting from {{ requirement("QOP","3.6") }}, programs begin with an implicit {{f("qm.qua.reset_global_phase")}} by default.
+
+The two phase-reset commands differ both in scope and in when they take effect:
+
+| Command | Scope | What it resets | When it takes effect | Typical use |
+| --- | --- | --- | --- | --- |
+| {{f("qm.qua.reset_if_phase")}} | One element | The element's intermediate-frequency phase | Together with the next `play()` or `align()` involving that element, including an implicit `align()` | Make repeated pulses on one element start with the same IF phase, including inside loops |
+| {{f("qm.qua.reset_global_phase")}} | All elements in the program | Intermediate-frequency phase and, on MW-FEM, the upconverter/downconverter phase | As a standalone global instruction | Reset the absolute lab phase, typically at the beginning of a program |
+
+!!! Important
+    Even for elements that are not using the MW-FEM, the two commands are not fully interchangeable.
+    Do not treat {{f("qm.qua.reset_global_phase")}} as a drop-in replacement for {{f("qm.qua.reset_if_phase")}} inside loops.
 
 Another command that will change the global phase is {{f("qm.qua.update_frequency")}}. When using the flag
 `keep_phase=True`, the phase of the pulse will be continuous through the frequency change, as can be seen in figure 1 indicated by the first dashed black line. 
