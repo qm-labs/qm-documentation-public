@@ -1314,14 +1314,15 @@ In addition, it is also possible to define two elements that [share an oscillato
         Working with a sampling rate of 2 GSa/s will consume double the number of cores, see more [here](opx1000_fems.md#sampling-rate). 
 
         If an element uses input, output, and/or digital resources, the required number of cores is the maximum of these values (they are not cumulative).
-            - SingleInput 1 GSPS: 1
-            - SingleInput 2 GSPS: 2
-            - MixInput 1 GSPS: 2
-            - MixInput 2 GSPS: 4
-            - Readout process 1 GSPS (integration, demod, dual_demod, time_tagging): 1
-            - Readout process 2 GSPS (integration, demod, dual_demod): 2 
-            - Readout process 2 GSPS (time_tagging): 1
-            - Digital: 1
+
+        - SingleInput 1 GSPS: 1
+        - SingleInput 2 GSPS: 2
+        - MixInput 1 GSPS: 2
+        - MixInput 2 GSPS: 4
+        - Readout process 1 GSPS (integration, demod, dual_demod, time_tagging): 1
+        - Readout process 2 GSPS (integration, demod, dual_demod): 2
+        - Readout process 2 GSPS (time_tagging): 1
+        - Digital: 1
 
     === "MW-FEM"
 
@@ -1329,9 +1330,11 @@ In addition, it is also possible to define two elements that [share an oscillato
         Each element with input and/or output requires one core. Digital only elements require only half a core.
 
         If an element uses input, output, and/or digital resources, the required number of cores is the maximum of these values (they are not cumulative).
-            - MWInput: 1
-            - Readout process (integration, demod, dual_demod): 1
-            - Digital: 0.5
+
+        - MWInput: 1
+        - Readout process (integration, demod, dual_demod): 1
+        - Digital: 0.5
+
     Each core has $N_{oscillators}=6$ internal oscillators.
     Note that an oscillator is needed also for baseband pulses and for performing integration on the readout signal.
     If two (or more) elements with an intermediate frequency [share a core](#sharing-cores), they will each use a separate oscillators, unless they are explicitly defined to [share an oscillator](#sharing-oscillators).
@@ -1343,10 +1346,11 @@ In addition, it is also possible to define two elements that [share an oscillato
     A single-input element requires one core and a mixed-input (IQ) element uses two cores, one for each channel.
 
     If an element uses input, output, and/or digital resources, the required number of cores is the maximum of these values (they are not cumulative).
-        - SingleInput: 1
-        - MixInput: 2
-        - Readout process (integration, demod, dual_demod, time_tagging): 1
-        - Digital: 1
+
+    - SingleInput: 1
+    - MixInput: 2
+    - Readout process (integration, demod, dual_demod, time_tagging): 1
+    - Digital: 1
 
     There are $N_{oscillators}=18$ oscillators shared by all cores.
     This limits the number of elements **with an intermediate frequency**.
