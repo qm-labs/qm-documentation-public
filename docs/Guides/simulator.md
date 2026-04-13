@@ -25,6 +25,7 @@ For examples, to simulate a program for 10 us (2500 cycles), we would use:
 
 ```python
 simulated_job = qmm.simulate(config, prog, SimulationConfig(duration=2500))
+simulated_job.wait_until("Done")
 ```
 
 To obtain the simulated samples use the {{f("qm.jobs.simulated_job.SimulatedJob.get_simulated_samples")}} function of the simulated job object.
@@ -41,10 +42,9 @@ To obtain the simulated samples use the {{f("qm.jobs.simulated_job.SimulatedJob.
     ```
 
 !!! Note
-    Until {{ requirement("QOP", "3.5") }}, the simulate command was a blocking command that would not return until the simulation was done. As consequences, attempting to simulate a long program would result in a gRPC timeout error.
-    To increase the timeout duration, please use the `timeout` parameter when creating the `QuantumMachinesManager` object.
-    Starting from {{ requirement("QOP", "3.5") }}, the simulate command will return as soon as the simulation has started running.
-    We recommend adding a `job.wait_until("Done", 60)` before attempting to fetch any data or samples from the job object.
+    Starting from {{ requirement("QOP", "3.7") }}, the simulate command is fully non-blocking. Simulation involves two stages: the actual simulation (typically a few seconds, longer for complex programs) and data processing (typically a few milliseconds). The command returns immediately after the simulation starts, before either stage completes.
+
+    Always add `simulated_job.wait_until("Done")` before fetching any data or samples from the job object.
 
 ### Simulation Interfaces
 
@@ -124,6 +124,7 @@ To use the waveform report you first need to generate it from a simulated job:
 job = qmm.simulate(config, prog, SimulationConfig(
         duration=duration,                    # duration of simulation in units of 4 ns
 ))
+job.wait_until("Done")
 
 # get DAC and digital samples (optional).
 samples = job.get_simulated_samples()

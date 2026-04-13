@@ -8,8 +8,7 @@ The following page describes the installation procedure of an OPNIC - including 
 - **OPX1000**: Ultra low latency Quantum control and readout controller
 
 ### Server Installation
-The OPNIC host server must be configured to communicate for it to function.
-If it is not yet configured, follow the instructions [here](#appendix-1-server-installation)
+**Important**: Before proceeding with OPNIC installation, you must first complete the server setup. Follow the detailed instructions [here](#appendix-1-server-installation) to install all required dependencies.
 
 ### OPNIC Hybrid Link Software & Firmware Components
 Software on the server consists of three open-source software components that are required to be installed on the server:
@@ -28,9 +27,15 @@ If the system was previously configured, you can skip directly to step 4.
 
 ??? "Step 1: OPNIC Mechanical Assembly"
 
-    The assembly instructions apply to a specific tray-based riser configuration. Server types and PCIe mounts may differ; always follow the manufacturer’s instructions for your model.
+    1. Power down the server completely and disconnect it from all power sources, then install the OPNIC in the server's designated PCIe slot
+        * Mechanical assembly manual example for tray-based riser server [OPNIC Assembly Guide](assets/opnic_installation_in_a_server.pdf)
+        * Server types and PCIe mounts may differ; always follow the manufacturer’s instructions for your model.
 
-    * Mechanical assembly manual - tray-based riser server [OPNIC Assembly Guide](assets/opnic_installation_in_a_server.pdf)
+    2. Power on the server and update the PCI device database:
+
+        * Connect the server to the internet.
+        * Run the following command: `sudo update-pciids`
+        * Verify the OPNIC is properly recognized by running `lspci` and confirm you see the device listed as: **Serial controller: Quantum Machines OPNIC**
 
 ??? "Step 2: OPNIC Connection Schema"
 
@@ -89,7 +94,7 @@ If the system was previously configured, you can skip directly to step 4.
     5. Verify installation of opnic libraries:
 
         ```bash
-        ll /usr/local/lib
+        ls -la /usr/local/lib
         ```
         And verify that the following files are present: `libopnic.so`, `libopnic-cuda.so`.
 
@@ -159,170 +164,240 @@ If the system was previously configured, you can skip directly to step 4.
 ## Appendix 1: Server Installation
 OPNIC host server minimal configuration:
 
-
 * OS:
 
-    * UBUNTU Ver. 22.04.5, 24.04
+    * Ubuntu Ver. 24.04
     * Fedora CoreOS 42.2x with GNU compiler 15.2.1
 
-* UBUNTU Ver. 22.04.5
 * GCC13
 * CMake ≥ 3.25.5
 * make
-* NVidia driver linux-nvidia-64k-hwe-22.04
-* Cuda toolkit 12-8
+* NVIDIA Open kernel drivers compatible with GPU installed
+* CUDA toolkit 12-8
 
 ### Recommended Installation Steps
-!!! Note
-
-    Next steps are for a specific GH200 server by QCT, exact details may vary based on the server model and configuration.
-
-??? "1. Preparations"
-
-    * Connect the server with two power cables.
-    * Connect an ethernet cable to the Baseboard Management Controller (BMC) panel. This is next to the front power button.
-    * Connect an ethernet cable to a free ethernet port, this should be in the same subnet as the OPX.
-    * Connect a screen and keyboard to find the BMC IP through the BIOS - ![example](assets/GH_BMC_IP.png)
-
-??? "2. Firmware updates"
-
-    Update the server's firmware, full steps (for a specific update) can be found in this [guide](assets/GH_S74G-2U_FW%20update_revE_v4.pdf)
-
 !!! Warning
-    The following installation notes apply to Ubuntu 22.04 on an arm64 system. Make sure to install the NVIDIA drivers that match your configuration. Applying the wrong configuration may stall your system.
+    * Server‑specific installation procedures may vary by vendor and hardware configuration. When in doubt, consult the system vendor.
+    * The following installation notes apply to Ubuntu on Aarch64 or x64 systems. Make sure to install the NVIDIA drivers that match your configuration. Applying the wrong configuration may stall your system.
 
-??? "3. Linux installation"
+=== "Ubuntu 24.04 **ARM64**"
+    ??? "1. Linux installation"
+        - Download and install Ubuntu 24.04 ARM64 Server from: [link](https://cdimage.ubuntu.com/releases/24.04.4/release/)
+        - Create a bootable USB drive (disk‑on‑key) and install the OS using a preferred USB imaging tool (e.g., Rufus or Ventoy).
 
-    Download and install Ubuntu 22.04.5 ARM64 Server: [link](https://cdimage.ubuntu.com/releases/22.04.5/release/):
-    - Load it onto a disk-on-key as bootable
-        - In MacOS (replace below # with the disk number, find it with `diskutil list`):
-        ```diskutil unmountDisk /dev/disk#```
-        ```sudo dd if=~/Downloads/ubuntu-22.04.5-live-server-arm64.iso of=/dev/rdisk# bs=4m```
-    - Insert disk-on-key in the BMC panel usb port, and power on the GH200
-    - The installation will start automatically, follow the instructions on the screen.
+    ??? "2. Install GCC13"
 
-??? "4. Install gcc13"
+        Run the following commands:
+        ```bash
+        sudo apt install software-properties-common -y
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+        sudo apt update
+        sudo apt install gcc-13 g++-13 -y
+        # make gcc13 the default version
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+        # verify
+        gcc --version
+        cc --version
+        ```
 
-    Run the following commands:
-    ```bash
-    sudo apt install software-properties-common -y
-    sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-    sudo apt update
-    sudo apt install gcc-13 g++-13 -y
-    # make gcc13 the default version
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
-    # verify
-    gcc --version
-    sudo ln -s /usr/bin/gcc /usr/bin/cc
-    ```
+        Update and run bashrc:
+        ```bash
+        grep -qxF 'export CC=gcc' ~/.bashrc || echo 'export CC=gcc' >> ~/.bashrc
+        source ~/.bashrc
+        ```
 
-    Edit the `/.bashrc` file and add the next string at the end:
-    ```bash
-    export CC=gcc
-    ```
+    ??? "3. Install cmake"
 
-    Run `bashrc` and run configuration:
-    ```bash
-    source ~/.bashrc
-    ```
+        Run the following commands:
+        ```bash
+        # download cmake installer
+        wget https://github.com/Kitware/CMake/releases/download/v3.31.6/cmake-3.31.6-linux-aarch64.sh
 
-??? "5. Install cmake"
+        # grant execution permission
+        sudo chmod +x cmake-3.31.6-linux-aarch64.sh
 
-    Run the following commands:
-    ``` bash
-    # download cmake installer
-    wget https://github.com/Kitware/CMake/releases/download/v3.31.6/cmake-3.31.6-linux-aarch64.sh
+        # run it. agree to the license and type 'Y' when it asks if you want to install it in the default folder
+        ./cmake-3.31.6-linux-aarch64.sh
 
-    # grant execution permission
-    sudo chmod +x cmake-3.31.6-linux-aarch64.sh
+        # move it to /opt
+        sudo mv cmake-3.31.6-linux-aarch64/ /opt/cmake-3.31.6
 
-    # run it. agree to the license and type 'Y' when it asks if you want to install it in the default folder
-    ./cmake-3.31.6-linux-aarch64.sh
+        # add symbolic links in /usr/local/bin to point to the cmake you just installed
+        sudo ln -sf /opt/cmake-3.31.6/bin/ccmake /usr/local/bin/ccmake
+        sudo ln -sf /opt/cmake-3.31.6/bin/cmake /usr/local/bin/cmake
+        sudo ln -sf /opt/cmake-3.31.6/bin/cmake-gui /usr/local/bin/cmake-gui
+        sudo ln -sf /opt/cmake-3.31.6/bin/cpack /usr/local/bin/cpack
+        sudo ln -sf /opt/cmake-3.31.6/bin/ctest /usr/local/bin/ctest
 
-    # move it to /opt
-    sudo mv cmake-3.31.6-linux-aarch64/ /opt/cmake-3.31.6
+        # test
+        cmake --version
+        ```
 
-    # add symbolic links in /usr/local/bin to point to the cmake you just installed
-    sudo ln -s /opt/cmake-3.31.6/bin/ccmake /usr/local/bin/ccmake
-    sudo ln -s /opt/cmake-3.31.6/bin/cmake /usr/local/bin/cmake
-    sudo ln -s /opt/cmake-3.31.6/bin/cmake-gui /usr/local/bin/cmake-gui
-    sudo ln -s /opt/cmake-3.31.6/bin/cpack /usr/local/bin/cpack
-    sudo ln -s /opt/cmake-3.31.6/bin/ctest /usr/local/bin/ctest
+    ??? "4. Install Ninja and make"
 
-    # test
-    cmake --version
-    # install Ninja
-    sudo apt install ninja-build -y
-    ```
+        Run the following command:
+        ```bash
+        sudo apt install ninja-build -y
+        sudo apt install make
+        ```
 
-??? "6.Install make"
+    ??? "5. Install and update NVIDIA driver"
+        !!! Warning
+            Make sure to install the NVIDIA drivers that match your configuration. Applying the wrong configuration may stall your system.
+        Run the following commands to update the system and install the NVIDIA optimized Ubuntu kernel variant and reboot:
+        ```bash
+        sudo DEBIAN_FRONTEND=noninteractive apt purge linux-image-$(uname -r) linux-headers-$(uname -r) linux-modules-$(uname -r) -y
+        sudo apt update
+        sudo apt install linux-nvidia-64k-hwe-24.04 -y
+        sudo reboot now
+        ```
 
-    Run the following commands:
-    ```bash
-    sudo apt install make
-    ```
+        !!! Note
+            Running GH200 may require GPU memory onlining (required for unified memory architecture) - consult vendor:
+            ```bash
+            sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1 memhp_default_state=online_movable"/' /etc/default/grub
+            sudo update-grub
+            sudo reboot now
+            ```
 
-??? "7. Install and update Nvidia driver"
-    !!!Warning
-        Make sure to install the NVIDIA drivers that match your configuration. Applying the wrong configuration may stall your system.
+        Updating NVIDIA driver:
+        ```bash
+        sudo apt-get install linux-headers-$(uname -r)
+        wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/sbsa/cuda-keyring_1.1-1_all.deb
+        sudo dpkg -i cuda-keyring*.deb
+        sudo apt-get update
+        sudo apt-get install cuda-toolkit-12-8 -y
+        sudo apt install nvidia-driver-590-server-open -y
+        sudo reboot
+        ```
 
-    Run the following commands to update the system and install the NVIDIA optimized Ubuntu kernel variant and reboot:
-    ```bash
-    sudo DEBIAN_FRONTEND=noninteractive apt purge linux-image-$(uname -r) linux-headers-$(uname -r) linux-modules-$(uname -r) -y
-    sudo apt update
-    sudo apt install linux-nvidia-64k-hwe-22.04 -y
-    sudo reboot now
-    ```
+        Check installation with:
+        ```bash
+        nvidia-smi
+        ```
 
-    Updating Nvidia driver:
-    ```bash
-    sudo apt-get install linux-headers-$(uname -r)
-    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/sbsa/cuda-keyring_1.1-1_all.deb
-    sudo dpkg -i cuda-keyring*.deb
-    sudo apt-get update
-    sudo apt-get install cuda-toolkit-12-8 -y
-    sudo apt-get install nvidia-kernel-open-575 cuda-drivers-575 -y
-    sudo reboot
-    ```
+        To check and determine whether the CPU and GPU memory subsystems are up and functional, run the following commands
+        ```bash
+        lsmem
+        ```
 
-    Check installation with:
-    ```bash
-    nvidia-smi
-    ```
+        map nvcc:
+        ```bash
+        grep -q 'export PATH=/usr/local/cuda-12.8/bin:$PATH' ~/.bashrc || echo 'export PATH=/usr/local/cuda-12.8/bin:$PATH' >> ~/.bashrc && source ~/.bashrc
+        ```
 
-    To check and determine whether the CPU and GPU memory subsystems are up and functional, run the following commands
-    ```bash
-    lsmem
-    ```
+    ??? "6. Validate correct gcc version"
 
-    map nvcc:
-    ```bash
-    grep -q 'export PATH=/usr/local/cuda-12.8/bin:$PATH' ~/.bashrc || echo 'export PATH=/usr/local/cuda-12.8/bin:$PATH' >> ~/.bashrc && source ~/.bashrc
-    ```
+        This step ensures the correct GCC version is used, as certain installations may inadvertently trigger a rollback to an earlier version
+        ```bash
+        # make gcc13 the default version
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+        # verify
+        gcc --version
+        ```
 
-??? "8. Validate correct gcc version"
+=== "Ubuntu 24.04 **X86_64**"
 
-    This step ensures the correct GCC version is used, as certain installations may inadvertently trigger a rollback to an earlier version
-    ```bash
-    # make gcc13 the default version
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
-    # verify
-    gcc --version
-    ```
+    ??? "1. Linux installation"
+        - Download and install Ubuntu 24.04.4 AMD64 Server from: [link](https://releases.ubuntu.com/noble/)
+        - Create a bootable USB drive (disk‑on‑key) and install the OS using a preferred USB imaging tool (e.g., Rufus or Ventoy).
 
+    ??? "2. Install GCC13"
 
-<!-- ## Appendix 2: OPNIC Recovery via USB
-??? "Detailed Guide"
-    Connect a computer via the USB cable to the OPNIC port and run the next steps through Vivado:
-    - Load the bitfile, and then reboot the server (to have PCIe access). After the reboot, you should see it in 'lspci', and the driver should load.
-    - After this, use the opnic tool to flash the bitfile.
-    Now, we will have two flash partitions: primary and secondary.
-    - The secondary partition is a "fail-safe" partition. We flash it with latest validated bitfile.
-    - After you flash the secondary partition, we flash the primary one with the same bitfile as the secondary.
-    - After you flash them, run 'opnic reset-card', it will reset the card with the bitfile from the flash.
-    - After this reset, reboot the server to reenumerate the PCIe.
-    - Flash latest bitfile version: `opnic flash --image <path_to_image>`
-    - Power cycle the GH200.
-    - After reboot, verify using `opnic --version` that the pll version correct. -->
+        Run the following commands:
+        ```bash
+        sudo apt install software-properties-common -y
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+        sudo apt update
+        sudo apt install gcc-13 g++-13 -y
+        # make gcc13 the default version
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+        # verify
+        gcc --version
+        cc --version
+        ```
+
+        Update and run bashrc:
+        ```bash
+        grep -qxF 'export CC=gcc' ~/.bashrc || echo 'export CC=gcc' >> ~/.bashrc
+        source ~/.bashrc
+        ```
+
+    ??? "3. Install cmake"
+
+        Run the following commands:
+        ```bash
+        # CMake 3.31.6 Installation
+        wget https://github.com/Kitware/CMake/releases/download/v3.31.6/cmake-3.31.6-linux-x86_64.tar.gz
+        tar -xzf cmake-3.31.6-linux-x86_64.tar.gz
+
+        # move it to /opt
+        sudo mv cmake-3.31.6-linux-x86_64 /opt/cmake-3.31.6
+
+        # Create System-wide CMake Symlinks
+        sudo ln -sf /opt/cmake-3.31.6/bin/cmake /usr/local/bin/cmake
+        sudo ln -sf /opt/cmake-3.31.6/bin/cpack /usr/local/bin/cpack
+        sudo ln -sf /opt/cmake-3.31.6/bin/ctest /usr/local/bin/ctest
+        sudo ln -sf /opt/cmake-3.31.6/bin/ccmake /usr/local/bin/ccmake
+        sudo ln -sf /opt/cmake-3.31.6/bin/cmake-gui /usr/local/bin/cmake-gui
+
+        # test
+        cmake --version
+        ```
+
+    ??? "4. Install Ninja and make"
+
+        Run the following commands:
+        ```bash
+        sudo apt install ninja-build -y
+        sudo apt install make
+        ```
+
+    ??? "5. Install and update NVIDIA driver"
+        !!! Warning
+            Make sure to install the NVIDIA drivers that match your configuration. Applying the wrong configuration may stall your system.
+        NVIDIA CUDA Repository Setup
+        ```bash
+        wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
+        sudo dpkg -i cuda-keyring_1.1-1_all.deb
+        sudo apt update
+        ```
+
+        NVIDIA Drivers 575 Installation
+        ```bash
+        sudo apt-get install nvidia-kernel-open-575 cuda-drivers-575 -y
+        # CUDA Toolkit 12.8 Installation
+        sudo apt install cuda-toolkit-12-8 -y
+        ```
+
+        CUDA Environment Setup
+        ```bash
+        grep -qxF 'export PATH=/usr/local/cuda-12.8/bin:$PATH' ~/.bashrc || echo 'export PATH=/usr/local/cuda-12.8/bin:$PATH' >> ~/.bashrc
+        grep -qxF 'export LD_LIBRARY_PATH=/usr/local/cuda-12.8/lib64:$LD_LIBRARY_PATH' ~/.bashrc || echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.8/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
+        source ~/.bashrc
+        ```
+
+        Check installation with:
+        ```bash
+        nvidia-smi
+        ```
+
+        To check and determine whether the CPU and GPU memory subsystems are up and functional, run the following commands
+        ```bash
+        lsmem
+        ```
+
+    ??? "6. Validate correct gcc version"
+
+        This step ensures the correct GCC version is used, as certain installations may inadvertently trigger a rollback to an earlier version
+        ```bash
+        # make gcc13 the default version
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+        # verify
+        gcc --version
+        ```
+

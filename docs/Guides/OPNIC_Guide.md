@@ -36,9 +36,8 @@ Pre-requisites:
 
 2. The OPX1000 and the OPNIC host server are paired, see below.
 
-### Pairing the OPX1000 with the Opnic Host Server
+### Pairing the OPX1000 with the OPNIC Host Server
 The server hosting the OPNIC must be paired with an OPX1000 cluster.
-When in doubt or after a restart or a failure, please follow the next steps:
 
 ??? "One time - Pair/Unpair Sequence"
 
@@ -56,7 +55,6 @@ When in doubt or after a restart or a failure, please follow the next steps:
 
 !!! Note - Sync is required on every cluster or server boot
     To initialize the flow and start-up the cluster - OPX1000 and the OPNIC host server need to be synced.
-
 
 ??? "OPX1000 to OPNIC host server synchronization steps"
 
