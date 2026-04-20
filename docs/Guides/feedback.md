@@ -17,9 +17,9 @@ The OPX makes it seamless to pass data between different controllers/FEM (Front 
     When operating with a multi-qubit system, the logical AND, OR or XOR between the state of all qubits is often needed for feedback purposes.
     The `broadcast` operations allow to pass this information from one element to all other elements in a more efficient way:
 
-    - [`broadcast.and_()`][qm.qua.broadcast.and_]: Performs a logical AND operation on boolean variables and broadcasts the result to all elements. Can take any number of boolean variables or arrays as input.
-    - [`broadcast.or_()`][qm.qua.broadcast.or_]: Performs a logical OR operation on boolean variables and broadcasts the result to all elements. Can take any number of boolean variables or arrays as input.
-    - [`broadcast.xor_()`][qm.qua.broadcast.xor_]: Performs a logical XOR operation on a boolean variables and broadcasts the result to all elements. Can take any number of boolean variables or arrays as input.
+    - [`broadcast.and_()`](../API_references/qua/dsl_main.md#for_docs.dsl.broadcast.and_): Performs a logical AND operation on boolean variables and broadcasts the result to all elements. Can take any number of boolean variables or arrays as input.
+    - [`broadcast.or_()`](../API_references/qua/dsl_main.md#for_docs.dsl.broadcast.or_): Performs a logical OR operation on boolean variables and broadcasts the result to all elements. Can take any number of boolean variables or arrays as input.
+    - [`broadcast.xor_()`](../API_references/qua/dsl_main.md#for_docs.dsl.broadcast.xor_): Performs a logical XOR operation on boolean variables and broadcasts the result to all elements. Can take any number of boolean variables or arrays as input.
 
     !!! Note
     

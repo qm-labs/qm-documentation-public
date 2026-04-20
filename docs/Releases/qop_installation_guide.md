@@ -7,7 +7,7 @@ If you are looking for the hardware installation guides, please follow the follo
 - [OPX1000](../Hardware/OPX1000_installation.md)
 
 !!! Warning
-    Please allow the booting process to finish after each step, and only move on to the next step once the device is "Operational".
+    Please allow the booting process to finish after each step, and only move on to the next step once the device has finished booting (Appears green and in the "Operational" state).
 
 
 ## Installation Procedure
@@ -24,6 +24,13 @@ you reach the desired release.
     For information on how to install each specific package, please refer to the detailed instructions below.
 
     QOP_INSTALL_TOOL_OPX1000
+        
+    ## Check the current BSP version
+
+    ??? info "How to check BSP version"
+        In the admin panel click on the controller icon at the top right of the page in the topology page
+
+        ![BSP](../../hidden_pages/assets/BSP_132.png)
 
     === "QOP"
         1. In the Admin Panel, navigate to `Preferences > QOP`.

@@ -25,7 +25,7 @@ All FEMs in one OPX1000 chassis are automatically included in the cluster.
 The cluster can be managed and configured via a web admin panel. Through the admin panel, one can check the cluster's health status and topology,
 restart the cluster, configure clock settings, access logs, and more. As detailed below, multiple clusters can exist in the same network and be managed by the web admin panel.
 
-## Hardware Installation Procedure
+## Installation Procedure
 
 1. Verify you have all the [required components](#required-components-for-the-installation).
 2. Mount the system in its designated place. Instructions for rack mounting the OPX1000 can be found [here](#rack-mounting-and-grounding-installation-guide).
@@ -52,9 +52,9 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
     5. Connect the OPX1000 and Octaves to the power outlet. It is generally recommended to connect the OPX1000 power supplies to separate power outlets. See the [opx1000 power requirements section below](#opx1000-power-requirements) for more information.
     6. Connect the OPX1000 and Octaves grounding post to the grounding point. More information can be found [here](#rack-mounting-and-grounding-installation-guide).
 6. Turn on all the devices.
-7. Please follow the [QOP installation guide](../Releases/qop_installation_guide.md) and install your desired QOP version.
-8. Configure the cluster, as shown [below](#configuring-opx1000-and-octave). This step will also install the latest version and can take ~30 minutes.
-9. Once clustered, the system will start calibrations, and the boot sequence should take a few minutes.
+7. Configure the cluster by following the [cluster configuration video](https://www.youtube.com/watch?v=ZVuvnJkSbDA), as described [below](#configuring-opx1000-and-octave). As part of clustering, the system installs an initial QOP version required to bring up the cluster. This step can take ~30 minutes.
+8. Follow the [QOP installation guide](../Releases/qop_installation_guide.md) and install the latest QOP version.
+9. Once the cluster is configured and the latest QOP version is installed, the system will start calibrations, and the boot sequence should take a few minutes.
 10. Open a browser and type the system's IP in the address field to access the admin panel where you can configure the system, check its status and more. See the [network overview section below](network_and_router.md#network-overview-and-configuration) for more details on how to access the cluster.
 11. Install the latest Python package by typing `pip install --upgrade qm-qua` in the desired Python environment.
 12. Open communication in Python using:

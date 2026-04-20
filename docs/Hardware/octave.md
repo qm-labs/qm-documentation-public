@@ -23,6 +23,10 @@ Using the following diagram one can plan the connections to and from an octave t
     - If both up-converters 4 and 5 are being utilized, with one using an internal LO and the other using an external LO, the configuration must be set up as follows: up-converter 4 will utilize the external LO, and up-converter 5 will use the internal LO.
     - If both up-converter 1 and down-converter 1 are being utilized, with one using an internal LO and the other using an external LO, the configuration must be set up as follows: down-converter 1 will utilize the external LO, and up-converter 1 will use the internal LO.
 
+!!! Tip "Adding external filters"
+    There are two aspects to note when working with an Octave. First, the 2xLO signal can be noticeable and could interfere with certain experimental aspects and apparatus. Thus, it can be beneficial to place a low-pass filter to reject the power at frequencies approaching 2xLO. 
+    Second, using the RF switches would produce the quietest electrical noise environment. It is well known that working with RF switches creates a transient at slow frequencies that adds up to the signal that passes through the switch. A common strategy to mitigate such known transients from RF switches is to use a high-pass filter. Implementing this combination of low-pass and high-pass filtering will optimize experimental conditions.
+
 ## Octave Front Panel
 
 ![OctaveFront](assets/OctaveFront.png "Octave Front Panel")
