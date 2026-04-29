@@ -60,7 +60,7 @@ The server hosting the OPNIC must be paired with an OPX1000 cluster.
 
     1. From the OPX1000 side - QOPA:
 
-        - Make sure the OPX1000 is paired with the Server in the admin panel, as explained [here](#pairing-the-opx1000-with-the-opnic-host-server).
+        - Make sure the OPX1000 is paired with the Server in the Admin Panel, as explained [here](#pairing-the-opx1000-with-the-opnic-host-server).
 
         - Restart the OPX1000 Cluster and wait for 'Waiting for OPNIC Pairing' status:
 

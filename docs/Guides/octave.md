@@ -16,7 +16,7 @@ This is done using the following steps:
 === "{{ requirement("OPX+", "2.4") }} & {{ requirement("QUA", "1.2.1") }} and above"
     
     1. After creating the cluster with the Octaves, the Octaves will be named in ascending order: `oct1`, `oct2`...
-       The name of the Octaves is shown under the `cluster` page in the admin panel. 
+       The name of the Octaves is shown under the `cluster` page in the Admin Panel. 
     2. Create a file for Calibration parameters by setting its path in the qmm object:
 
     ```python

@@ -9,8 +9,8 @@ A **cluster** is a synced and fully-connected system of OPX+ controllers, Octave
 A cluster can be comprised of a single OPX+, it can have multiple OPX+ (and for that, OPTs), and it may or may not include Octaves. 
 For each cluster, there is a main OPX+ and, in the case of a multi-OPX system, secondary OPXs.
 
-The cluster can be managed and configured via a web admin panel. Through the admin panel, one can check the cluster's health status and topology,
-restart the cluster, configure clock settings, access logs, and more. As detailed below, multiple clusters can exist in the same network and be managed by the web admin panel.
+The cluster can be managed and configured via the Admin Panel. Through the Admin Panel, one can check the cluster's health status and topology,
+restart the cluster, configure clock settings, access logs, and more. As detailed below, multiple clusters can exist in the same network and be managed by the Admin Panel.
 
 ## Hardware Installation Procedure
 
@@ -74,7 +74,7 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
 5. Turn on all the devices.
 6. When using new devices, configure the cluster, as shown [below](#configuring-opx-and-octave). This step can take ~30 minutes. 
 7. Once clustered, the system will start calibrations, and the boot sequence should take a few minutes.
-8. Open a browser and type the system's IP in the address field to access the admin panel where you can configure the system, check its status and more. See the [network overview section below](network_and_router.md#network-overview-and-configuration) for more details on how to access the cluster.
+8. Open a browser and type the system's IP in the address field to access the Admin Panel where you can configure the system, check its status and more. See the [network overview section below](network_and_router.md#network-overview-and-configuration) for more details on how to access the cluster.
 9. Install the latest Python package by typing `pip install --upgrade qm-qua` in the desired Python environment.
 10. Open communication in Python using:
       ```python

@@ -35,7 +35,7 @@ For an in-depth review of the version's new features and upgrades, please see [t
     configuration introduced in that version.
 
 ??? note "QOP Admin (QOPA)"
-    Starting with this version, the Admin is taken out of the QOP package, and will
+    Starting with this version, the QOPA is taken out of the QOP package, and will
     become a stand-alone package to be installed separately. This QOP version comes with QOPA version 1.3.0 included.
     However, future versions of both QOP and QOPA will be installed sepaeately.
     For more information, please visit the [QOPA Releases](./qopa_releases.md) page.

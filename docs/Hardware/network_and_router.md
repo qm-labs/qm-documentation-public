@@ -28,15 +28,15 @@ We list below four possible configurations and details on accessing the cluster.
     If a static IP is required, the IT department at the institution needs to provide it.
     More information on configuring the QM router can be found [here](#configuring-the-qm-router).  
 
-    Accessing the web admin and connecting to the cluster using Python can be done in the following way:  
+    Accessing the Admin Panel and connecting to the cluster using Python can be done in the following way:  
 
     === "QOP >= 2.2.x"
     
-        There is one web admin panel for all devices and clusters that is accessible by typing the IP address of the QM router in a web browser. 
+        There is one Admin Panel for all devices and clusters that is accessible by typing the IP address of the QM router in a web browser. 
         If you are unsure what is the QM router's IP address is, see [here](#configuring-the-qm-router).
-        Moreover, all clusters behind the router must have the same version for the admin panel to control them.
+        Moreover, all clusters behind the router must have the same version for the Admin Panel to control them.
         
-        To open a communication with the cluster in Python, use the following with the name of the cluster, as defined in the admin panel.
+        To open a communication with the cluster in Python, use the following with the name of the cluster, as defined in the Admin Panel.
 
         ``` python
         qmm = QuantumMachinesManager(host='QM_Router_IP', cluster_name='My_cluster_name')
@@ -44,7 +44,7 @@ We list below four possible configurations and details on accessing the cluster.
 
     === "QOP <= 2.1.x:"
     
-        There is one cluster per router, and the web admin panel is available by typing in the IP address of the QM router in a web browser.
+        There is one cluster per router, and the Admin Panel is available by typing in the IP address of the QM router in a web browser.
         If you are unsure what is the QM router's IP address is, see [here](#configuring-the-qm-router).
         
         To open a communication with the cluster in Python, use the following:
@@ -64,15 +64,15 @@ We list below four possible configurations and details on accessing the cluster.
 
      2. Set the QM router's IP to a static one, as required by the switch's LAN. Instructions can be found [here](#configuring-the-qm-router). 
 
-    Accessing the web admin and connecting to the cluster using Python can be done in the following way:  
+    Accessing the Admin Panel and connecting to the cluster using Python can be done in the following way:  
 
     === "QOP >= 2.2.x"
     
-        There is one web admin panel for all devices and clusters that is accessible by typing the IP address of the QM router in a web browser. 
+        There is one Admin Panel for all devices and clusters that is accessible by typing the IP address of the QM router in a web browser. 
         If you are unsure what is the QM router's IP address is, see [here](#configuring-the-qm-router).
-        Moreover, all clusters behind the router must have the same version for the admin panel to control them.
+        Moreover, all clusters behind the router must have the same version for the Admin Panel to control them.
         
-        To open a communication with the cluster in Python, use the following with the name of the cluster, as defined in the admin panel.
+        To open a communication with the cluster in Python, use the following with the name of the cluster, as defined in the Admin Panel.
 
         ``` python
         qmm = QuantumMachinesManager(host='QM_Router_IP', cluster_name='My_cluster_name')
@@ -80,7 +80,7 @@ We list below four possible configurations and details on accessing the cluster.
 
     === "QOP <= 2.1.x:"
     
-        There is one cluster per router, and the web admin panel is available by typing in the IP address of the QM router in a web browser. 
+        There is one cluster per router, and the Admin Panel is available by typing in the IP address of the QM router in a web browser. 
         If you are unsure what is the QM router's IP address is, see [here](#configuring-the-qm-router).
         
         To open a communication with the cluster in Python, use the following:
@@ -105,11 +105,11 @@ We list below four possible configurations and details on accessing the cluster.
         To accomplish this, you can follow [this guide](network_and_router.md#proxy-settings) and ask for assistance from the institution's IT personnel.
         It is recommended to set all QM devices (e.g., OPXes and Octaves) to static IP addresses.  
 
-    Accessing the web admin and connecting to the cluster using Python can be done in the following way:  
+    Accessing the Admin Panel and connecting to the cluster using Python can be done in the following way:  
 
     ===  "QOP >= 2.2.x"  
     
-        To access the web admin panel, type any device's IP in a web browser to access all clusters using the same QOP version.
+        To access the Admin Panel, type any device's IP in a web browser to access all clusters using the same QOP version.
         To find the IP of the devices connected, follow the steps [below](#configuring-the-qm-router)
         
         To open a communication with the cluster in Python, use the following:
@@ -120,7 +120,7 @@ We list below four possible configurations and details on accessing the cluster.
         ```
     ===  "QOP <= 2.1.x:"
 
-        To access the web admin panel, type the IP of the main OPX of the cluster in a web browser.
+        To access the Admin Panel, type the IP of the main OPX of the cluster in a web browser.
 
         To open a communication with the cluster in Python, use the following:
 
@@ -144,11 +144,11 @@ We list below four possible configurations and details on accessing the cluster.
        If a static IP is required, it must be provided by the institution's IT department.
        Note that this frequently requires whitelisting the MAC addresses of all QM devices in advance.
    
-    Accessing the web admin and connecting to the cluster using Python can be done in the following way:  
+    Accessing the Admin Panel and connecting to the cluster using Python can be done in the following way:  
 
     ===  "QOP >= 2.2.x"  
     
-        To access the web admin panel, type any device's IP in a web browser to access all clusters using the same QOP version.
+        To access the Admin Panel, type any device's IP in a web browser to access all clusters using the same QOP version.
         To find the IP of the devices connected, follow the steps [below](#configuring-the-qm-router)
         
         To open a communication with the cluster in Python, use the following:
@@ -242,7 +242,7 @@ These are common in academic institutions, corporate environments, and other org
 [![Network With Proxy](assets/Network_configuration_proxy.png)](assets/Network_configuration_proxy.png)
 
 This guide provides instructions for configuring the proxy settings on the PC, by adding an exception for the LAN. 
-These settings ensure uninterrupted communication with the OPX for both HTTP (Web admin panel) and gRPC protocols (Python job execution).
+These settings ensure uninterrupted communication with the OPX for both HTTP (Admin Panel) and gRPC protocols (Python job execution).
 
 !!! Note
     All of the values that are written below (e.g. `192.168.88`, `192.168.88.0/24`) are for the default MikroTik network, as appears in [Option C](#possible-network-configurations).

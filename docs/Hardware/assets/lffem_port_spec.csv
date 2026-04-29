@@ -2,3 +2,4 @@
 Voltage settings,"Direct Mode: ±0.5* V (4 dBm), Amplified Mode: ±2.5 V (18 dBm)","Default ±0.5 V (4 dBm), Adjustable gain from -3 dB to +29 dB",3.3 V
 Resolution,16 bit DAC,12 bit ADC,1 bit
 Impedance,"Direct Mode: 35 Ω*, Amplified Mode: 50 Ω",50 Ω,High - Z
+Frequency range,"Direct Mode: DC – 750 MHz, Amplified Mode: DC – 330 MHz",—,N/A

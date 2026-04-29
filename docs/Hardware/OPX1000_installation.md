@@ -22,8 +22,8 @@ A **cluster** is a synced and fully-connected system of OPX1000 Chassis, Octaves
 A cluster can be comprised of a one or more OPX1000, and it may or may not include Octaves.
 All FEMs in one OPX1000 chassis are automatically included in the cluster.
 
-The cluster can be managed and configured via a web admin panel. Through the admin panel, one can check the cluster's health status and topology,
-restart the cluster, configure clock settings, access logs, and more. As detailed below, multiple clusters can exist in the same network and be managed by the web admin panel.
+The cluster can be managed and configured via a Admin Panel. Through the Admin Panel, one can check the cluster's health status and topology,
+restart the cluster, configure clock settings, access logs, and more. As detailed below, multiple clusters can exist in the same network and be managed by the Admin Panel.
 
 ## Installation Procedure
 
@@ -55,7 +55,7 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
 7. Configure the cluster by following the [cluster configuration video](https://www.youtube.com/watch?v=ZVuvnJkSbDA), as described [below](#configuring-opx1000-and-octave). As part of clustering, the system installs an initial QOP version required to bring up the cluster. This step can take ~30 minutes.
 8. Follow the [QOP installation guide](../Releases/qop_installation_guide.md) and install the latest QOP version.
 9. Once the cluster is configured and the latest QOP version is installed, the system will start calibrations, and the boot sequence should take a few minutes.
-10. Open a browser and type the system's IP in the address field to access the admin panel where you can configure the system, check its status and more. See the [network overview section below](network_and_router.md#network-overview-and-configuration) for more details on how to access the cluster.
+10. Open a browser and type the system's IP in the address field to access the Admin Panel where you can configure the system, check its status and more. See the [network overview section below](network_and_router.md#network-overview-and-configuration) for more details on how to access the cluster.
 11. Install the latest Python package by typing `pip install --upgrade qm-qua` in the desired Python environment.
 12. Open communication in Python using:
       ```python

@@ -41,7 +41,7 @@ When we want to synchronize two or more OPX modules to one clock or use a clock 
 
     ## Clock Configuration
 
-    Access your OPX1000 admin panel through the browser. On the settings page, you can see radio buttons to choose between internal and external clock.
+    Access your OPX1000 Admin Panel through the browser. On the settings page, you can see radio buttons to choose between internal and external clock.
     
     ![Choose external or internal clock](assets/opx1000_ext_int.jpeg)
     
@@ -189,7 +189,7 @@ When we want to synchronize two or more OPX modules to one clock or use a clock 
         
         {{ requirement("QOP", "2.0") }}
         
-        Access your OPX admin panel through the browser. On the settings page, you can see radio buttons to choose between internal and external clock.
+        Access your OPX Admin Panel through the browser. On the settings page, you can see radio buttons to choose between internal and external clock.
         
         ![EXTCLKQMAPPNEW](assets/EXTCLKQMAPPNEW.png)
         

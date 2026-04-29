@@ -51,9 +51,16 @@ The analog outputs can operate in one of two modes, set in the config at the out
     Connecting to a 50 Ω matched line will produce the exact applied output voltage without distortion, but connecting it to a High-Z load will not yield the expected doubling of the applied voltage at 50 Ω.
     The `amplified` mode is optimized for improved step response characteristics and is 50 Ω matched. 
 
+### Frequency Range
+
+The usable output bandwidth depends on the output mode:
+
+* **Direct mode** (1 Vpp): DC – 750 MHz
+* **Amplified mode** (5 Vpp): DC – 330 MHz
+
 ## Microwave FEM (MW-FEM)
-The MW-FEM module features 8 analog outputs at a quadrature sampling rate of 1 GSa/s, which are digitally upconverted to 
-MW frequencies, 2 analog inputs at a sampling rate of 1 GSa/s, and 8 digital outputs at a sampling rate of 1 GSa/s.
+The MW-FEM module features 8 analog outputs at a quadrature sampling rate of 1 GSa/s, covering **50 MHz to 10.5 GHz**, which are digitally upconverted to
+MW frequencies, 2 analog inputs at a sampling rate of 1 GSa/s accepting signals from **2 to 10.5 GHz**, and 8 digital outputs at a sampling rate of 1 GSa/s.
 For more information about the panel and the connectors, see [OPX1000 Hardware](../Hardware/OPX1000_hardware.md).
 
 !!! Note
