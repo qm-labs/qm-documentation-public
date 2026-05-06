@@ -282,12 +282,16 @@ The element `spcm` has the time tagging parameters defined in the `timeTaggingPa
     'timeTaggingParameters': {   # Time tagging parameters
         'signalThreshold': -500,  # in ADC units
         'signalPolarity': 'Below',
-        'derivativeThreshold': -10000,  # in ADC units / ns (OPX+)
-                                        # in ADC units / 0.5ns (OPX1000)
+        'derivativeThreshold': -2048,  # in ADC units / ns (OPX+)
+                                       # in ADC units / 0.5ns (OPX1000)
         'derivativePolarity': 'Above'
     }
 },
 ```
+
+!!! warning "Valid threshold range"
+    Both `signalThreshold` and `derivativeThreshold` must be in the range **[-2048, 2047]**
+    (signed 12-bit ADC values). Values outside this range produce undefined results.
 
 Note that the condition on the derivative is chosen such that it will always be **True**. In that way,
 a time tag will be registered upon crossing the signal's threshold.

@@ -3,6 +3,10 @@
 
 This page describes the hardware components of the OPX1000.
 
+!!! Note
+    This page includes a summary of key specifications. For complete technical details and full system specifications, refer to the full spec sheet.
+
+    [Request the Full OPX1000 Spec Sheet](https://www.quantum-machines.co/request-the-full-opx1000-spec-sheet/)
 
 ## General Specifications
 
@@ -25,6 +29,7 @@ For more information, see [OPX1000 FEMs Guide](../Guides/opx1000_fems.md)
 
 {{ read_csv("docs/Hardware/assets/mwfem_port_spec.csv") }}
 
+[Request the Full OPX1000 Spec Sheet](https://www.quantum-machines.co/request-the-full-opx1000-spec-sheet/)
 
 ## Pulse Processor Block Diagram
 
@@ -99,3 +104,7 @@ The following section details the back panel of the OPX1000 chassis.
 * Chassis LED flash twice every second during update.
 
     Upon completion, LED will be constant
+
+---
+
+[Request the Full OPX1000 Spec Sheet](https://www.quantum-machines.co/request-the-full-opx1000-spec-sheet/)
