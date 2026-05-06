@@ -29,8 +29,6 @@ For more information, see [OPX1000 FEMs Guide](../Guides/opx1000_fems.md)
 
 {{ read_csv("docs/Hardware/assets/mwfem_port_spec.csv") }}
 
-[Request the Full OPX1000 Spec Sheet](https://www.quantum-machines.co/request-the-full-opx1000-spec-sheet/)
-
 ## Pulse Processor Block Diagram
 
 The simplified block diagram model for the Pulse Processor can be seen below.
