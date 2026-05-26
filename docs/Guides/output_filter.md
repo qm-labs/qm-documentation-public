@@ -91,7 +91,7 @@ Multiple exponential and a high-pass response can be modeled by the following st
 
 $$s(t) = \left(A_{dc} + \sum_{n=1}^N A_n e^{-\frac{t}{\tau_n}}\right)\cdot u(t)$$
 
-Where $A_{dc}$ is the DC gain of the filter, and $\tau_n$ is the time constant of the $n$-th filter.
+Where $A_{dc}$ is the DC gain of the filter, and $\tau_n$ is the time constant of the $n$-th filter. The default value is $A_{dc}=1$.
 If $A_{dc}=1$, the filter will be a simple sum of exponential filters:
 
 $$s(t) = \left(1 + A_1e^{-\frac{t}{\tau_1}} + A_2e^{-\frac{t}{\tau_2}} + ...\right)\cdot u(t)$$

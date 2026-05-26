@@ -24,7 +24,7 @@ The quantum-classical interconnect architecture is **NVQLink compatible** and in
 
 OPNIC supports a wide range of server architectures and can be deployed on modern X86‑based systems as well as NVIDIA ARM‑based servers.
 
-*Contact QM for a recommended supported server that would fit your needs.*
+*[Contact QM](https://www.quantum-machines.co/contact-us/) for a recommended supported server that would fit your needs.*
 
 The **DGX Quantum** platform introduced an OPX1000 controller interface with NVIDIA’s Grace Hopper 200 super-chip through the OPNIC card as the initial POC system. Many more server platforms are also supported.
 

@@ -26,8 +26,8 @@ The "stream processing" allows for arithmetic operations and data reshaping to o
 in parallel to OPX experimental runs.
 
 !!! Note
-    For common sweep patterns, the Sweep Program APIs can generate the matching save and buffering logic automatically.
-    Use {{f("qm.qua.declare_with_stream")}} together with the iterators in the [Sweep Program guide](sweep_program.md) when the result structure follows the loop structure.
+    For common sweep patterns, the iterables and auto-streaming APIs can generate the matching save and buffering logic automatically.
+    Use {{f("qm.qua.declare_with_stream")}} together with the iterators in the [QUA Iterables & Auto-Streaming guide](qua_iterables.md) when the result structure follows the loop structure.
     Use manual {{f("qm.qua.stream_processing")}} when you need explicit pipeline operators or a custom result layout.
 
 ## Basic Syntax and Examples

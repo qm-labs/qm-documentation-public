@@ -68,6 +68,9 @@ restart the cluster, configure clock settings, access logs, and more. As detaile
 !!! Important
     When connecting SMA cables to the OPX1000 chassis or FEMs, always use a properly torqued wrench set to 0.3-0.6 Newton-metre (Nm). Applying excessive torque or over-tightening may damage the connectors.
 
+!!! Note
+    On the MW-FEM, the Analog Input ports protrude 0.75 mm more than the Analog Output ports. This difference is by design and does not affect functionality.
+
 
 ## Extra Topics
 

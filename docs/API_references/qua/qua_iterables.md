@@ -3,7 +3,7 @@ search:
   boost: 3
 ---
 
-# Sweep Program API
+# Iterables & Auto-Streaming API
 
 ## Import paths
 
@@ -32,4 +32,4 @@ from qm.qua import (
         heading_level: 3
         show_root_heading: false
 
-For usage examples and behavior details, see the [Sweep Program guide](../../Guides/sweep_program.md).
+For usage examples and behavior details, see the [QUA Iterables & Auto-Streaming guide](../../Guides/qua_iterables.md).

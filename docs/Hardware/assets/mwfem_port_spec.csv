@@ -1,5 +1,4 @@
 ﻿MW-FEM ,Analog Outputs,Analog Inputs,Digital Outputs
 Max Power,"-11 dBm to 16 dBm","-42 dBm to -10 dBm",3.3 V
 Resolution,16 bit DAC,12 bit ADC,1 bit
-Impedance,50 Ω,50 Ω,High - Z
 Frequency range,"50 MHz – 10.5 GHz","2 – 10.5 GHz",N/A

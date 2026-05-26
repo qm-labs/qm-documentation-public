@@ -105,6 +105,10 @@ In other words, both coupled ports must be configured to the same band (both in 
 
     Band 2 is slower (delayed) by 20 ns compared to Bands 1 & 3.
 
+### Output Impedance
+
+The MW-FEM analog outputs are 50 Ω matched. The digital outputs are High-Z.
+
 ### Upconverters and Downconverters
 Each analog output port must define either an `upconverter_frequency` field with a frequency in the port's band, or 
 a `upconverters` field, with up to 2 upconverters per port:
@@ -160,7 +164,22 @@ Therefore, for a given waveform, its voltage-shape should be identical between t
 !!! Note
     For best analog performance, it is recommended to set `full_scale_power_dbm` to a value between 1 and 10 dBm.
     This will produce the best SNR and SFDR.
-    Going above 10 dBm will start to degrade the SFDR, while going below 1 dBm will degrade the SNR. 
+    Going above 10 dBm will start to degrade the SFDR, while going below 1 dBm will degrade the SNR.
+
+!!! Tip "Optimizing output power in an experimental setup"
+    When connecting the MW-FEM to an experimental setup, apply the same SNR/SFDR principle to protect the device
+    from unnecessary noise exposure: **maximize the waveform amplitude while minimizing `full_scale_power_dbm`**.
+
+    This keeps the digital-to-analog converter operating near full scale, where its signal-to-noise ratio is highest,
+    and limits the analog output power to only what the experiment requires.
+
+    If this approach drives `full_scale_power_dbm` below 1 dBm, consider adding external room-temperature
+    attenuators instead of further reducing the full-scale power, so the DAC stays within its optimal operating range.
+
+    When a single output port carries multiple frequencies — whether from multiple upconverters, multiple
+    intermediate-frequency oscillators within a single upconverter, or both — the rule of thumb becomes:
+    maximize the **sum** of the waveform amplitudes across all frequencies on that port while minimizing
+    `full_scale_power_dbm`.
 
 !!! Note
     To calculate the amplitude-voltage that will be seen on a scope set to 50 Ω, first convert the power to voltage:
