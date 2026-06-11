@@ -24,7 +24,14 @@ The OPX makes it seamless to pass data between different controllers/FEM (Front 
     !!! Note
     
         When working in a multi-controller system, the `broadcast` operations are required and the feedback operation would give an error if not used.
-    
+
+    !!! warning
+
+        Broadcast operations (and any feedback variable accessed by a different core than the one that measured it)
+        trigger an **implicit align** of all cores involved. This alignment **cannot be suppressed** — it is a
+        hardware requirement of the data transfer.
+        See [The Implicit Align](timing_in_qua.md#the-implicit-align) for details.
+
     === "Example - 2 Qubits Active Reset"
         
         ```python

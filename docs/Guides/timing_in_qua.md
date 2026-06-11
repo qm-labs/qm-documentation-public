@@ -88,6 +88,17 @@ Therefore, the loops duration will be determined by the longest of the two opera
 It is possible to add the flag `skip-add-implicit-align` to the execution to remove the automatic addition of these aligns.
 For more information on how to use flags, see [compilation options](features.md#compilation-options).
 
+In addition to flow control branches, certain inter-core data transfer operations also trigger an implicit align of all cores involved:
+
+- **Broadcast operations** (`broadcast.and_()`, `broadcast.or_()`, `broadcast.xor_()`)
+- **Feedback variables** — any variable obtained from a `measure()` command that is subsequently read by a different core
+
+!!! warning
+
+    This implicit alignment **cannot be suppressed**. The `skip-add-implicit-align` flag only removes
+    implicit aligns added by flow control branches — it does not affect the alignment triggered by
+    data transfers.
+
 ## Gaps in QUA
 
 The QUA syntax of pulses and operations only defines their order of execution, it does not guarantee that they would be played without introducing gaps.

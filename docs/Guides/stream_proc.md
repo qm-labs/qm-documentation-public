@@ -618,14 +618,23 @@ When using this legacy saving mechanism the output can be retrieved without chan
 fetch_all_data = job.result_handles.get("A").fetch_all()
 ```
 
-This retrieves both values and timestamps. Alternatively, if only values (or only timestamps) are needed, we have introduced the following notation:
+This returns a numpy structured array with `value` and `timestamp` fields. To work with only values or only timestamps, use standard numpy field indexing:
 
 ```python
-fetch_only_values= job.result_handles.get("A").fetch_all(flat_struct=True)
-fetch_only_timestamps= job.result_handles.get("A_timestamps").fetch_all(flat_struct=True)
+result = job.result_handles.get("A").fetch_all()
+only_values     = result["value"]
+only_timestamps = result["timestamp"]
 ```
 
-This provides only values (or only timestamps) and is slightly more performant than the previous option. In future versions `flat_struct=True` the default option.
+!!! Warning
+    Legacy save is a convenience intended for quick debugging. Internally it is equivalent to `declare_output_stream().with_timestamps().save_all(tag)`, which means every saved value carries a timestamp and all results are accumulated in server memory for the lifetime of the job. Both effects add measurable overhead — larger payloads, higher memory usage, and slower fetching — compared to an explicit stream pipeline. For anything beyond ad-hoc inspection, prefer:
+
+    ```python
+    # Recommended: auto-buffers from enclosing named QUA loops, no timestamp overhead
+    x = declare_with_stream(fixed, "x")
+    ```
+
+    Note that `declare_with_stream` is loop-aware — it derives buffering from the enclosing named QUA loops. For variables saved outside a loop, use `declare_output_stream` directly.
 
 ## Server PC storage and data limitations
 
