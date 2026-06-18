@@ -136,6 +136,12 @@ A pulse sent to such an element must be defined with two waveforms. For example:
 }
 ```
 
+!!! Note
+    After upconversion, the output signal is:
+    $\text{signal} = \tilde{I}\cos(\omega_{LO}t) - \tilde{Q}\sin(\omega_{LO}t)$
+
+    Note the minus sign on Q. If your pulses appear phase-shifted, negate the Q waveform samples.
+
 ### Mixed Inputs Element
 
 If the element has two inputs (i.e. two output ports of the OPX are connected to the element via an IQ mixer), a `mixer`

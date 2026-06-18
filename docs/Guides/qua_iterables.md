@@ -94,10 +94,10 @@ Use manual {{f("qm.qua.stream_processing")}} when you need something outside tha
 ```python
 import numpy as np
 
-from qm.qua import (
-    declare_with_stream,
-    NativeIterable,
-    NativeIterableRange,
+from qm.qua import declare_with_stream
+from qm.qua.extensions import (
+    PythonIterable,
+    PythonIterableRange,
     QuaIterable,
     QuaIterableRange,
     QuaProduct,
@@ -110,9 +110,12 @@ from qm.qua import (
 An iterable describes one sweep axis. Two families exist:
 
 - **QUA iterables** ({{f("qm.qua.extensions.qua_iterators.QuaIterable")}}, {{f("qm.qua.extensions.qua_iterators.QuaIterableRange")}}) build loops that run on the QOP. They map to {{f("qm.qua.for_")}} or {{f("qm.qua.for_each_")}}.
-- **Native iterables** ({{f("qm.qua.extensions.qua_iterators.NativeIterable")}}, {{f("qm.qua.extensions.qua_iterators.NativeIterableRange")}}) iterate in Python on the host. Use them for sweeps over non-numeric values like element names, or for numeric sweeps you want to keep on the host. They do not create QUA loop variables and cannot be averaged with `average_axes`.
+- **Python iterables** ({{f("qm.qua.extensions.qua_iterators.PythonIterable")}}, {{f("qm.qua.extensions.qua_iterators.PythonIterableRange")}}) iterate in Python on the host. Use them for sweeps over non-numeric values like element names, or for numeric sweeps you want to keep on the host. They do not create QUA loop variables and cannot be averaged with `average_axes`.
 
-Every iterable carries a name. That name becomes the axis identifier used by auto-buffering and by `average_axes`. Use named native iterables instead of plain Python iterators when the host-side axis should still participate in {{f("qm.qua.extensions.qua_iterators.QuaProduct")}}, {{f("qm.qua.extensions.qua_iterators.QuaZip")}}, or stream naming.
+!!! Note
+    Earlier releases named these `NativeIterable` and `NativeIterableRange`. Those names remain available as deprecated aliases and will be removed in 2.0.0.
+
+Every iterable carries a name. That name becomes the axis identifier used by auto-buffering and by `average_axes`. Use named Python iterables instead of plain Python iterators when the host-side axis should still participate in {{f("qm.qua.extensions.qua_iterators.QuaProduct")}}, {{f("qm.qua.extensions.qua_iterators.QuaZip")}}, or stream naming.
 
 ### `QuaIterableRange`
 
@@ -132,21 +135,21 @@ for amp_scale in QuaIterable("amp_scale", np.linspace(0.2, 1.0, 5)):
     play("x90" * amp(amp_scale), "q1")
 ```
 
-### `NativeIterableRange`
+### `PythonIterableRange`
 
 For Python-side numeric ranges.
 
 ```python
-for amp_scale in NativeIterableRange("amp_scale", 0.1, 1.0, 0.05):
+for amp_scale in PythonIterableRange("amp_scale", 0.1, 1.0, 0.05):
     play("x90" * amp(amp_scale), "q1")
 ```
 
-### `NativeIterable`
+### `PythonIterable`
 
 For Python-side loops over explicit values, including non-numeric ones such as element names or device labels.
 
 ```python
-for element in NativeIterable("element", ["q1", "q2"]):
+for element in PythonIterable("element", ["q1", "q2"]):
     play("x180", element)
 ```
 
@@ -160,7 +163,7 @@ for element in NativeIterable("element", ["q1", "q2"]):
 for args in QuaProduct(
     [
         QuaIterableRange("shot", 100),
-        NativeIterable("element", ["q1", "q2"]),
+        PythonIterable("element", ["q1", "q2"]),
         QuaIterable("amp", [0.2, 0.5, 0.8]),
     ]
 ):
@@ -174,7 +177,7 @@ This keeps the body flat and lets you reorder sweeps by editing the list.
 {{f("qm.qua.extensions.qua_iterators.QuaZip")}} combines iterables position-by-position. All iterables in a single zip must be of the same kind:
 
 - all QUA iterables, or
-- all native iterables
+- all Python iterables
 
 By default, the zip name is formed by joining the iterable names. Pass `name=` for a shorter handle, especially when nesting inside `QuaProduct`.
 
@@ -193,7 +196,7 @@ When a zip is nested inside `QuaProduct`, give it a `name` so its fields are acc
 
 ```python
 shots = QuaIterableRange("shot", 100)
-qubits = NativeIterable("qubit", ["q1", "q2"])
+qubits = PythonIterable("qubit", ["q1", "q2"])
 amps = QuaIterable("amp", np.linspace(0.1, 1.0, 10))
 taus = QuaIterableRange("tau", 20, 120, 20)
 
@@ -230,7 +233,7 @@ measure(
 
 Stream items come out of the OPX as a flat sequence, in the order they were saved. *Buffering* is the step in stream processing that folds that sequence back into an N-dimensional array aligned with the sweep. Without it, the result for `I` would be a 1D array of length `N_shots × N_frequencies × N_taus`, and you would have to reshape it yourself on the client. In a manual `stream_processing()` block you do this with a chain of `.buffer(N_outer, ..., N_inner)` calls, with the sizes matching the loop bounds.
 
-With `auto_buffer=True` (the default), `declare_with_stream` reads the active QUA iterables at the call site, picks up each name and size, and writes that `buffer(...)` call for you. Add a loop and the buffer grows an axis. Reorder the loops and the axis order follows. Native iterables don't add to the buffer shape; each Python-side position becomes its own result stream instead (see [Stream names inside native iterables](#stream-names-inside-native-iterables)). Set `auto_buffer=False` when you want `declare_with_stream` to handle the per-write save but plan to reshape in your own `stream_processing()` block.
+With `auto_buffer=True` (the default), `declare_with_stream` reads the active QUA iterables at the call site, picks up each name and size, and writes that `buffer(...)` call for you. Add a loop and the buffer grows an axis. Reorder the loops and the axis order follows. Python iterables don't add to the buffer shape; each Python-side position becomes its own result stream instead (see [Stream names inside Python iterables](#stream-names-inside-python-iterables)). Set `auto_buffer=False` when you want `declare_with_stream` to handle the per-write save but plan to reshape in your own `stream_processing()` block.
 
 ### Averaging
 
@@ -274,6 +277,6 @@ with program() as prog:
 !!! Note
     `average_axes` can only reference QUA loop names, and averaged axes must be outermost in the loop nesting order. Once a non-averaged QUA axis is kept, later inner QUA axes cannot be averaged.
 
-### Stream names inside native iterables
+### Stream names inside Python iterables
 
-When `declare_with_stream` runs with `auto_buffer=True` inside a native iterable, the native iteration index is appended to the stream name. A stream named `I` inside `NativeIterable("element", ["q1", "q2"])` produces two result handles, `I_0` and `I_1`. Each Python-side position gets its own handle, and the raw value (which might be a non-numeric label like `"q1"`) does not end up in the result name.
+When `declare_with_stream` runs with `auto_buffer=True` inside a Python iterable, the Python iteration index is appended to the stream name. A stream named `I` inside `PythonIterable("element", ["q1", "q2"])` produces two result handles, `I_0` and `I_1`. Each Python-side position gets its own handle, and the raw value (which might be a non-numeric label like `"q1"`) does not end up in the result name.

@@ -483,6 +483,12 @@ For a MW-FEM using the waveform, the sample values give the output amplitude as 
 !!! tip
     In the [QUA tools section](https://github.com/qua-platform/py-qua-tools/tree/main/qualang_tools) you can find a lot of useful tools for writing QUA programs. In particular, [Config tools](https://github.com/qua-platform/py-qua-tools/tree/main/qualang_tools/config/) which include [Waveform Tools](https://github.com/qua-platform/py-qua-tools/tree/main/qualang_tools/config/waveform_tools.py) package that provides tools for easy waveform creation and manipulation.
 
+!!! Note
+    When using I and Q waveforms, after upconversion the output signal is:
+    $\text{signal} = \tilde{I}\cos(\omega_{LO}t) - \tilde{Q}\sin(\omega_{LO}t)$
+
+    Note the minus sign on Q. If your pulses appear phase-shifted, try negating the Q waveform samples.
+
 ### Digital Waveform
 
 In this section we define the digital waveforms to be used in the program as follows:

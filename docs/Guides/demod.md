@@ -240,15 +240,14 @@ are the integration weights.
 !!! Note
     Only full dual demodulation is currently supported. Running any vector demodulation, e.g., sliced, will result in an error.
 
-To motivate the use of this feature, we will now demonstrate IQ demodulation via dual demodulation.
+To motivate the use of this feature, we will now demonstrate IQ demodulation via dual demodulation. The example below uses OPX+ with analog IQ mixers, but the same math and `dual_demod` syntax apply equally to OPX1000 MW-FEM, where upconversion is performed digitally.
 First, recall that an IQ signal passes through the following linear system to convert it to an intermediate frequency $\omega_{IF}$
 
 $$
 \begin{pmatrix} \tilde{I_i} \\ \tilde{Q_i} \end{pmatrix} = \begin{pmatrix} \cos(\omega_{IF}t+\phi_F) & -\sin(\omega_{IF}t+\phi_F)\\ \sin(\omega_{IF}t+\phi_F) & \cos(\omega_{IF}t+\phi_F) \end{pmatrix} \begin{pmatrix} I_i \\ Q_i \end{pmatrix}
 $$
 
-After the up-conversion to $\omega_{IF}$, the complex signal enters an IQ mixer which outputs the fully
-modulated signal
+After the up-conversion to $\omega_{IF}$, the complex signal is upconverted (via an IQ mixer or, for MW-FEM, via the digital upconverter), producing the modulated signal
 
 $$
 \text{signal} = \tilde{I}\cos(\omega_{LO}t) + \tilde{Q}\sin(\omega_{LO}t)
@@ -265,7 +264,7 @@ where $\omega_{RF}=\omega_{LO}+\omega_{IF}$ is the total signal frequency.
 Now, we wish to find the values of $I$ and $Q$, assuming for the sake of simplicity that the channel
 between the system output and system input is a simple loopback which does not change the signal, except for some arbitrary phase $\phi_D$.
 
-The incoming signal now passes through a down-conversion mixer which outputs two signals that enter the two ADCs
+The received signal is down-converted and sampled by the ADC, after which the I and Q components are extracted
 
 \begin{eqnarray}
 ADC1 &=& (\tilde{I}\cos(\omega_{LO}t+\phi_D) + \tilde{Q}\sin(\omega_{LO}t+\phi_D))\cos(\omega_{LO}t) \\
@@ -275,8 +274,8 @@ ADC2 &=& (\tilde{I}\cos(\omega_{LO}t+\phi_D) + \tilde{Q}\sin(\omega_{LO}t+\phi_D
 \end{eqnarray}
 
 !!! Note
-    The IQ mixers used for up and down conversions may emit signals with a $-\frac{\pi}{2}$ phase difference instead of a $\frac{\pi}{2}$ difference.
-    i.e., an up conversion mixer will emit $\text{signal}=\tilde{I}\cos(\omega_{LO}t)-\tilde{Q}\sin(\omega_{LO}t)$.
+    The up and down conversion process (whether via IQ mixers or digital mixing) produces:
+    $\text{signal}=\tilde{I}\cos(\omega_{LO}t)-\tilde{Q}\sin(\omega_{LO}t)$
 
 Next, recall that the ADCs are fit with a low-pass filter (LPF) that nullifies any frequencies above 500 MHz, ensuring
 no aliasing occurs in the sampling process. Specifically, the LPF cancels out all the high-frequency components of the mixers'

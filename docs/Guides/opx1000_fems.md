@@ -120,6 +120,15 @@ a `upconverters` field, with up to 2 upconverters per port:
 }
 ```
 
+!!! Note
+    The settable frequency range per band is:
+
+    * Band 1: 0 – 5.5 GHz
+    * Band 2: 4.5 – 7.5 GHz
+    * Band 3: 6.5 – 11 GHz
+
+    Values outside the band's specified range (see [Bands](#bands) above) will not meet the performance specification.
+
 In the elements `MWInput` field, the user can set the `upconverter` field; the default is 1.
 
 Each analog input port must define a `downconverter_frequency` field with a frequency in the port's band.
@@ -137,6 +146,9 @@ Starting from {{ requirement("QOP","3.7") }}, MW-FEM analog inputs also support 
 
 !!! Note
     In `auto` mode, the ADC trace includes a short 5 MHz ringing transient. This is only an artifact on the ADC trace and not an output signal from the MW-FEM.
+
+!!! Note
+    The IQ demodulation math for MW-FEM — including dual demodulation and the Q-sign convention — follows the same principles as for OPX+ with IQ mixers. See [Demodulation and Measurement](demod.md) for details.
 
 ### Optimized Readout
 

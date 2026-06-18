@@ -8,10 +8,10 @@ search:
 ## Import paths
 
 ```python
-from qm.qua import (
-    declare_with_stream,
-    NativeIterable,
-    NativeIterableRange,
+from qm.qua import declare_with_stream
+from qm.qua.extensions import (
+    PythonIterable,
+    PythonIterableRange,
     QuaIterable,
     QuaIterableRange,
     QuaProduct,

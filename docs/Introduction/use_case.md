@@ -127,7 +127,7 @@ The physical elements that are connected to the OPXs are denoted in the configur
 
 The pulses applied to the elements are also specified in the configuration, where each pulse is defined as a collection of temporal waveforms. For example, a pulse to an element with two analog inputs and one digital input will specify the two waveforms applied to the analog inputs of the element and the digital pulse applied to its digital input.
 
-Also in the configuration, are specified the properties of auxiliary components that affect the actual output of the controller, such as IQ mixers and local oscillators.
+Also in the configuration, are specified the properties of auxiliary components that affect the actual output of the controller, such as IQ mixers and local oscillators (for OPX+), or upconverter/downconverter frequencies for MW-FEM digital mixing.
 The configuration is defined as a set of nested Python dictionaries.
 
 Read more about the configuration in the [configuration section](./config.md).

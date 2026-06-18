@@ -31,6 +31,8 @@ Therefore, we would be happy to receive any comments or suggestions.
 
 ## Loops
 
+- Use a different iterator variable for each flow-control loop (for example, {{f("qm.qua.for_")}} and {{f("qm.qua.for_each_")}}) whenever possible. Reusing the same iterator across many loops increases the compiler workload, which can lead to significantly longer compilation times, compilation timeouts, or, in extreme cases, the cluster becoming unresponsive. Additionally, reusing iterator variables across loops that were supposed to run in parallel, can cause the threads to be interlaced and break the intended parallelism. 
+
 - Iterating with {{f("qm.qua.for_each_")}} loops adds a small overhead compared to using {{f("qm.qua.for_")}} loops.
   In addition, they require saving the entire array into the memory, resulting in a limited array length.
 
