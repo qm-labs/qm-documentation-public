@@ -14,15 +14,18 @@ QOPA 1.6.1 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/
     - QOP cannot be downgraded below version 3.6.3.
 
 **Added**
+
 - Add support for QOP 3.7.
 - Add support for QOPF 1.2.
 
 **Changed**
-- Block QOPA from installing QOPA versions older than the currently installed one.
+
 - Block QOPA from installing QOP versions older than QOP 3.6.3.
-- Block QOPF version downgrades.
 
 **Fixed**
+
+- Fixed cases where QOPA could be downgraded to an older version.
+- Fixed cases where QOPF could be downgraded to an older version.
 - Ensure that QOPAs stopped during QOPF installations can re-enable themselves once the timeout is reached.
 
 ## QOPA 1.6.0
