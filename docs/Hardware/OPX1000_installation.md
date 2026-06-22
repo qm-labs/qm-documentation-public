@@ -42,9 +42,10 @@ The Admin Panel can be accessed by navigating to the OPX1000's IP address in you
 5. Connect the system:
     1. If there is more than one OPX1000:
         1. One OPX1000 is defined as the *main* OPX1000.
-        2. Clock: Connect the others OPX1000's clock input to the *main* OPX1000's clock outputs via the supplied SMA cables. Please see the [connectivity scheme](#connectivity-scheme) for more details.
+        2. Optional: Label each OPX1000 with its controller (con) number and IP address on both the front and back panels, to speed up connectivity and troubleshooting.
         3. QSync: Connect the others OPX1000's QSync port to the *main* OPX1000's QSync ports via the supplied QSync unshielded Ethernet cable. Please see the [connectivity scheme](#connectivity-scheme) for more details.
         4. Data: Connect the others OPX1000's Comm port to the *main* OPX1000's Comm ports via the supplied optical cables. Remove the connectors' protectors, if present, and press the optical cables firmly into the ports until a click is heard, ensuring a proper connection. Please see the [connectivity scheme](#connectivity-scheme) for more details.
+        5. Clock: Connect the others OPX1000's clock input to the *main* OPX1000's clock outputs via the supplied SMA cables. Make sure to use the QM-provided cables, or alternatively make sure to use cables of the same type and length, to keep the distributed clock aligned across the chassis. Please see the [connectivity scheme](#connectivity-scheme) for more details.
     2. Octaves:
         1. If there are any Octaves, connect their clock inputs to any OPX1000's clock outputs.
         2. If all OPX1000es' clock outputs have been used, and there are still unconnected Octaves, then connect the Octave's clock input to other Octave's clock outputs.
@@ -138,7 +139,7 @@ If Octaves are used, please first connect the OPX1000 according to the table bel
 
 <strong style="color: #8b0000;">QSync</strong>
 
-The QSync signal is passed between the OPX1000 via Cat6 RJ45 (Ethernet) cables.
+The QSync signal is passed between the OPX1000 via the supplied unshielded Cat6 RJ45 (Ethernet) cables.
 A single OPX1000 can sync with up to four additional OPX1000s.
 If more than five OPX1000 are used, a tree-like connectivity is needed: The *main* OPX1000 syncs OPX1000 2-5.
 OPX1000 2-5 syncs the next OPX1000, etc.
@@ -325,9 +326,9 @@ Make sure to press the optical cables firmly into the ports until a click is hea
     | 1       | 3              | 4       | 1             |
     | 1       | 4              | 5       | 1             |
     | 2       | 1              | 6       | 1             |
-    | 3       | 1              | 7       | 1             |
-    | 4       | 1              | 8       | 1             |
-    | 5       | 1              | 9       | 1             |
+    | 2       | 2              | 7       | 1             |
+    | 2       | 3              | 8       | 1             |
+    | 2       | 4              | 9       | 1             |
 
     <strong style="color: #8b0000;">QSync</strong>
 
@@ -338,9 +339,9 @@ Make sure to press the optical cables firmly into the ports until a click is hea
     | 1       | 3          | 4       | 1          |
     | 1       | 4          | 5       | 1          |
     | 2       | 2          | 6       | 1          |
-    | 3       | 2          | 7       | 1          |
-    | 4       | 2          | 8       | 1          |
-    | 5       | 2          | 9       | 1          |
+    | 2       | 3          | 7       | 1          |
+    | 2       | 4          | 8       | 1          |
+    | 3       | 2          | 9       | 1          |
 
     <strong style="color: #1e3a8a;">Communication</strong>
 
