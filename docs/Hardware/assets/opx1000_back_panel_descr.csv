@@ -1,7 +1,7 @@
 ﻿Number,Label,Description
 1,GND,Grounding pin 
 2,Clock in 1/2,Clock input - Can be either 10 MHz or 2 GHz 
-3,Clock out 1/2/3/4,Clock output - Outputs 2 GHz or 1 GHz clock at -4 dBm
+3,Clock out 1/2/3/4,Clock output - For internal use only; used to share clocks with QM products
 4,Fan 1/2/3/4/5/6,Chassis temperature stabilization fans
 5,12 VDC in,12 V DC input 
 6,PS - 1/2/3,Power supplies of the OPX1000

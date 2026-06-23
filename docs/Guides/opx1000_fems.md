@@ -101,9 +101,19 @@ In addition, the following pairs of analog ports are coupled:
 Coupled ports must be in the same band, or in bands `1` and `3`.
 In other words, both coupled ports must be configured to the same band (both in `1` or `2` or `3`), or one port in band `1` and the other in band `3`. Other band combinations are not supported.
 
-!!! Note
+### Pulse Generation Timing Variation
 
-    Band 2 is slower (delayed) by 20 ns compared to Bands 1 & 3.
+Pulse generation timing of analog output ports varies across FEM types and MW-FEM bands. These fixed offsets should be taken into account when synchronizing pulses between LF-FEM and MW-FEM analog output ports.
+
+Relative to an LF-FEM analog output port, the additional delay of an MW-FEM analog output port is approximately:
+
+* `155 ns` for Bands 1 and 3
+* `175 ns` for Band 2
+
+Therefore:
+
+* There is an inherent delay between LF-FEM and MW-FEM analog output ports.
+* Band 2 is delayed by an additional `20 ns` compared to Bands 1 and 3.
 
 ### Output Impedance
 

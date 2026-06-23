@@ -146,6 +146,9 @@ When the channels are on the same module (either the same OPX+ or the same FEM o
 Synchronization across different FEMs within an OPX1000 introduces a slightly longer delay, while the longest delay occurs when syncing channels across different OPX chassis. 
 Therefore there might be different gaps in non-deterministic align depending on which channels are aligned. 
 
+!!! Note
+    `align()` synchronizes the program flow between elements, but it does not remove fixed hardware timing offsets between different output types. These inherent differences are due to different pulse generation times in the hardware. For example, MW-FEM outputs have an inherent delay relative to LF-FEM outputs, as described in the [OPX1000 FEMs guide](opx1000_fems.md#pulse-generation-timing-variation).
+
 ## Examples for Timing scenarios in QUA
 
 We will present five examples in order to demonstrate the timing in qua:
