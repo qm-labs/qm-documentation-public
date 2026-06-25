@@ -50,9 +50,17 @@ The Admin Panel can be accessed by navigating to the OPX1000's IP address in you
         1. If there are any Octaves, connect their clock inputs to any OPX1000's clock outputs.
         2. If all OPX1000es' clock outputs have been used, and there are still unconnected Octaves, then connect the Octave's clock input to other Octave's clock outputs.
     3. Optional: Connect any of the *main* OPX1000 clock inputs to an external reference clock.
+
+        !!! Note
+            When connecting an external reference clock, only one clock input can be active at a time.
+            On chassis revision E and later, any unused clock input must be terminated with a 50 Ω SMA
+            terminator or connected to a non-transmitting source — it must not be left floating.
+            See [Connecting External Clock](../Guides/qop_clock.md#connecting-external-clock) for details.
+
     4. Connect the OPX1000 and Octaves Ethernet cables according to your preferred [network configuration](network_and_router.md#network-overview-and-configuration), selected in point 4.
     5. Connect the OPX1000 and Octaves to the power outlet. It is generally recommended to connect the OPX1000 power supplies to separate power outlets. See the [opx1000 power requirements section below](#opx1000-power-requirements) for more information.
     6. Connect the OPX1000 and Octaves grounding post to the grounding point. More information can be found [here](#rack-mounting-and-grounding-installation-guide).
+
 6. Turn on all the devices.
 7. Configure the cluster by following the [cluster configuration video](https://www.youtube.com/watch?v=ZVuvnJkSbDA), as described [below](#configuring-opx1000-and-octave). As part of clustering, the system installs an initial QOP version required to bring the cluster up. This step can take ~30 minutes.
 8. Follow the [QOP installation guide](../Releases/qop_installation_guide.md) and install the latest QOP version.
