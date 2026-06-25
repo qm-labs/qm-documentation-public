@@ -1340,9 +1340,15 @@ In addition, it is also possible to define two elements that [share an oscillato
         - Digital: 0.5
 
     Each core has $N_{oscillators}=6$ internal oscillators.
-    Note that an oscillator is needed also for baseband pulses and for performing integration on the readout signal.
-    If two (or more) elements with an intermediate frequency [share a core](#sharing-cores), they will each use a separate oscillators, unless they are explicitly defined to [share an oscillator](#sharing-oscillators).
-    If two (or more) elements without an intermediate frequency [share a core](#sharing-cores), they will share the same oscillator.
+    An oscillator is consumed by each element. Note that this also applies to elements with no intermediate frequency defined at all.
+    If two (or more) elements with an intermediate frequency [share a core](#sharing-cores), they each use a separate oscillator, unless they are explicitly configured to [share one](#sharing-oscillators).
+    If two (or more) elements without an intermediate frequency [share a core](#sharing-cores), they automatically share the same "static" oscillator.
+    An element performing readout integration also uses this same "static" oscillator.
+
+    !!! note
+        There is a difference between `intermediate_frequency = 0` and not defining an intermediate frequency at all.
+        In the first case, a normal oscillator is allocated and its frequency can be changed in QUA.
+        In the latter case, the frequency cannot be changed in QUA and the oscillator is considered "static" — it is automatically shared by all relevant elements.
 
 === "OPX+"
 
