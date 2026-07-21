@@ -3,6 +3,84 @@
 Here you can find release notes and version files for the latest version of QOP Admin (QOPA).
 Note that the admin was taken out of the QOP package and is a separate package starting from QOP 2.5 and QOP 3.3.
 
+## QOPA 2.0.1
+
+[QOPA2.0.1.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1783587807-auda87/QOPA2.0.1.tar.gz.age)
+
+*SHA-256 checksum:* `76332178d5add4fddf309b517d8548ce942a04adb3a6bb0b351a402677576b24`
+
+!!! important
+    Since QOPA cannot be downgraded to an older version, please note that:
+
+    - QOP cannot be downgraded below version 3.6.3.
+    - OPNIC requires QOPA 2.0 or later with QOP 3.7, so downgrading to 3.6.3 would not allow working with the OPNIC.
+
+### Release Notes
+
+**Added**
+
+- Add support for QOP3.8.x
+
+**Changed**
+
+- Blocked installation of QOP versions 3.6.2 and earlier.
+
+**Fixed**
+
+- Fixed cases where QOPA could be downgraded to an older version.
+- Fixed cases where QOPF could be downgraded to an older version.
+
+**Removed**
+
+- Discontinued Octave support for clusters >= QOP3.8.x
+
+## QOPA 2.0.0
+
+This release is a complete redesign focused on improving the UX when managing clusters, especially for multi-cluster environments.
+
+### Download
+
+[QOPA2.0.0.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1778076475-w3ww4x/QOPA2.0.0.tar.gz.age)
+
+*SHA-256 checksum:* `4b13a06247d8b78a45b26a9a4d459325463afa8cddf99481b0e3943d26afbee6`
+
+!!! Note
+    For OPX1000, upgrades to QOPA 2.0.0 are not supported from versions before QOP 3.3.0.
+    Customers on earlier versions must first upgrade through QOP 3.3.1. 
+    For OPX+, upgrades to QOPA 2.0.0 are not supported from versions before QOP 2.5.0.
+    Customers on earlier versions must first go through QOP 2.5.0.
+    See the [QOP Installation Guide](qop_installation_guide.md) for detailed instructions.
+
+!!! Note
+    OPNIC support requires QOP 3.7 or later. OPNIC is not supported with QOP 3.6.
+
+### Release Notes
+
+**Added**
+
+- Added support for installing QOPA and QOPF packages on devices without requiring a cluster.
+- Added an automated OPNIC pairing flow.
+- Added a device-focused view.
+- Added a versioned API (v2) that guarantees backward compatibility across future releases. Breaking changes will be introduced only in new API versions, with deprecation notices for older endpoints.
+
+**Changed**
+
+- Introduced a cluster-oriented layout where users select a cluster and perform operations in that cluster's context.
+- Limited clustering operations to one cluster at a time. Moving a device between clusters now requires two actions:
+    - Remove the device from the original cluster and wait for the operation to finish
+    - Add the unclustered device to the new cluster and wait for the operation to finish
+- Enabled FEM channel unlocking for devices without requiring a cluster.
+
+**Fixed**
+
+- Improved QOPF rescue and reboot reliability during update flows.
+- Fixed an issue where the filesystem on OPX1000 controller could fill up due to cleanup not running correctly in multi-controller clusters.
+- Fixed an issue where QOPA continued to display and use the link-local IP address for a device after it had been switched to a static IPv4 address.
+
+**Deprecated**
+
+- Deprecated support for Octaves in OPX1000 clusters. This support will be removed in QOP 3.8.0.
+
 ## QOPA 1.6.1
 
 QOPA 1.6.1 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1782020467-ofhisn/QOPA1.6.1.tar.gz.age).
@@ -43,15 +121,21 @@ QOPA 1.6.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/
 
 ## QOPA 1.5.1
 
-QOPA 1.5.1 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1766137065-lm2z6u/QOPA1.5.1.tar.gz.age).
+### Download
+[QOPA1.5.1.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1766137065-lm2z6u/QOPA1.5.1.tar.gz.age)
+
+### Release Notes
 
 **Added**
 
-- Add support for QOP 2.6
+- Added support for QOP 2.6.0.
 
 ## QOPA 1.5.0
 
-QOPA 1.5.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1764772641-fd38mr/QOPA1.5.0.tar.gz.age).
+### Download
+[QOPA1.5.0.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1764772641-fd38mr/QOPA1.5.0.tar.gz.age)
+
+### Release Notes
 
 **Added**
 
@@ -74,7 +158,10 @@ QOPA 1.5.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/
 
 ## QOPA 1.4.1
 
-QOPA 1.4.1 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1762876057-ida1o5/QOPA1.4.1.tar.gz.age).
+### Download
+[QOPA1.4.1.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1762876057-ida1o5/QOPA1.4.1.tar.gz.age)
+
+### Release Notes
 
 **Added**
 
@@ -103,7 +190,10 @@ Please reach out to Quantum Machines support in order to get installation files 
 
 ## QOPA 1.3.0
 
-QOPA 1.3.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1754056874-g1p5lw/QOPA1.3.0.tar.gz.age).
+### Download
+[QOPA1.3.0.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1754056874-g1p5lw/QOPA1.3.0.tar.gz.age)
+
+### Release Notes
 
 **Changed**
 
@@ -115,7 +205,10 @@ QOPA 1.3.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/
 
 ## QOPA 1.2.2
 
-QOPA 1.2.2 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1750000608-9bcu65/QOPA1.2.2.tar.gz.age).
+### Download
+[QOPA1.2.2.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1750000608-9bcu65/QOPA1.2.2.tar.gz.age)
+
+### Release Notes
 
 **Changed**
 
@@ -128,7 +221,10 @@ QOPA 1.2.2 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/
 
 ## QOPA 1.2.1
 
-QOPA 1.2.1 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1746012714-1363t6/QOPA1.2.1.tar.gz.age).
+### Download
+[QOPA1.2.1.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1746012714-1363t6/QOPA1.2.1.tar.gz.age)
+
+### Release Notes
 
 **Added**
 
@@ -145,4 +241,5 @@ QOPA 1.2.1 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/
 
 ## QOPA 1.0.0
 
-QOPA 1.0.0 can be downloaded from [here](https://qmpublic.s3.amazonaws.com/QOPA/1741714454-j30f8h/QOPA_1.0.0.tar.gz.age).
+### Download
+[QOPA_1.0.0.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1741714454-j30f8h/QOPA_1.0.0.tar.gz.age)

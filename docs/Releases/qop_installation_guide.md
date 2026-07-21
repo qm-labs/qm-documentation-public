@@ -13,19 +13,78 @@ If you are looking for the hardware installation guides, please follow the follo
 ## Installation Procedure
 1. Open a web browser on a computer that has network access to the device you wish to update.
 1. In the address bar, enter the IP address typically used to connect to your device.
-This should open the Admin Panel. You can find your current QOP version displayed in the top right corner of the screen.
-1. Based on your OPX, refer to the instructions below and install each intermediate version until 
-you reach the desired release. 
+This should open the Admin Panel.
+1. Based on your QOPA version and OPX type, refer to the instructions below and install each intermediate version until
+you reach the desired release.
 
+=== "QOPA 2.0.0 and higher"
 
-=== "OPX1000"
+    Select the desired cluster on the Cluster Overview page or from the sidebar. The current QOP version is displayed in the sidebar on the left.
+
+    ### OPX1000
 
     Please use the following selector tool to determine the correct steps for installing the latest QOP version.
     For information on how to install each specific package, please refer to the detailed instructions below.
 
     QOP_INSTALL_TOOL_OPX1000
-        
-    ## Check the current BSP version
+
+    #### Check the current BSP version
+
+    ??? info "How to check BSP version"
+        Navigate to the **Devices** section in the leftmost part of the sidebar. The BSP version for each device is displayed in the right-most column.
+
+        ![BSP_qopa2](../../hidden_pages/assets/bsp_qopa2.png)
+
+    #### Updating QOP, QOPA, or QOPF
+
+    The update flow is the same for all packages:
+
+    1. Select the cluster from the sidebar.
+    1. Navigate to the **Versions** page.
+    1. Click the **Upload Version** button in the top right corner.
+    1. Follow the on-screen instructions to upload the desired package. It will be automatically detected as QOP, QOPA, or QOPF.
+    1. Once the version is uploaded, hover over the newly uploaded version and click `Install`.
+
+    !!! Note
+        For QOPF instalation please carefully read the instructions in the pop-up window before proceeding.
+
+    ### OPX+
+
+    === "QOP>=2.5.0"
+        ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_250_and_above.png)
+
+        1. Select the cluster from the sidebar.
+        1. Navigate to the **Versions** page.
+        1. Click the **Upload Version** button in the top right corner.
+        1. Follow the on-screen instructions to upload the desired QOPA package.
+        1. Once the version is uploaded, hover over the newly uploaded version and click `Install`.
+        1. Once the QOPA update is finished, repeat the steps above to upload and install the desired QOP package.
+
+            !!! Note "Important note"
+                For the best performance, please make sure to update the QOPA version to the latest one.
+
+    === "QOP<=2.4.4"
+
+        ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_244_and_below.png)
+
+        1. Select the cluster from the sidebar.
+        1. Navigate to the **Versions** page.
+        1. Click the **Upload Version** button in the top right corner.
+        1. Follow the on-screen instructions to upload the desired QOP package.
+        1. Once the version is uploaded, hover over the newly uploaded version and click `Install`.
+
+=== "QOPA 1.x"
+
+    You can find your current QOP version displayed in the top right corner of the screen.
+
+    ### OPX1000
+
+    Please use the following selector tool to determine the correct steps for installing the latest QOP version.
+    For information on how to install each specific package, please refer to the detailed instructions below.
+
+    QOP_INSTALL_TOOL_OPX1000
+
+    #### Check the current BSP version
 
     ??? info "How to check BSP version"
         In the admin panel click on the controller icon at the top right of the page in the topology page
@@ -34,31 +93,27 @@ you reach the desired release.
 
     === "QOP"
         1. In the Admin Panel, navigate to `Preferences > QOP`.
-        1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package. 
+        1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package.
         1. Once the version is uploaded, select the target cluster (if applicable) from the drop-down menu.
         1. Hover over the newly uploaded version and click `Install`.
     === "QOPA"
         1. In the Admin Panel, navigate to `Preferences > QOPA`.
-        1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOPA package. 
+        1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOPA package.
         1. Once the version is uploaded, select the target cluster (if applicable) from the drop-down menu.
         1. Hover over the newly uploaded version and click `Install`.
-    
     === "QOPF"
         1. In the Admin Panel, navigate to `Preferences > QOPF`.
-        1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOPF package. 
+        1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOPF package.
         1. Once the version is uploaded, select the target cluster (if applicable) from the drop-down menu.
         1. Select the desired device(s) according to their hostnames.
         1. Hover over the newly uploaded version and click `Install`.
         1. Carefully read the instructions in the pop-up window. Once ready, follow the on screen instructions to start the installation.
-    
 
+    ### OPX+
 
-
-=== "OPX+"
-    
     === "QOP>=2.5.0"
         ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_250_and_above.png)
-        
+
         1. In the Admin Panel, navigate to `Preferences > QOPA`
         1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOPA package.
         1. Once the version is uploaded, select the target cluster from the drop-down menu.
@@ -70,11 +125,11 @@ you reach the desired release.
 
             !!! Note "Important note"
                 For the best performance, please make sure to update the QOPA version to the latest one.
-    
+
     === "QOP<=2.4.4"
-                
+
         ![QOP_Versions_Flowchart](assets/QOP_Upgrade_flowchart_244_and_below.png)
-    
+
         1. In the Admin Panel, navigate to `Preferences > Versions`.
         1. Click the blue `Upload` button and follow the on-screen instructions to upload the desired QOP package.
         1. Once the version is uploaded, select the target cluster from the drop-down menu.

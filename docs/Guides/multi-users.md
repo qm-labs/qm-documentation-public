@@ -71,6 +71,7 @@ To enable port sharing, you need to add `"shareable": True` in the port's dictio
     1. Direct interference - For example, both `qms` applying operations on the same qubit.
     2. If both `qms` are playing at the same time, overflows might occur even if each `qm` by itself doesn't cause an overflow.
     3. A `qm` saving too much data (mostly ADC traces at a fast rate), could crash the QOP.
+    4. Opening a `qm` with `close_other_machines=True` (the default) will close the first `qm` even if the overlapping ports are marked as `"shareable": True`. To keep both `qms` open simultaneously, set `close_other_machines=False` explicitly.
 
 ## Job Queue
 

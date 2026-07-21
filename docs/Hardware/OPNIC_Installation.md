@@ -45,7 +45,7 @@ If the system was previously configured, you can skip directly to step 4.
     * Connect the 2 QSFP-MPO adapters to the relevant ports in the OPNIC.
     * Connect the MPO optical cables from the OPNIC to the OPX1000 according to the diagram:
 
-        - **Make sure to connect Comm 2 to the right OPNIC port (orientation according to the sketch).**
+        - **Make sure to connect Comm 4 to the OPNIC port 0 (closer to SMA, notice orientation according to the sketch).**
 
         - **Make sure both MPO optical cables are identical and of the same length.**
 
@@ -62,50 +62,198 @@ If the system was previously configured, you can skip directly to step 4.
 
 ??? "Step 3: OPNIC Drivers Installation and Update"
 
-    1. Copy the OPNIC software package provided by Quantum Machines into the server
-    2. Add execute permissions:
+    === "QOP >= 3.7.0"
+        Starting from QOP 3.7.1 OPNIC is supported through QOPA2 and an automated service, enabling communication, synchronization and setup.
 
-        ```bash
-        cd opnic-driver/scripts
-        chmod +x install.sh
-        chmod +x uninstall.sh
-        cd ../..
-        ```
+        1. Download the OPNIC software package [here](https://qmpublic.s3.amazonaws.com/OPNIC/opnic_releases_0.9.zip). Copy the directory into the server and unzip it.
 
-    3. Install Driver:
+        2. Add execute permissions:
 
-        ```bash
-        cd opnic-driver
-        make
-        sudo make install
-        cd ..
-        ```
+            ```bash
+            cd opnic-driver/scripts
+            chmod +x install.sh
+            chmod +x uninstall.sh
+            cd ../..
+            ```
 
-    4. Install SDK:
+        3. Install Driver:
 
-        ```bash
-        sudo apt install libssl-dev
-        cd opnic-sdk
-        cmake --preset cuda
-        sudo cmake --build build -- install
-        cd ..
-        ```
+            ```bash
+            cd opnic-driver
+            make
+            sudo make install
+            cd ..
+            ```
 
-    5. Verify installation of opnic libraries:
+        4. Install SDK:
 
-        ```bash
-        ls -la /usr/local/lib
-        ```
-        And verify that the following files are present: `libopnic.so`, `libopnic-cuda.so`.
+            ```bash
+            sudo apt install libssl-dev
+            cd opnic-sdk
+            cmake --preset cuda
+            sudo cmake --build build -- install
+            cd ..
+            ```
 
-    6. Install CLI:
+        5. Verify installation of opnic libraries:
 
-        ```bash
-        cd opnic-cli
-        cmake . -B build -G Ninja
-        sudo cmake --build build --target install
-        cd ..
-        ```
+            ```bash
+            ls -la /usr/local/lib
+            ```
+            And verify that the following files are present: `libopnic.so`, `libopnic-cuda.so`.
+
+        6. Install cli service:
+
+            ```bash
+            cd opnic-service
+            pip install --break-system-packages ./opnic_cli-0.1.1-py3-none-any.whl
+            ```
+
+            Continue according to system architecture:
+
+            * ARM servers:
+
+            ```bash
+            cp ./opnic-service_0.1.0_arm64.deb /tmp/
+            cp ./opnic-service-systemd_0.1.0_arm64.deb /tmp/
+            sudo apt install /tmp/opnic-service_0.1.0_arm64.deb /tmp/opnic-service-systemd_0.1.0_arm64.deb
+            cd ..
+            ```
+
+            * x64 servers:
+
+            ```bash
+            cp ./opnic-service_0.1.0_amd64.deb /tmp/
+            cp ./opnic-service-systemd_0.1.0_amd64.deb /tmp/
+            sudo apt install /tmp/opnic-service_0.1.0_amd64.deb /tmp/opnic-service-systemd_0.1.0_amd64.deb
+            cd ..
+            ```
+
+        7. Install Avahi service and reboot your system:
+
+            ```bash
+            cd avahi-publisher
+            chmod +x install.sh
+            sudo ./install.sh
+            cd ..
+            sudo reboot now
+            ```
+
+        8. Check service is running and versions are up to date:
+
+            ```bash
+            systemctl status opnic
+            ```
+
+            response should look like this:
+
+            ```bash
+            ● opnic.service - Opnic service
+                Loaded: loaded (/usr/lib/systemd/system/opnic.service; enabled; preset: enabled)
+                Active: active (running) since Tue 2026-06-09 13:35:18 UTC; 11min ago
+            ```
+
+        9. Find your OPNIC S/N:
+
+            ```bash
+            opnic -vv version
+            ```
+
+            FPGA and PLL versions should show the S/N:
+
+            ```bash
+            Cli Version: x.x.x.x
+            SDK Version: x.x.x.x
+            Service version: x.x.x.x
+            Driver version: x.x.x.x
+            FPGA version [OPNIC-262xyz]: x.x.x.x
+            PLL version [OPNIC-262xyz]: x.x.x.x
+            ```
+
+        10. Validate the server is accessible: Run the following command from another machine in the same subnet. Fill in your server's IP address.
+
+            ```bash
+            curl -v http://<server-ip>:8080
+            ```
+
+            Response should resemble the following:
+
+            ```bash
+            *   Trying <server-ip>:8080...
+            * Connected to <server-ip> (<server-ip>) port 8080
+            > GET / HTTP/1.1
+            > Host: <server-ip>:8080
+            > User-Agent: curl/8.5.0
+            > Accept: */*
+            >
+            < HTTP/1.1 404 Not Found
+            < Content-Length: 15
+            < Server: Crow/master
+            < Connection: Keep-Alive
+            <
+            404 Not Found
+            * Connection #0 to host <server-ip> left intact
+            ```
+
+        11. Pair the OPNIC via the Admin Panel - select the correct OPNIC from "Available devices" according to it's S/N found in step 9, and click "Connect":
+            ![OPNIC Pairing](assets/OPNIC_Pair_QOPA2.png)
+        12. Following system restart - the opnic pairing and sync will automate:
+            ![OPNIC Connection](assets/OPNIC_Connected_QOPA2.png)
+
+        For manual pairing mode (in case AVAHI installation skipped):
+
+        13. Select 'pair by manual configuration' in QOPA and apply the S/N and IP address:
+            ![OPNIC Manual Pairing](assets/OPNIC_Manual_QOPA2.png)
+        14. Following system restart - the opnic pairing and sync will automate
+
+
+
+    === "QOP < 3.7.0"
+
+        1. Copy the OPNIC software package provided by Quantum Machines into the server
+        2. Add execute permissions:
+
+            ```bash
+            cd opnic-driver/scripts
+            chmod +x install.sh
+            chmod +x uninstall.sh
+            cd ../..
+            ```
+
+        3. Install Driver:
+
+            ```bash
+            cd opnic-driver
+            make
+            sudo make install
+            cd ..
+            ```
+
+        4. Install SDK:
+
+            ```bash
+            sudo apt install libssl-dev
+            cd opnic-sdk
+            cmake --preset cuda
+            sudo cmake --build build -- install
+            cd ..
+            ```
+
+        5. Verify installation of opnic libraries:
+
+            ```bash
+            ls -la /usr/local/lib
+            ```
+            And verify that the following files are present: `libopnic.so`, `libopnic-cuda.so`.
+
+        6. Install CLI:
+
+            ```bash
+            cd opnic-cli
+            cmake . -B build -G Ninja
+            sudo cmake --build build --target install
+            cd ..
+            ```
 
 ??? "Step 4: OPNIC Firmware Update"
 

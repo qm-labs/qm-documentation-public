@@ -1,6 +1,6 @@
 # Variables in QUA
 
-The following page describes the three types of variables in QUA: Integers, fixed point numbers and booleans.
+The following page describes the three types of variables in QUA: Integers, fixed point numbers and booleans, and how Python and NumPy values convert into them.
 
 ## Definitions
 
@@ -23,17 +23,6 @@ i = declare(int)  # creates a variable named "i" of type integer
     # big_number is now 2^31-1
     assign(big_number, big_number+1)
     # big_number is now -2^31
-    ```
-
-!!! Note
-    Mixing arithmetics of a QUA integer with python literals of type float will keep the integer type. 
-    
-    ```python
-    i = declare(int, value=3)  # creates a variable named "i" of type integer with value 3
-    assign(i, i + 0.7)  # i stays a QUA integer, 0.7 is rounded down, and the value of i remains 3
-    assign(i, 10 * (i + 1.2))  # i stays a QUA integer, 1.2 is rounded down to 1, and this results in "10 * 4"
-    # when the bracket is expanded it will yield a different result
-    assign(i, 10 * i + 10 * 1.2)  # "10 * 1.2" is being calculated first, so this results in "10 * i + 12"
     ```
 
 ### Fixed point numbers
@@ -64,6 +53,31 @@ To create a boolean variable we {{f("qm.qua.declare")}} as follows:
 b = declare(bool)  # creates a variable named "b" of type fixed boolean
 ```
 
+## Casting from Python
+
+When a Python value — an `int`, `float`, `bool`, or a NumPy scalar (`np.integer`, `np.floating`, `np.bool_`) — is used where a QUA value is expected (for example as the `value` argument of {{f("qm.qua.declare")}}, in {{f("qm.qua.assign")}}, or as an argument to a QUA function such as {{f("qm.qua.amp")}}), it is cast automatically to the corresponding QUA type. NumPy scalars are first converted to their Python primitive equivalent, and then follow the same conversion rules below.
+
+### Casting to integers
+
+Mixing arithmetics of a QUA integer with python literals of type float will keep the integer type.
+
+```python
+i = declare(int, value=3)  # creates a variable named "i" of type integer with value 3
+assign(i, i + 0.7)  # i stays a QUA integer, 0.7 is rounded down, and the value of i remains 3
+assign(i, 10 * (i + 1.2))  # i stays a QUA integer, 1.2 is rounded down to 1, and this results in "10 * 4"
+# when the bracket is expanded it will yield a different result
+assign(i, 10 * i + 10 * 1.2)  # "10 * 1.2" is being calculated first, so this results in "10 * i + 12"
+```
+
+### Casting to fixed point numbers
+
+A Python float is converted to the fixed point representation as `int(round(f * 2**28))`. Rounding follows the same round-half-to-even convention as `numpy.round()` (IEEE 754), not round-half-away-from-zero.
+
+!!! Note
+    `np.float16` and `np.float32` values can convert to a different value than expected: converting a reduced-precision NumPy float to a Python `float` widens it rather than reproducing the original decimal value (for example, `np.float32(0.85)` becomes `0.8500000238418579`, not `0.85`). Use a native Python `float` or `np.float64` when the exact literal value matters.
+
+### Casting to booleans
+
 When assigning the truth value of the boolean, every non-zero value will be considered as true, and zero will be false. For example:
 
 ```python
@@ -82,7 +96,10 @@ assign(b, 0)
 assign(b, 0.0)
 ```
 
-## Casting
+!!! Note
+    This automatic conversion only applies to Python/NumPy values. QUA does not cast automatically between its own types — converting a QUA variable or expression from one type (`int`, `fixed`, `bool`) to another always requires an explicit call to the [Cast library](qua_ref.md#cast). See [Casting between QUA types](#casting-between-qua-types) below.
+
+## Casting between QUA types
 
 QUA enables casting between different types of variables using the [Cast library](qua_ref.md#cast).
 There are three normal casting operations, two casting by multiplication operations and two "unsafe" casting operations.

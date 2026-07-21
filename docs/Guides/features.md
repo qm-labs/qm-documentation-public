@@ -646,6 +646,9 @@ for val in current_vals:
 !!! Note
     Pausing the QUA program is required to properly set an IO variable with `job.set_io_values(val1, val2)`. Setting it while the program is running may result in unexpected behavior. 
 
+!!! Note
+    `IO1` cannot currently be used together with [input streams](#input-streams) in the same QUA program. `IO2` is not affected by this limitation.
+
 ### Reading an IO variable
 
 IO values can also be used to extract information of a running program. For example, update the LO frequency to some value calculated in real-time, in the OPX.
@@ -718,6 +721,9 @@ while some_cond:
     job.push_to_input_stream('truth_table_input_stream', qubit_states)
     job.push_to_input_stream('tau_input_stream', calc_tau)
 ```
+
+!!! Note
+    Input streams cannot currently be used together with `IO1` in the same QUA program. `IO2` is not affected by this limitation.
 
 ## Timestamp Stream
 {{ requirement("QOP", "2.2") }}
@@ -1340,15 +1346,8 @@ In addition, it is also possible to define two elements that [share an oscillato
         - Digital: 0.5
 
     Each core has $N_{oscillators}=6$ internal oscillators.
-    An oscillator is consumed by each element. Note that this also applies to elements with no intermediate frequency defined at all.
-    If two (or more) elements with an intermediate frequency [share a core](#sharing-cores), they each use a separate oscillator, unless they are explicitly configured to [share one](#sharing-oscillators).
-    If two (or more) elements without an intermediate frequency [share a core](#sharing-cores), they automatically share the same "static" oscillator.
-    An element performing readout integration also uses this same "static" oscillator.
-
-    !!! note
-        There is a difference between `intermediate_frequency = 0` and not defining an intermediate frequency at all.
-        In the first case, a normal oscillator is allocated and its frequency can be changed in QUA.
-        In the latter case, the frequency cannot be changed in QUA and the oscillator is considered "static" — it is automatically shared by all relevant elements.
+    Elements that [share a core](#sharing-cores) each use a separate oscillator, unless they are explicitly configured to [share one](#sharing-oscillators). A core can therefore drive up to 6 elements with different frequencies that all remain phase coherent.
+    Elements with no intermediate frequency defined all share a single oscillator (also used for readout integration), so together they consume one of the 6.
 
 === "OPX+"
 

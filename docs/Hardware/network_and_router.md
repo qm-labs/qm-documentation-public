@@ -158,6 +158,25 @@ We list below four possible configurations and details on accessing the cluster.
         qmm = QuantumMachinesManager(host='ANY_QM_OPX_IP', cluster_name='My_cluster_name')
         ```
 
+## Recovering Access via a Link-Local Address
+
+{{ requirement("OPX1000", 3) }}
+
+If an OPX1000 is set to DHCP but no DHCP server responds, the device falls back to a **link-local** address in the `169.254.0.0/16` range. This lets you regain access to the device without performing a factory reset.
+
+!!! Note
+    Link-local access is intended for **recovery and management access only**. You can reach the Admin Panel through a web browser over the link-local address, but full system functionality is not guaranteed. After regaining access, restore a valid IP address for normal operation.
+
+To connect to an OPX1000 over its link-local address:
+
+1. Connect the OPX1000 directly to your computer with an Ethernet cable, or place both on an isolated network segment that has no DHCP server. With no DHCP lease available, your computer also self-assigns a `169.254.x.x` link-local address, placing it on the same subnet as the device.
+
+    The device or your computer's network interface may need to be restarted for the link-local address to take effect. On Windows, you can release your computer's current DHCP lease by running `ipconfig /release`.
+
+2. Open the Admin Panel in a web browser, using either the device's link-local IP address or its mDNS hostname `qm-<mac-address>.local` (for example, `qm-d8b3770a1b2c.local`). Depending on your operating system, the `.local` suffix may or may not be required.
+
+3. From the Admin Panel, set the device back to a valid IP address so it can be reached normally.
+
 ## Configuring the QM router
 
 ??? Router password

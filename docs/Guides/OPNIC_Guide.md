@@ -39,51 +39,75 @@ Pre-requisites:
 ### Pairing the OPX1000 with the OPNIC Host Server
 The server hosting the OPNIC must be paired with an OPX1000 cluster.
 
-??? "One time - Pair/Unpair Sequence"
+=== "QOPA 2.0.0 and higher"
 
-    **Action required on initial connection or disconnection**
+    ??? "One time - Pair/Unpair Sequence"
 
-    1. Click on operations
-    2. Select Cluster connected to the server
-    3. Verify server status is 'Paired to OPX1000' or click on 'Pair'
-    4. The cluster will *Automatically* restart
-    5. To complete initial pairing, follow the steps in the next section: OPX1000 to OPNIC host server synchronization steps.
+        **Action required on initial connection or disconnection**
 
-    ![Paring Sequence QOP](./assets/OPNIC_Pair.png)
+        Starting from QOP 3.7.x and QOPA 2.0, OPNIC synchronization is performed automatically upon cluster restart
 
-## Communication Initialization
+        1. Create a cluster and wait until it reaches **Operational** status.
+        2. Select the cluster from the sidebar.
+        3. Navigate to the **Settings** page.
+        4. Under the **OPNIC** section, locate the desired OPNIC under **Available devices**.
+        5. Click **Connect** next to the desired OPNIC.
+        6. The cluster will automatically restart. Wait until it becomes **Operational** again.
+        7. To complete initial pairing, follow the steps in the next section: OPX1000 to OPNIC host server synchronization steps.
 
-!!! Note - Sync is required on every cluster or server boot
-    To initialize the flow and start-up the cluster - OPX1000 and the OPNIC host server need to be synced.
+        ![OPNIC Pairing in QOPA 2.0](./assets/OPNIC_Pair_QOPA2.jpeg)
 
-??? "OPX1000 to OPNIC host server synchronization steps"
+        ![OPNIC Successfully Paired](./assets/OPNIC_Paired_QOPA2.jpeg)
 
-    1. From the OPX1000 side - QOPA:
 
-        - Make sure the OPX1000 is paired with the Server in the Admin Panel, as explained [here](#pairing-the-opx1000-with-the-opnic-host-server).
 
-        - Restart the OPX1000 Cluster and wait for 'Waiting for OPNIC Pairing' status:
+=== "QOPA 1.x"
 
-        ![Startup Sequence QOPA](./assets/OPNIC_Restart_Sequence.png)
+    ??? "One time - Pair/Unpair Sequence"
 
-    2. From the Server side:
+        **Action required on initial connection or disconnection**
 
-        - Run the sync command by executing the following command in the terminal:
-        ```
-        opnic sync <ip_address_of_qop OR host_name> <port>
-        ```
+        1. Click on operations
+        2. Select Cluster connected to the server
+        3. Verify server status is 'Paired to OPX1000' or click on 'Pair'
+        4. The cluster will *Automatically* restart
+        5. To complete initial pairing, follow the steps in the next section: OPX1000 to OPNIC host server synchronization steps.
 
-        - default port is 8080
+        ![Pairing Sequence QOP](./assets/OPNIC_Pair.png)
 
-        - example and expected output:
-            ``` bash
-            > opnic sync 10.0.0.10 8080
-            [=======================] ✔ Connected to QOP
-            [=======================] ✔ QOP is synced
-            [=======================] ✔ Sync Started
+    ## Communication Initialization
+
+    !!! Note - Sync is required on every cluster or server boot
+        To initialize the flow and start-up the cluster - OPX1000 and the OPNIC host server need to be synced.
+
+    ??? "OPX1000 to OPNIC host server synchronization steps"
+
+        1. From the OPX1000 side - QOPA:
+
+            - Make sure the OPX1000 is paired with the Server in the Admin Panel, as explained [here](#pairing-the-opx1000-with-the-opnic-host-server).
+
+            - Restart the OPX1000 Cluster and wait for 'Waiting for OPNIC Pairing' status:
+
+            ![Startup Sequence QOPA](./assets/OPNIC_Restart_Sequence.png)
+
+        2. From the Server side:
+
+            - Run the sync command by executing the following command in the terminal:
+            ```
+            opnic sync <ip_address_of_qop OR host_name> <port>
             ```
 
-    3. OPX1000 boot sequence will continue after synchronization
+            - default port is 8080
+
+            - example and expected output:
+                ``` bash
+                > opnic sync 10.0.0.10 8080
+                [=======================] ✔ Connected to QOP
+                [=======================] ✔ QOP is synced
+                [=======================] ✔ Sync Started
+                ```
+
+        3. OPX1000 boot sequence will continue after synchronization
 
 ## Basic Syntax and Examples
 The system enables running algorithms using GPU, CPU and supported combinations coded in C++ and/or CUDA.

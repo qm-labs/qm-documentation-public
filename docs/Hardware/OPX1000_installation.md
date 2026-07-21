@@ -31,11 +31,12 @@ The Admin Panel can be accessed by navigating to the OPX1000's IP address in you
 1. Verify you have all the [required components](#required-components-for-the-installation).
 2. Mount the system in its designated place. Instructions for rack mounting the OPX1000 can be found [here](#rack-mounting-and-grounding-installation-guide).
 3. Insert the FEMs into the chassis:
-    1. To prevent static discharge that can damage the FEM, please use the provided ESD gloves before touching or handling the FEMs.
-    2. Slide FEM into an empty slot in the chassis.
-    3. Ensure that the FEM is fully inserted and that the FEM panel is flush with the chassis panel. If it is not, check that the captive screws or ejectors are not obstructing the insertion.
-    4. Secure the FEM in place using the captive screws.
-    5. Repeat for all FEMs, also install the provided blank FEMs in any remaining empty slots.
+    1. Ensure the chassis is powered off before inserting or removing a FEM. Inserting or removing a FEM while the chassis is powered on can damage the FEM or the chassis.
+    2. To prevent static discharge that can damage the FEM, please use the provided ESD gloves before touching or handling the FEMs.
+    3. Slide FEM into an empty slot in the chassis.
+    4. Ensure that the FEM is fully inserted and that the FEM panel is flush with the chassis panel. If it is not, check that the captive screws or ejectors are not obstructing the insertion.
+    5. Secure the FEM in place using the captive screws.
+    6. Repeat for all FEMs, also install the provided blank FEMs in any remaining empty slots.
         1. Turning on the system without all the FEM installed, or the blank FEMs, can cause the system to overheat, which will increase fan speed and can cause the system to shut down to protect itself from damage.
 
 4. Determine your [network configuration](network_and_router.md#network-overview-and-configuration).
@@ -431,6 +432,10 @@ Make sure to press the optical cables firmly into the ports until a click is hea
 ??? Information "Configuring the Device's IP"
 
     It is possible to change the IP addresses of the devices. If it is needed, please contact QM for assistance.
+
+??? Information "Recovering access if the IP is unreachable"
+
+    If a device is set to DHCP but does not receive an address, the OPX1000 falls back to a link-local address through which it can still be reached. See [Recovering Access via a Link-Local Address](network_and_router.md#recovering-access-via-a-link-local-address).
 
 ??? Information "Cluster Devices"
 

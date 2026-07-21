@@ -191,48 +191,70 @@ When we want to synchronize two or more OPX modules to one clock or use a clock 
 
 === "OPX1000"
 
-    Access your OPX1000 Admin Panel through the browser. On the settings page, you can see radio buttons to choose between internal and external clock.
-    
-    ![Choose external or internal clock](assets/opx1000_ext_int.jpeg)
-    
-    Choose the clock input where the external clock is connected to and its frequency
-    
-    ![Choose clock input](assets/opx1000_clock_in_select.jpeg)
-    
-    ![Choose clock input frequency](assets/opx1000_clock_freq.jpeg)
+    === "QOPA 2.x"
 
-    After the frequency was chosen, click apply and wait for the system to restart with the new clock.
-    
-    !!! Note
-        Changing the clock frequency will result in a system reboot.
+        Select the cluster from the sidebar. Navigate to the **Settings** page. Find the **Adjust Clock Preferences** section and click on it. In the expanded menu, choose the desired clock preferences and press **Apply**.
+
+        ![OPX1000 Clock Configuration in QOPA 2.x](assets/qopa2_external_clock_config.jpeg)
+
+        !!! Note
+            Changing the clock frequency will result in a system reboot.
+
+    === "QOPA 1.x"
+
+        Access your OPX1000 Admin Panel through the browser. On the settings page, you can see radio buttons to choose between internal and external clock.
+
+        ![Choose external or internal clock](assets/opx1000_ext_int.jpeg)
+
+        Choose the clock input where the external clock is connected to and its frequency
+
+        ![Choose clock input](assets/opx1000_clock_in_select.jpeg)
+
+        ![Choose clock input frequency](assets/opx1000_clock_freq.jpeg)
+
+        After the frequency was chosen, click apply and wait for the system to restart with the new clock.
+
+        !!! Note
+            Changing the clock frequency will result in a system reboot.
 
 === "OPX+"
 
     {{ requirement("QOP", "2.0") }}
-    
-    Access your OPX Admin Panel through the browser. On the settings page, you can see radio buttons to choose between internal and external clock.
-    
-    ![EXTCLKQMAPPNEW](assets/EXTCLKQMAPPNEW.png)
-    
-    After the frequency was chosen, click apply and wait for the system to restart with the new clock.
-    
-    ![EXTCLKQMAPPAPPLY](assets/EXTCLKQMAPPAPPLY.png)
-    
-    !!! Note
-        Changing the clock frequency will result in a system reboot
+
+    === "QOPA 2.x"
+
+        Select the cluster from the sidebar. Navigate to the **Settings** page. Find the **Adjust Clock Preferences** section and click on it. In the expanded menu, choose the desired clock preferences and press **Apply**.
+
+        ![OPX+ Clock Configuration in QOPA 2.x](assets/qopa2_external_clock_config.jpeg)
+
+        !!! Note
+            Changing the clock frequency will result in a system reboot
+
+    === "QOPA 1.x"
+
+        Access your OPX Admin Panel through the browser. On the settings page, you can see radio buttons to choose between internal and external clock.
+
+        ![EXTCLKQMAPPNEW](assets/EXTCLKQMAPPNEW.png)
+
+        After the frequency was chosen, click apply and wait for the system to restart with the new clock.
+
+        ![EXTCLKQMAPPAPPLY](assets/EXTCLKQMAPPAPPLY.png)
+
+        !!! Note
+            Changing the clock frequency will result in a system reboot
 
 === "OPX"
 
     {{ requirement("QOP", "1.0") }}
-    
+
     Log in to your OPX through the QMApp. On the main window you will see all the OPXes in that cluster.
     Press on the settings icon to go into the clock settings.
-    
+
     ![oqmapp1](assets/oqmapp1.png)
-    
+
     Pick a clock frequency and press apply. Now you can either restart the OPX for the change to occur immediately or restart later and continue working with the current clock configuration.
-    
+
     ![oqmapp2](assets/oqmapp2.png)
-    
+
     !!! Note
         Changing clock frequency will result in a system reboot
