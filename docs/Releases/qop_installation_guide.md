@@ -89,7 +89,7 @@ you reach the desired release.
     ??? info "How to check BSP version"
         In the admin panel click on the controller icon at the top right of the page in the topology page
 
-        ![BSP](../../hidden_pages/assets/BSP_132.png)
+        ![BSP](assets/BSP_132.png)
 
     === "QOP"
         1. In the Admin Panel, navigate to `Preferences > QOP`.
