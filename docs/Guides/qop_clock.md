@@ -258,3 +258,31 @@ When we want to synchronize two or more OPX modules to one clock or use a clock 
 
     !!! Note
         Changing clock frequency will result in a system reboot
+
+## Switch between external clock sources on OPX1000
+
+This guide describes the recommended procedure for changing your OPX1000 cluster from one external clock source to another (for example, from a 2 GHz external clock to a 10 MHz external clock). When switching, make sure the physical cable is connected to the same clock input port specified in the admin panel.
+
+### Option 1 — Safer
+This method uses the internal clock as an intermediate step and involves two restarts.
+
+1. In the admin panel, change the clock configuration to Internal and click Apply.
+(The cluster will automatically restart)
+
+2. Once the boot following the restart is complete, swap the external clock cables to the new clock source.
+
+3. In the admin panel, select the new External clock configuration and click Apply.
+(The cluster will restart again and boot with the new external clock settings.)
+
+### Option 2 — Faster (Time-sensitive)
+This method completes the switch in a single restart cycle but requires you to act within a defined time window.
+
+1. In the admin panel, select the new external clock configuration and click Apply.
+
+2. Wait 10 seconds.
+
+2. Within 2 minutes of clicking Apply (you have approximately 1 minute 50 seconds after the initial 10-second wait), connect or swap the external clock cables to the correct clock input port on the OPX1000.
+
+3. The cluster will detect the new clock signal and complete the boot with the updated settings.
+
+4. If the timing window is missed: The cluster may fail to boot. Perform a software restart from the admin panel to recover the cluster to a healthy state.

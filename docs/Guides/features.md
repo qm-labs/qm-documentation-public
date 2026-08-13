@@ -358,6 +358,8 @@ measure([pulse], [element], [stream], time_tagging.analog(times, max_time, count
 === "OPX+"
     High resolution time tagging has a resolution of <50 ps with a dead time of 84 ns.
 
+This dead time applies per element, i.e. per [core](#cores-and-oscillators). Elements that do not share a core each have their own independent dead time, even when they read from the same analog input.
+
 The high resolution time-tagging is done in a measure statement, with the following syntax:
 
 ```python
@@ -372,6 +374,9 @@ measure([pulse], [element], [stream],
 - `counts` is a variable populated with the number of tags which arrived during the measurement.
 
 ## Flow control
+
+!!! Note
+    Entering a loop or branch (`for_`, `while_`, `if_`/`elif_`/`else_`, `switch_`) implicitly aligns the elements referenced inside it. See [Timing in QUA — The Implicit Align](timing_in_qua.md#the-implicit-align) for the full rule, examples, and the `skip-add-implicit-align` flag.
 
 ### Python vs QUA control flow (compile-time vs run-time)
 
@@ -1342,7 +1347,7 @@ In addition, it is also possible to define two elements that [share an oscillato
         If an element uses input, output, and/or digital resources, the required number of cores is the maximum of these values (they are not cumulative).
 
         - MWInput: 1
-        - Readout process (integration, demod, dual_demod): 1
+        - Readout process (integration, demod, dual_demod): 0.5
         - Digital: 0.5
 
     Each core has $N_{oscillators}=6$ internal oscillators.

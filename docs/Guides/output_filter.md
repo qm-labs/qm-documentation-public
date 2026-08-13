@@ -8,9 +8,14 @@ played continuously with the filter operating on them as a single pulse.
 Once the filter is calibrated, we are free to design pulses without considering the channel setup,
 allowing for a more convenient workflow and seamless transfer of pulses between setups.
 
+!!! note "Hardware scope"
+
+    On OPX1000, configurable digital output filters are available only on LF-FEM analog outputs. MW-FEM analog outputs do not support this feature.
+    On OPX+ and OPX, digital output filters are available on all analog outputs.
+
 !!! important
 
-    Adding a filter to any port will delay **all** analog pulses coming out from all ports. See more on the [Delay Consequences](#delay-consequences) below.
+    Adding a filter to any port will delay **all** analog pulses from the applicable analog output ports on that controller. On OPX1000, this affects all LF-FEM analog output ports; MW-FEM outputs are unaffected. See [Delay Consequences](#delay-consequences) below.
 
 ## Overview of the Filters Operation
 
@@ -115,9 +120,9 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
 
 === "OPX1000"
 
-    {{ requirement("QOP", "3.3") }}
+    {{ requirement("QOP", "3.3") }} {{ requirement("LF") }}
     
-    The OPX1000 output filter consists of one FIR filter with 48 taps, and 6 IIR filters, each with a single feedback tap.
+    The OPX1000 LF-FEM output filter consists of one FIR filter with 48 taps, and 6 IIR filters, each with a single feedback tap.
     The IIR filters can cover exponential decays and high-pass compensation filters with time constants ranging from 1 ns to 1 second.
     The filters always operate at 2 GSa/s, and each FIR tap is 0.5 ns.
     
@@ -125,7 +130,7 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
 
     ![output_filter_OPX1000](assets/output_filter_qop3.png)
 
-    The filter for every output channel can be configured at the OPX configuration file under `filter` in the `analog_outputs` field.
+    The filter for every LF-FEM output channel can be configured in the OPX configuration file under `filter` in the LF-FEM `analog_outputs` field.
 
     === "QOP 3.5 and later"
 
@@ -198,13 +203,19 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
         ```python
         'controllers': {
             'con1': {
-                'analog_outputs': {
-                    1: {
-                        ...,
-                        'filter': {
-                            'feedforward': [0.8, 0.3],
-                            'exponential': [(A1, tau1), (A2, tau2), ...]
-                            'high_pass': tau_hp
+                'type':'opx1000',
+                'fems': {
+                    1 :{
+                        'type': 'LF',
+                        'analog_outputs': {
+                            1: {
+                                ...,
+                                'filter': {
+                                    'feedforward': [0.8, 0.3],
+                                    'exponential': [(A1, tau1), (A2, tau2), ...],
+                                    'high_pass': tau_hp
+                                },
+                            },
                         },
                     },
                 },
@@ -217,8 +228,14 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
         ```python
         'controllers': {
             'con1': {
-                'analog_outputs': {
-                    1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[], 'high_pass':None}},
+                'type':'opx1000',
+                'fems': {
+                    1 :{
+                        'type': 'LF',
+                        'analog_outputs': {
+                            1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[], 'high_pass':None}},
+                        },
+                    },
                 },
             },
         }
@@ -347,13 +364,15 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
 
 ## Delay Consequences
 
-As emphasized above, adding a filter to **any port** will delay **all** analog pulses coming out from **all** ports and will also delay feedback operations.
+As emphasized above, adding a filter to **any port** will delay **all** analog pulses from the applicable analog output ports on that controller and will also delay feedback operations.
 
 For advance use-cases, it is possible to remove the filter-related latencies from analog ports that are not filtered.
 This will disable the temporal alignment between the filtered and the non-filtered ports.
 When using the [compilation flag](features.md#compilation-options) `disable-filtered-ports-alignment`, the ports which are filtered will be delayed relative to the non-filtered ports according to each port's filter configuration.
 
 === "OPX1000"
+
+    The delay values below apply to LF-FEM analog outputs only. MW-FEM analog outputs are unaffected.
 
     === "QOP 3.5 and later"
 

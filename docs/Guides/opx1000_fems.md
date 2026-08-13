@@ -51,6 +51,11 @@ The analog outputs can operate in one of two modes, set in the config at the out
     Connecting to a 50 Ω matched line will produce the exact applied output voltage without distortion, but connecting it to a High-Z load will not yield the expected doubling of the applied voltage at 50 Ω.
     The `amplified` mode is optimized for improved step response characteristics and is 50 Ω matched. 
 
+!!! Note
+    There is a 0.9 ns path-delay difference between `direct` and `amplified` output modes.
+    This delay can produce an IF-dependent phase offset in measurements that are sensitive to the relative phase of the output path.
+    For demodulated measurements, compensate this phase offset by rotating the integration weights according to the intermediate frequency, as described in [Rotating the IQ plane](demod.md#rotating-the-iq-plane).
+
 ### Frequency Range
 
 The usable output bandwidth depends on the output mode:

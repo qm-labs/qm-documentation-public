@@ -4,7 +4,13 @@ This section describes standard syntax rules for classical computations in QUA.
 
 ## Arithmetic Expressions
 
-Multiplication, addition and subtraction of fixed point variables is supported.
+Multiplication, addition and subtraction are supported between two `fixed` variables or between two `int` variables.
+
+Division is supported between two `fixed` variables and between two `int` variables. The result type will match the type of the variable it is assigned to:
+
+
+- Assigning an `int / int` division into an `int` variable truncates the result toward negative infinity (`floor(x/y)`).
+- Assigning an `int / int` division into a `fixed` variable returns the fixed-point result.
 
 !!! Note
     division incurs a computational overhead of approximately 400 ns per operation.
@@ -25,14 +31,20 @@ with program() as prog:
         d = declare(fixed, value=-0.02)
         e = declare(int, value=3)
         f = declare(int, value=5)
+        g = declare(int)
+        h = declare(fixed)
 
         assign(a, c*d-d+c*0.25)
         assign(b, e+f*123*e-e)
         assign(c, d/c)
+        assign(g, f/e)  # int / int assigned to an int variable: floor(5/3) == 1
+        assign(h, f/e)  # int / int assigned to a fixed variable: 5/3 == 1.666...
 
         save(a, "a")
         save(b, "b")
         save(c, "c")
+        save(g, "g")
+        save(h, "h")
 ```
 
 The evaluation of each operator takes only a few clock cycles. For example, the addition (+) and subtraction (-) operations

@@ -2,6 +2,9 @@
 
 The following page describes the three types of variables in QUA: Integers, fixed point numbers and booleans, and how Python and NumPy values convert into them.
 
+!!! Note
+    This page covers variable types and casting. For how a variable derived from a measurement affects the timing and synchronization of subsequent operations (for example, using it in an `if_()` or `align()`), see [Timing in QUA](timing_in_qua.md) and [Real-Time Communication and Feedback](feedback.md).
+
 ## Definitions
 
 ### Integers

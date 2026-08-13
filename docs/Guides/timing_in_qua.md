@@ -99,6 +99,8 @@ In addition to flow control branches, certain inter-core data transfer operation
     implicit aligns added by flow control branches — it does not affect the alignment triggered by
     data transfers.
 
+See also: [Real-Time Communication and Feedback](feedback.md) for a worked broadcast/feedback example, and [QUA Language Features — Branching](features.md#branching) for `if_`/`switch_` syntax.
+
 ## Gaps in QUA
 
 The QUA syntax of pulses and operations only defines their order of execution, it does not guarantee that they would be played without introducing gaps.

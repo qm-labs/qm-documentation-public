@@ -124,6 +124,18 @@ The Admin Panel can be accessed by navigating to the OPX1000's IP address in you
     {{ read_csv("docs/Hardware/assets/OPX1000_installation_components.csv") | add_indentation(spaces=4) }}
 
 
+### Adding FEMs to an Existing System
+
+To add one or more FEMs to an already-configured chassis:
+
+1. Shut down the system.
+2. Remove the blank FEMs from the target slots, then install the new FEMs following the physical installation steps in the [installation procedure](#installation-procedure), including the ESD-handling precautions.
+3. Verify that all remaining unused slots still have blank FEMs installed, then turn on the system.
+
+If the system is running QOP 3.6 or later and the new FEMs carry an older QOPF firmware version, the system does not complete its normal boot process. The topology screen in the Admin Panel displays a prompt to reinstall QOPF. Follow the on-screen instructions to update QOPF as described in the [QOP installation guide](../Releases/qop_installation_guide.md).
+
+This procedure applies equally to LF-FEMs and MW-FEMs. There are no additional steps specific to MW-FEMs.
+
 ### Connectivity Scheme
 
 A multi-OPX1000 system has three required inter-OPX1000 connectivity groups: <span style="color: #b8860b;">Clock</span>, <span style="color: #8b0000;">QSync</span>, and <span style="color: #1e3a8a;">Communication</span>.

@@ -9,10 +9,9 @@ Here you can find release notes and version files for the latest version of {{ r
 
 - Latest version: **QOP 3.7.3**
 - Please see [the release notes page](../../hidden_pages/QOP37x.md) for more information about this version and for the download link.
-- [QOPA](qopa_releases.md) 1.6.0 (or later) must be installed before installing QOP 3.7.x.
+- [QOPA](qopa_releases.md) 1.6.1 (or later) must be installed before installing QOP 3.7.x.
     - OPNIC requires QOPA 2.x.
-- [QOPF](qopf_releases.md) 1.1.0 (or later) must be installed before installing QOP 3.7.x.
-    - Chassis revision E requires QOPF 1.2.0 (or later).
+- If prompted, [QOPF](qopf_releases.md) 1.2.0 (or later) must be installed before installing QOP 3.7.x.
 - Use with `qm-qua>=1.3.1`.
 
 ## QOP 3.6.x

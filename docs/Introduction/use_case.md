@@ -349,8 +349,8 @@ with program() as powerRabiProg :
             play('gauss_pulse'*amp(a), 'qubit')
             align("qubit", "resonator")
             measure("readout", "resonator",
-                    dual_demod.full("cos", "out1", "sin", "out2", I),
-                    dual_demod.full("minus_sin", "out1", "cos", "out2", Q))
+                    dual_demod.full("cos", "sin", I),
+                    dual_demod.full("minus_sin", "cos", Q))
             save(I, 'I')
             save(Q, 'Q')
             save(a, 'a')

@@ -25,6 +25,8 @@ The dependency can be summarized as follows:
 1. Each pulse is played immediately, unless dependent on a previous pulse, transformation or calculation.
 2. Pulses applied to the same element are dependent on each other according to the order in which they are written in the program.
 
+This is a partial summary. For the complete set of dependency rules — including cross-element dependencies via `align()` and the implicit align triggered by flow control and feedback — see [Timing in QUA](../Guides/timing_in_qua.md).
+
 We first describe in detail the pulses and measurement statements and their relation to the logical configuration and then list
 and specify the language statements and data types.
 
@@ -603,8 +605,8 @@ in two cases:
 
 1. When aligning two elements which are on separate controllers, and it is impossible for the compiler
    to determine how long each of the elements will need to wait for the other (for example, due to a branching
-   in the code)
+   in the code) — see [Timing in QUA — Deterministic vs. non-Deterministic Align](../Guides/timing_in_qua.md#deterministic-vs-non-deterministic-align).
 2. When performing a measurement on an element in one controller and using the result of that measurement
-   to affect the playing of an element in a different controller.
+   to affect the playing of an element in a different controller — see [Real-Time Communication and Feedback](../Guides/feedback.md).
 
 When transferring arrays, the latency will also increase with the length of the array.
