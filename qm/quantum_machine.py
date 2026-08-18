@@ -84,14 +84,17 @@ class QuantumMachine:
 
     @property
     def id(self) -> str:
+        """The unique identifier of this quantum machine."""
         return self._id
 
     @property
     def queue(self) -> Union[QmQueue, QmQueueWithDeprecations]:
+        """The job queue for this quantum machine."""
         return self._queue
 
     @property
     def octave(self) -> QmOctave:
+        """The Octave interface for this quantum machine."""
         return self._octave
 
     def close(self) -> bool:
@@ -291,6 +294,9 @@ class QuantumMachine:
     ) -> MixerCalibrationResults:
         """Calibrate the up converters associated with a given element for the given LO & IF frequencies.
 
+        This is only relevant for elements connected to an Octave. Calling this on an
+        element that is not connected to an Octave will raise a `CantCalibrateElementError`.
+
         - Frequencies can be given as a dictionary with LO frequency as the key and a list of IF frequencies for every LO
         - If no frequencies are given calibration will occur according to LO & IF declared in the element
         - The function need to be run for each element separately
@@ -303,6 +309,9 @@ class QuantumMachine:
             save_to_db (bool): If true (default), The calibration
                 parameters will be saved to the calibration database
             params: Optional calibration parameters
+
+        Returns:
+            The mixer calibration results, keyed by (LO frequency, gain).
         """
         inst = self._elements[qe]
         if not isinstance(inst.input, UpconvertedInput):
@@ -649,18 +658,22 @@ class QuantumMachine:
 
     @property
     def io1(self) -> Dict[str, Value]:
+        """Gets the data stored in ``IO1``. Equivalent to ``get_io1_value()``."""
         return self.get_io1_value()
 
     @io1.setter
     def io1(self, value: Value) -> None:
+        """Sets the value of ``IO1``. Equivalent to ``set_io1_value(value)``."""
         self.set_io1_value(value)
 
     @property
     def io2(self) -> Dict[str, Value]:
-        return self.get_io1_value()
+        """Gets the data stored in ``IO2``. Equivalent to ``get_io2_value()``."""
+        return self.get_io2_value()
 
     @io2.setter
     def io2(self, value: Value) -> None:
+        """Sets the value of ``IO2``. Equivalent to ``set_io2_value(value)``."""
         self.set_io2_value(value)
 
     def set_io1_value(self, value_1: Value) -> None:
@@ -814,7 +827,11 @@ class QuantumMachine:
             writer.write(json_str)
 
     def get_running_job(self) -> Optional[Union[QmJob, JobApiWithDeprecations]]:
-        """Gets the currently running job. Returns None if there isn't one."""
+        """Gets the currently running job. Returns None if there isn't one.
+
+        Returns:
+            The currently running job, or ``None`` if no job is running.
+        """
 
         job_id = self._job_manager.get_running_job(self._id)
         if job_id is None:

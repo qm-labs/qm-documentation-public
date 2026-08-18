@@ -340,7 +340,12 @@ class ControlDeviceConverter(
         item: inc_qua_config_pb2.QuaConfig.OctoDacAnalogOutputPortDec,
         data_with_defaults: AnalogOutputPortConfigTypeOctoDac,
     ) -> None:
-        """Also update the upsampling mode, as its value is tightly correlated to the sampling rate."""
+        """Also update the upsampling mode, as its value is tightly correlated to the sampling rate.
+
+        Args:
+            item: The protobuf analog output port to set the sampling rate (and upsampling mode) on.
+            data_with_defaults: The port config (with defaults filled in) holding the ``sampling_rate`` and ``upsampling_mode``.
+        """
         sampling_rate = data_with_defaults.get("sampling_rate")
         if sampling_rate is None:
             item.ClearField("sampling_rate")

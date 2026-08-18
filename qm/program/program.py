@@ -48,6 +48,12 @@ class Program:
     def to_protobuf(self, config: FullQuaConfig) -> bytes:
         """
         Serialize the program to a protobuf binary.
+
+        Args:
+            config: The QUA configuration to embed in the serialized program.
+
+        Returns:
+            The serialized program as a protobuf binary.
         """
         self._ensure_not_in_scope()
         loaded_config = load_config(config)
@@ -60,6 +66,12 @@ class Program:
     def from_protobuf(cls, binary: bytes) -> "Program":
         """
         Deserialize the program from a protobuf binary.
+
+        Args:
+            binary: The protobuf binary to deserialize.
+
+        Returns:
+            The deserialized program.
         """
         program = inc_qua_pb2.QuaProgram()
         program.ParseFromString(binary)
@@ -68,6 +80,10 @@ class Program:
     def to_file(self, path: Union[str, Path], config: FullQuaConfig) -> None:
         """
         Serialize the program to a protobuf binary and write it to a file.
+
+        Args:
+            path: The file path to write the serialized program to.
+            config: The QUA configuration to embed in the serialized program.
         """
         self._ensure_not_in_scope()
         if isinstance(path, str):
@@ -78,6 +94,12 @@ class Program:
     def from_file(cls, path: Union[str, Path]) -> "Program":
         """
         Deserialize the program from a protobuf binary file.
+
+        Args:
+            path: The file path to read the serialized program from.
+
+        Returns:
+            The deserialized program.
         """
         if isinstance(path, str):
             path = Path(path)

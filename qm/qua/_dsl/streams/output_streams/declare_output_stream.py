@@ -42,6 +42,9 @@ def declare_stream(adc_trace: Optional[bool] = None) -> "ResultStreamSource":
 
     Args:
         adc_trace: An optional boolean to indicate if the stream is an ADC trace. If not provided, it will be inferred automatically.
+
+    Returns:
+        A client output stream source that can be written with ``save`` or ``send_to_stream``.
     """
     deprecation_message_details = "Please use declare_output_stream() instead"
     if adc_trace is not None:

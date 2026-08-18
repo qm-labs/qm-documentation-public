@@ -119,6 +119,11 @@ class StreamsManager(Mapping[str, Optional[AnySingleStreamFetcher]]):
         return self.get(item)
 
     def __iter__(self) -> Generator[Tuple[str, Optional[AnySingleStreamFetcher]], None, None]:  # type: ignore[override]
+        """Iterates over the results.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. The iteration API will change to be
+        dictionary-like; use ``iterate_results()`` for the current behavior.
+        """
         warnings.warn(
             deprecation_message(
                 method="streaming_result_fetcher.__iter__",
@@ -138,19 +143,22 @@ class StreamsManager(Mapping[str, Optional[AnySingleStreamFetcher]]):
 
     def keys(self) -> KeysView[str]:
         """
-        Returns a view of the names of the results
+        Returns:
+            A view of the names of the results
         """
         return self._single_stream_fetchers.keys()
 
     def items(self) -> ItemsView[str, AnySingleStreamFetcher]:
         """
-        Returns a view, in which the first item is the name of the result and the second is the result
+        Returns:
+            A view of (name, result) pairs, where the first item is the name of the result and the second is the result
         """
         return self._single_stream_fetchers.items()
 
     def values(self) -> ValuesView[AnySingleStreamFetcher]:
         """
-        Returns a view of the results
+        Returns:
+            A view of the results
         """
         return self._single_stream_fetchers.values()
 
@@ -198,7 +206,7 @@ class StreamsManager(Mapping[str, Optional[AnySingleStreamFetcher]]):
                 self._wait_until_func("Done", timeout if timeout else VERY_LONG_TIME)
                 return True
             except JobFailedError:
-                logger.warning("Job failed or canceled, data processing has stopped, not all data is available.")
+                logger.warning("Job failed or canceled, data processing has stopped, not all data is available")
                 return False
         else:
 
@@ -211,7 +219,7 @@ class StreamsManager(Mapping[str, Optional[AnySingleStreamFetcher]]):
             def on_complete() -> bool:
                 if all(fetcher.get_job_state().done for fetcher in self._single_stream_fetchers.values()):
                     return True
-                logger.warning("Job failed or canceled, data processing has stopped, not all data is available.")
+                logger.warning("Job failed or canceled, data processing has stopped, not all data is available")
                 return False
 
             return run_until_with_timeout(

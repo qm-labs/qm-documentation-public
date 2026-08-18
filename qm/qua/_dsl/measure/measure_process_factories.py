@@ -114,8 +114,7 @@ class _DualAccumulationMethod(_AccumulationMethod, metaclass=abc.ABCMeta):
         iw1: str,
         iw2: str,
         target: Union[QuaVariable[float], QuaArrayCell[float]],
-    ) -> DualMeasureProcess:
-        ...
+    ) -> DualMeasureProcess: ...
 
     @overload
     @classmethod
@@ -126,8 +125,7 @@ class _DualAccumulationMethod(_AccumulationMethod, metaclass=abc.ABCMeta):
         iw2: str,
         element_output2: str,
         target: Union[QuaVariable[float], QuaArrayCell[float]],
-    ) -> DualMeasureProcess:
-        ...
+    ) -> DualMeasureProcess: ...
 
     @classmethod
     def full(cls, *args: Any, **kwargs: Any) -> DualMeasureProcess:
@@ -347,6 +345,9 @@ class time_tagging:
                 pulses detected
             element_output (str): The output of an element from which to get the pulses.
                 Required when there are multiple outputs in the element. Optional otherwise.
+
+        Returns:
+            A time-tagging measure process to be used inside a ``measure`` statement.
         """
         return AnalogRawTimeTagging(element_output, target, targetLen, max_time)
 
@@ -371,6 +372,9 @@ class time_tagging:
                 pulses detected
             element_output (str): The output of an element from which to get the pulses.
                 Required when there are multiple outputs in the element. Optional otherwise.
+
+        Returns:
+            A digital time-tagging measure process to be used inside a ``measure`` statement.
         """
         return DigitalRawTimeTagging(element_output, target, targetLen, max_time)
 
@@ -394,6 +398,9 @@ class time_tagging:
                 pulses detected
             element_output (str): The output of an element from which to get the pulses.
                 Required when there are multiple outputs in the element. Optional otherwise.
+
+        Returns:
+            A high-resolution time-tagging measure process to be used inside a ``measure`` statement.
         """
         return HighResTimeTagging(element_output, target, targetLen, max_time)
 
@@ -424,6 +431,9 @@ class counting:
                 (Must be larger than the pulse duration)
             element_outputs (str): the outputs of an element from which
                 to get ADC results
+
+        Returns:
+            A counting measure process to be used inside a ``measure`` statement.
         """
         return DigitalMeasureProcessCounting(element_outputs, target, max_time)
 
@@ -452,6 +462,9 @@ class demod(_RealAccumulationMethod):
             element_output (str): The output of an element from which to get the ADC data.
                 Required for elements with `MWOutput` or with multiple `outputs`.
                 Optional otherwise.
+
+        Returns:
+            A demodulation measure process to be used inside a ``measure`` statement.
         """
         return super().full(iw, target, element_output)
 
@@ -476,6 +489,9 @@ class demod(_RealAccumulationMethod):
             element_output (str): The output of an element from which to get the ADC data.
                 Required for elements with `MWOutput` or with multiple `outputs`.
                 Optional otherwise.
+
+        Returns:
+            A sliced demodulation measure process to be used inside a ``measure`` statement.
         """
         return super().sliced(iw, target, samples_per_chunk, element_output)
 
@@ -500,6 +516,9 @@ class demod(_RealAccumulationMethod):
             element_output (str): The output of an element from which to get the ADC data.
                 Required for elements with `MWOutput` or with multiple `outputs`.
                 Optional otherwise.
+
+        Returns:
+            An accumulated demodulation measure process to be used inside a ``measure`` statement.
         """
         return super().accumulated(iw, target, samples_per_chunk, element_output)
 
@@ -527,6 +546,9 @@ class demod(_RealAccumulationMethod):
             element_output (str): The output of an element from which to get the ADC data.
                 Required for elements with `MWOutput` or with multiple `outputs`.
                 Optional otherwise.
+
+        Returns:
+            A moving-window demodulation measure process to be used inside a ``measure`` statement.
         """
         return super().moving_window(iw, target, samples_per_chunk, chunks_per_window, element_output)
 
@@ -601,6 +623,9 @@ class dual_demod(_DualAccumulationMethod):
                 * target (QUA variable): variable to which the demod result is saved
 
             kwargs (Any): Accepts keyword arguments corresponding to the parameters.
+
+        Returns:
+            A dual-measure process to be used inside a `measure` statement.
         """
         return super().full(*args, **kwargs)
 
@@ -629,6 +654,9 @@ class integration(_RealAccumulationMethod):
             element_output (str): The output of an element from which to get the ADC data.
                 Required for elements with `MWOutput` or with multiple `outputs`.
                 Optional otherwise.
+
+        Returns:
+            An integration measure process to be used inside a ``measure`` statement.
         """
         return super().full(iw, target, element_output)
 
@@ -653,6 +681,9 @@ class integration(_RealAccumulationMethod):
             element_output (str): The output of an element from which to get the ADC data.
                 Required for elements with `MWOutput` or with multiple `outputs`.
                 Optional otherwise.
+
+        Returns:
+            A sliced integration measure process to be used inside a ``measure`` statement.
         """
         return super().sliced(iw, target, samples_per_chunk, element_output)
 
@@ -677,6 +708,9 @@ class integration(_RealAccumulationMethod):
             element_output (str): The output of an element from which to get the ADC data.
                 Required for elements with `MWOutput` or with multiple `outputs`.
                 Optional otherwise.
+
+        Returns:
+            An accumulated integration measure process to be used inside a ``measure`` statement.
         """
         return super().accumulated(iw, target, samples_per_chunk, element_output)
 
@@ -704,5 +738,8 @@ class integration(_RealAccumulationMethod):
             element_output (str): The output of an element from which to get the ADC data.
                 Required for elements with `MWOutput` or with multiple `outputs`.
                 Optional otherwise.
+
+        Returns:
+            A moving-window integration measure process to be used inside a ``measure`` statement.
         """
         return super().moving_window(iw, target, samples_per_chunk, chunks_per_window, element_output)

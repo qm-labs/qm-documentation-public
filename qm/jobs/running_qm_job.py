@@ -20,14 +20,15 @@ class AcquiringStatus(Enum):
 class RunningQmJob(QmBaseJob):
     @property
     def manager(self) -> None:
-        """
-        The QM object where this job lives
+        """The QM object where this job lives.
+
+        Deprecated since 1.1.0; will be removed in 2.0.0. The job no longer has a ``manager`` property.
         """
         warnings.warn(
             deprecation_message(
                 method="RunningQmJob.manager",
                 deprecated_in="1.1.0",
-                removed_in="1.2.0",
+                removed_in="2.0.0",
                 details="QMJob no longer has 'manager' property",
             ),
             DeprecationWarning,
@@ -64,7 +65,11 @@ class RunningQmJob(QmBaseJob):
         return self._job_manager.halt(self._id)
 
     def resume(self) -> bool:
-        """Resumes a program that was halted using the [pause][qm.qua.pause] statement"""
+        """Resumes a program that was halted using the [pause][qm.qua.pause] statement
+
+        Returns:
+            `True` if the job was resumed successfully; `False` if the job is in an error state.
+        """
         if self.status == "ERROR":
             return False
         return self._job_manager.resume(self._id)

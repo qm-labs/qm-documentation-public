@@ -82,7 +82,13 @@ class QmBaseJob:
         name: str,
         data: List[Value],
     ) -> None:
-        """Deprecated - Please use `job.push_to_input_stream`."""
+        """Deprecated - Please use `job.push_to_input_stream`.
+
+        Args:
+            name: The input stream name the data is to be inserted to.
+            data: The data to be inserted. The data's size must match
+                the size of the input stream.
+        """
         warnings.warn(
             deprecation_message(
                 method="job.insert_input_stream",

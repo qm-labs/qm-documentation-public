@@ -316,7 +316,11 @@ class Event:
         )
 
     def to_string(self) -> str:
-        """Prints all fields of the event in the standard readable format."""
+        """Prints all fields of the event in the standard readable format.
+
+        Returns:
+            A readable string representation of the event.
+        """
         indent = " " * len("Event(")
         body = ("\n" + indent).join(f"{f.name}={getattr(self, f.name)}" for f in dataclasses.fields(self))
         return f"Event({body})"
@@ -424,7 +428,8 @@ class WaveformReport:
         """
         Dumps the report into a (pretty-print) string.
 
-        return: str
+        Returns:
+            A pretty-printed string representation of the full waveform report.
         """
         waveforms_str = [wf.to_string() for wf in self.waveforms]
         adc_string = [adc.to_string() for adc in self.adc_acquisitions]

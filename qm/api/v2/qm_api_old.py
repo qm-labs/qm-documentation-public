@@ -7,7 +7,6 @@ from qm.api.v2.job_api import JobApi
 from qm.octave import QmOctaveConfig
 from qm.program.program import Program
 from qm.utils import deprecation_message
-from qm.exceptions import FunctionInputError
 from qm.grpc.qm.pb import inc_qua_config_pb2
 from qm.octave.octave_manager import OctaveManager
 from qm.simulate.interface import SimulationConfig
@@ -15,6 +14,7 @@ from qm.api.models.capabilities import ServerCapabilities
 from qm.api.models.server_details import ConnectionDetails
 from qm.api.v2.qm_api import QmApi, IoValue, NoRunningQmJob
 from qm.api.v2.job_api.job_api import JobApiWithDeprecations
+from qm.exceptions import QmQuaException, FunctionInputError
 from qm.type_hinting import Value, Number, NumpySupportedValue
 from qm.type_hinting.general import PathLike, NumpySupportedFloat
 from qm.jobs.job_queue_with_deprecations import QmQueueWithDeprecations
@@ -80,6 +80,11 @@ class QmApiWithDeprecations(QmApi):
 
     @property
     def queue(self) -> QmQueueWithDeprecations:
+        """The job queue for this quantum machine.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. Use the queue methods directly on
+        ``QuantumMachine`` instead (e.g. ``qm.add_to_queue(prog)`` instead of ``qm.queue.add(prog)``).
+        """
         warnings.warn(
             deprecation_message(
                 method="qm.queue",
@@ -165,6 +170,11 @@ class QmApiWithDeprecations(QmApi):
                         removed_in="2.0.0",
                     ),
                 )
+                if not isinstance(x, int):
+                    raise QmQuaException(
+                        f"The argument {name} is deprecated and must be an integer, got {type(x).__name__}."
+                        "Maybe the parameter you want to add is a keyword-only argument?"
+                    )
 
         compiler_options = standardize_compiler_params(compiler_options, strict, flags)
 
@@ -727,6 +737,10 @@ class QmApiWithDeprecations(QmApi):
 
     @property
     def io1(self) -> IoValue:
+        """Gets the data stored in ``IO1``.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. Use ``job.get_io_values()[0]`` instead.
+        """
         warnings.warn(
             deprecation_message(
                 method="qm.io1",
@@ -741,6 +755,10 @@ class QmApiWithDeprecations(QmApi):
 
     @io1.setter
     def io1(self, value: Value) -> None:
+        """Sets the value of ``IO1``.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. Use ``job.set_io_values(io1=value)`` instead.
+        """
         warnings.warn(
             deprecation_message(
                 method="qm.io1",
@@ -755,6 +773,10 @@ class QmApiWithDeprecations(QmApi):
 
     @property
     def io2(self) -> IoValue:
+        """Gets the data stored in ``IO2``.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. Use ``job.get_io_values()[1]`` instead.
+        """
         warnings.warn(
             deprecation_message(
                 method="qm.io2",
@@ -765,10 +787,14 @@ class QmApiWithDeprecations(QmApi):
             DeprecationWarning,
             stacklevel=1,
         )
-        return self.get_io1_value()
+        return self.get_io2_value()
 
     @io2.setter
     def io2(self, value: Value) -> None:
+        """Sets the value of ``IO2``.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. Use ``job.set_io_values(io2=value)`` instead.
+        """
         warnings.warn(
             deprecation_message(
                 method="qm.io2",
@@ -887,7 +913,7 @@ class QmApiWithDeprecations(QmApi):
         """
         warnings.warn(
             deprecation_message(
-                method="qm.get_io2_value",
+                method="qm.get_io1_value",
                 deprecated_in="1.2.0",
                 removed_in="2.0.0",
                 details="This method is going to be moved to the job API, please use `job.get_io_values()[0]`",
@@ -983,6 +1009,9 @@ class QmApiWithDeprecations(QmApi):
         """Deprecated - This method is going to be removed, please use `qm.get_jobs(status=['Running'])`
 
         Gets the currently running job. Returns None if there isn't one.
+
+        Returns:
+            The currently running job, or ``None`` if no job is running.
         """
         warnings.warn(
             deprecation_message(

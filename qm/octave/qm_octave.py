@@ -106,7 +106,7 @@ class QmOctaveBase(Generic[QmInstT, JobInstT], metaclass=ABCMeta):
         """
         warnings.warn(
             "lo_frequency is now set directly from config when a QuantumMachine is created, no need to do it directly. "
-            "If you want, you can run over the elements and do set_frequency.",
+            "If you want, you can run over the elements and do set_frequency",
             category=DeprecationWarning,
             stacklevel=2,
         )
@@ -245,6 +245,11 @@ class QmOctaveBase(Generic[QmInstT, JobInstT], metaclass=ABCMeta):
                 consists of all the (LO,IF) pairs for calibration
             save_to_db (boolean): If true (default), The calibration
                 parameters will be saved to the calibration database
+            offset_frequency (float): The IF offset frequency, in Hz, used
+                during the calibration sweep. Defaults to 7e6.
+
+        Returns:
+            A mapping from each (LO, IF) pair to its calibration result.
         """
         warnings.warn(
             "Calibrate element was moved to the QuantumMachine instance, please use it from there", DeprecationWarning
@@ -290,7 +295,9 @@ class QmOctaveBase(Generic[QmInstT, JobInstT], metaclass=ABCMeta):
 
         Args:
             octave_name (str): The octave name to get clock for
-        :returns ClockInfo: Info about the clock as an object
+
+        Returns:
+            Clock info for the given Octave.
         """
         return self._octave_manager.get_clock(octave_name)
 
@@ -300,7 +307,7 @@ class QmOctaveBase(Generic[QmInstT, JobInstT], metaclass=ABCMeta):
     ) -> Tuple[AbstractLOCalibration, AbstractIFCalibration]:
         assert isinstance(qe.input, UpconvertedInput)
         if qe.input._calibration_db is None:
-            logger.warning(f"No calibration DB is attached for element {qe.name}, not changing anything.")
+            logger.warning(f"No calibration DB is attached for element {qe.name}, not changing anything")
             raise NoCalibrationDbAttachedError(qe.name)
         db = qe.input._calibration_db
 

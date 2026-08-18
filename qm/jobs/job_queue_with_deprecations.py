@@ -9,6 +9,7 @@ from qm.jobs.job_queue_base import QmQueueBase
 from qm.api.models.capabilities import ServerCapabilities
 from qm.api.models.compiler import CompilerOptionArguments
 from qm.api.v2.job_api.job_api import JobApiWithDeprecations
+from qm.type_hinting.execution_overrides import ExecutionOverridesType
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,10 @@ class QmQueueWithDeprecations(QmQueueBase[JobApi]):
 
     @property
     def pending_jobs(self) -> Tuple[JobApiWithDeprecations, ...]:
+        """The pending jobs in the queue.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. Use ``qm.get_jobs("In queue")`` instead.
+        """
         warnings.warn(
             deprecation_message(
                 method="queue.pending_jobs",
@@ -57,9 +62,14 @@ class QmQueueWithDeprecations(QmQueueBase[JobApi]):
         """Adds a QmJob to the queue.
         Programs in the queue will play as soon as possible.
 
+        Deprecated since 1.2.0; will be removed in 2.0.0. Use ``qm.add_to_queue()`` instead.
+
         Args:
             program: A QUA program
             compiler_options: Optional arguments for compilation
+
+        Returns:
+            The job that was added to the queue
 
         Example:
             ```python
@@ -82,10 +92,11 @@ class QmQueueWithDeprecations(QmQueueBase[JobApi]):
 
         return self._api.add_to_queue(program)
 
-    def add_compiled(self, program_id: str) -> JobApi:
+    def add_compiled(self, program_id: str, overrides: Optional[ExecutionOverridesType] = None) -> JobApi:
         """Deprecated - This method is going to be removed, use `qm.add_to_queue()`.
 
-        Adds a compiled QUA program to the end of the queueץ
+        Adds a compiled QUA program to the end of the queue, optionally
+        overriding the values of analog waveforms defined in the program.
         Programs in the queue will play as soon as possible.
         For a detailed explanation see
         [Precompile Jobs](../Guides/features.md#precompile-jobs).
@@ -93,6 +104,11 @@ class QmQueueWithDeprecations(QmQueueBase[JobApi]):
         Args:
             program_id: A QUA program ID returned from the compile
                 function
+            overrides: Object containing Waveforms to run the program
+                with
+
+        Returns:
+            The job that was added to the queue
         """
         warnings.warn(
             deprecation_message(
@@ -104,10 +120,12 @@ class QmQueueWithDeprecations(QmQueueBase[JobApi]):
             DeprecationWarning,
             stacklevel=1,
         )
-        return self._api.add_to_queue(program_id)
+        return self._api.add_to_queue(program_id, overrides=overrides)
 
     def remove_by_id(self, job_id: str) -> int:
         """Removes the pending job with a specific job id
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. Use ``qm.clear_queue([job_id])`` or ``job.cancel()`` instead.
 
         Args:
             job_id: a QMJob id
@@ -137,6 +155,8 @@ class QmQueueWithDeprecations(QmQueueBase[JobApi]):
     def remove_by_user_id(self, user_id: str) -> int:
         """Removes all pending jobs with a specific user id
 
+        Deprecated since 1.2.0; will be removed in 2.0.0. Use ``qm.clear_queue(user_ids=[user_id])`` or ``job.cancel()`` instead.
+
         Args:
             user_id: a user id
 
@@ -162,6 +182,8 @@ class QmQueueWithDeprecations(QmQueueBase[JobApi]):
 
     def clear(self) -> int:
         """Empties the queue from all pending jobs
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. Use ``qm.clear_queue()`` instead.
 
         Returns:
             The number of jobs removed

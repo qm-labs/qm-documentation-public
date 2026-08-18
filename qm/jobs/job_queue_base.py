@@ -58,6 +58,8 @@ class QmQueueBase(Generic[JobTypeVar]):
             program: A QUA program
             compiler_options: Optional arguments for compilation
 
+        Returns:
+            The pending job that was added to the start of the queue
         """
         raise QmNewApiNotImplementedError
 

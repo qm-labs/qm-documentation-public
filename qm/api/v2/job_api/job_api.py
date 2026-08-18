@@ -71,7 +71,7 @@ IoValueTypes = Union[Type[bool], Type[int], Type[float], Type[fixed]]
 
 
 def transfer_statuses_to_enum(
-    status: Union[JobStatus, Iterable[JobStatus]]
+    status: Union[JobStatus, Iterable[JobStatus]],
 ) -> List[common_types_pb2.JobExecutionStatus.ValueType]:  # type: ignore[name-defined]
     if isinstance(status, str):
         status = [status]
@@ -418,9 +418,7 @@ class JobApi(JobGenericApi):
         self.set_io_values(io2=value)
 
     @overload
-    def get_io_values(
-        self, *, io1_type: None = ..., io2_type: None = ...
-    ) -> Tuple[
+    def get_io_values(self, *, io1_type: None = ..., io2_type: None = ...) -> Tuple[
         job_api_pb2.GetIoValuesResponse.GetIoValuesResponseSuccess.IOValuesData,
         job_api_pb2.GetIoValuesResponse.GetIoValuesResponseSuccess.IOValuesData,
     ]:
@@ -911,6 +909,8 @@ class JobApi(JobGenericApi):
             element (str): The name of the element to update the correction for
             frequency_hz (float): The frequency to set to the given element
             update_component (str): The component to update the frequency for: "upconverter", "downconverter", or "both"
+
+        Deprecated since 1.2.2; will be removed in 2.0.0. Use ``job.set_converter_frequency()`` instead.
         """
         deprecation_message(
             method="job.update_oscillator_frequency",
@@ -984,7 +984,13 @@ class JobApiWithDeprecations(JobApi):
         name: str,
         data: List[Value],
     ) -> None:
-        """Deprecated - Please use `job.push_to_input_stream`."""
+        """Deprecated - Please use `job.push_to_input_stream`.
+
+        Args:
+            name: The input stream name the data is to be pushed to.
+            data: The data to be pushed. The data's size & type must match
+                the size & type of the input stream.
+        """
         warnings.warn(
             deprecation_message(
                 method="job.insert_input_stream",
@@ -1022,7 +1028,13 @@ class JobApiWithDeprecations(JobApi):
         super().push_to_input_stream(name, data)
 
     def halt(self) -> bool:
-        """Halts the job on the opx"""
+        """Halts the job on the opx.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. Renamed to ``job.cancel()``.
+
+        Returns:
+            ``True`` once the job has been halted.
+        """
         warnings.warn(
             deprecation_message(
                 method="job.halt",

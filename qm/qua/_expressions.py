@@ -120,11 +120,18 @@ class QuaNumericExpression(Generic[S, NumberT], QuaExpression[S], metaclass=abc.
         return isinstance(self, InputStreamOldInterface)
 
     def empty(self) -> bool:
+        """Returns whether the expression is empty.
+
+        Deprecated since 1.1.0; will be removed in 2.0.0.
+
+        Returns:
+            ``True`` if the expression is empty, ``False`` otherwise.
+        """
         warnings.warn(
             deprecation_message(
                 method="QuaExpression.empty()",
                 deprecated_in="1.1.0",
-                removed_in="1.2.0",
+                removed_in="2.0.0",
                 details="This function is going to be removed, as it's not needed.",
             ),
             DeprecationWarning,
@@ -132,11 +139,18 @@ class QuaNumericExpression(Generic[S, NumberT], QuaExpression[S], metaclass=abc.
         return self._expression is None
 
     def isFixed(self) -> bool:
+        """Returns whether the variable is of ``fixed`` type.
+
+        Deprecated since 1.1.0; will be removed in 2.0.0. Use ``is_fixed()`` instead.
+
+        Returns:
+            ``True`` if the variable is of ``fixed`` type, ``False`` otherwise.
+        """
         warnings.warn(
             deprecation_message(
                 method="QuaVariable.isFixed",
                 deprecated_in="1.1.0",
-                removed_in="1.2.0",
+                removed_in="2.0.0",
                 details="use: 'QuaVariable.is_fixed()' instead",
             ),
             DeprecationWarning,
@@ -144,11 +158,18 @@ class QuaNumericExpression(Generic[S, NumberT], QuaExpression[S], metaclass=abc.
         return self.is_fixed()
 
     def isInt(self) -> bool:
+        """Returns whether the variable is of ``int`` type.
+
+        Deprecated since 1.1.0; will be removed in 2.0.0. Use ``is_int()`` instead.
+
+        Returns:
+            ``True`` if the variable is of ``int`` type, ``False`` otherwise.
+        """
         warnings.warn(
             deprecation_message(
                 method="QuaVariable.isInt",
                 deprecated_in="1.1.0",
-                removed_in="1.2.0",
+                removed_in="2.0.0",
                 details="use: 'QuaVariable.is_int()' instead",
             ),
             DeprecationWarning,
@@ -156,11 +177,18 @@ class QuaNumericExpression(Generic[S, NumberT], QuaExpression[S], metaclass=abc.
         return self.is_int()
 
     def isBool(self) -> bool:
+        """Returns whether the variable is of ``bool`` type.
+
+        Deprecated since 1.1.0; will be removed in 2.0.0. Use ``is_bool()`` instead.
+
+        Returns:
+            ``True`` if the variable is of ``bool`` type, ``False`` otherwise.
+        """
         warnings.warn(
             deprecation_message(
                 method="QuaVariable.isBool",
                 deprecated_in="1.1.0",
-                removed_in="1.2.0",
+                removed_in="2.0.0",
                 details="use: 'QuaVariable.is_bool()' instead",
             ),
             DeprecationWarning,
@@ -354,10 +382,23 @@ class QuaArrayVariable(QuaNumericExpression[inc_qua_pb2.QuaProgram.ArrayVarRefEx
         return QuaArrayCell(item_scalar_expression, self.dtype)
 
     def length(self) -> "QuaArrayLength[int]":
+        # This function in the future may return a value that changes with the iterations,
+        # so we keep it returning a Qua integer. `self.creation_length` returns a Pythonic integer.
         unwrapped_element = self.unwrapped
         array_exp = inc_qua_pb2.QuaProgram.ArrayLengthExpression(array=unwrapped_element)
         result = inc_qua_pb2.QuaProgram.AnyScalarExpression(arrayLength=array_exp)
         return QuaArrayLength(result, int)
+
+    @property
+    def creation_length(self) -> int:
+        """Returns the length of the array as it was declared"""
+        return self._size
+
+    def __eq__(self, other: Any) -> bool:
+        raise NotAllowedOperationArrayComparison()
+
+    def __ne__(self, other: Any) -> bool:
+        raise NotAllowedOperationArrayComparison()
 
 
 class QuaStructReference(QuaExpression[inc_qua_pb2.QuaProgram.StructVarRefExpression]):
@@ -404,20 +445,26 @@ class AssignmentTargetInterface(metaclass=abc.ABCMeta):
 
 
 class NotAllowedOperation(QmQuaException):
-    def __init__(self, expression_type: str) -> None:
-        super(NotAllowedOperation, self).__init__(
-            f"In-place operations are not supported for QUA {expression_type}. Please use `assign` instead."
-        )
+    def __init__(self, message: str) -> None:
+        super(NotAllowedOperation, self).__init__(message)
 
 
 class NotAllowedOperationVariable(NotAllowedOperation):
     def __init__(self) -> None:
-        super().__init__("variable")
+        super().__init__("In-place operations are not supported for QUA variable. Please use `assign` instead.")
 
 
 class NotAllowedOperationArrayCell(NotAllowedOperation):
     def __init__(self) -> None:
-        super().__init__("array cell")
+        super().__init__("In-place operations are not supported for QUA array cell. Please use `assign` instead.")
+
+
+class NotAllowedOperationArrayComparison(NotAllowedOperation):
+    def __init__(self) -> None:
+        super().__init__(
+            "Comparing a QUA array (`==`/`!=`) is not supported, as comparison operations are not defined for "
+            "QUA arrays."
+        )
 
 
 class QuaVariable(AssignmentTargetInterface, QuaScalarExpression[NumberT, inc_qua_pb2.QuaProgram.VarRefExpression]):
@@ -688,6 +735,15 @@ class QuaVariableInputStream(QuaVariable[NumberT], InputStreamOldInterface):
         )
 
 
+class IoVariableImproperUsage(QmQuaException):
+    def __init__(self, number: Literal[1, 2]):
+        message = (
+            f"The variable IO{number} used where it cannot be used. "
+            f"please assign it first to a different variable and use the variable instead."
+        )
+        super().__init__(message)
+
+
 class QuaIO(AssignmentTargetInterface):
     """A class representing the QUA IO type."""
 
@@ -699,6 +755,17 @@ class QuaIO(AssignmentTargetInterface):
         return inc_qua_pb2.QuaProgram.AssignmentStatement.Target(
             variable=inc_qua_pb2.QuaProgram.VarRefExpression(ioNumber=self._number, loc=_get_loc())
         )
+
+    @property
+    def number(self) -> Literal[1, 2]:
+        return self._number
+
+    @property
+    def unwrapped(self) -> None:
+        raise IoVariableImproperUsage(self._number)
+
+    def __eq__(self, other: Any) -> bool:
+        raise IoVariableImproperUsage(self._number)
 
 
 IO1 = QuaIO(1)
@@ -763,21 +830,17 @@ def to_scalar_pb_expression(value: Union["ScalarOfAnyType", QuaIO]) -> _ScalarEx
         return literal_int(other)
     if isinstance(other, float):
         return literal_real(other)
-    if other == IO1:
-        return io(1)
-    if other == IO2:
-        return io(2)
+    if isinstance(other, QuaIO):
+        return io(other.number)
     raise QmQuaException(f"invalid expression: '{other}' is not a scalar expression")
 
 
 @overload
-def create_qua_scalar_expression(value: "QuaScalar[NumberT]") -> "QuaScalar[NumberT]":
-    ...
+def create_qua_scalar_expression(value: "QuaScalar[NumberT]") -> "QuaScalar[NumberT]": ...
 
 
 @overload
-def create_qua_scalar_expression(value: NumberT) -> QuaLiteral[NumberT]:
-    ...
+def create_qua_scalar_expression(value: NumberT) -> QuaLiteral[NumberT]: ...
 
 
 def create_qua_scalar_expression(value: "Scalar[NumberT]") -> "QuaScalar[NumberT]":

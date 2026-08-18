@@ -80,9 +80,24 @@ def _create_vectors_output_expression(
     return __create_output_expression(function, output_type, *args)
 
 
+# Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
 def call_library_function(
     function: SomeCallable, output_type: Type[NumberT], *args: ScalarOfAnyType
 ) -> QuaLibFunctionOutput[NumberT]:
+    """Call a QUA library function.
+
+    Deprecated since 1.2.2; will be removed in 2.0.0. Call the function directly from the
+    available classes instead (e.g. ``Random(x).rand_int(y)`` instead of
+    ``call_library_function(Random.rand_int, int, x, y)``).
+
+    Args:
+        function: the QUA library function to call.
+        output_type: the QUA type of the function's output.
+        *args: the scalar arguments to pass to the library function.
+
+    Returns:
+        A QUA library-function output expression of the given output type.
+    """
     warnings.warn(
         deprecation_message(
             method="call_library_function",
@@ -96,9 +111,24 @@ For instance, instead of using call_library_function(Random.rand_int, int, x, y)
     return _create_output_expression(function, output_type, *args)
 
 
+# Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
 def call_vectors_library_function(
     function: SomeCallable, output_type: Type[S], *args: Vector[NumberT]
 ) -> QuaLibFunctionOutput[S]:
+    """Call a QUA vectors library function.
+
+    Deprecated since 1.2.2; will be removed in 2.0.0. Call the function directly from the
+    available classes instead (e.g. ``Math.sum(x)`` instead of
+    ``call_vectors_library_function(Math.sum, x.dtype, x)``).
+
+    Args:
+        function: the QUA vectors library function to call.
+        output_type: the QUA type of the function's output.
+        *args: the vector arguments to pass to the library function.
+
+    Returns:
+        A QUA library-function output expression of the given output type.
+    """
     warnings.warn(
         deprecation_message(
             method="call_vectors_library_function",
@@ -141,10 +171,20 @@ class Math:
         return _create_output_expression(Math.pow, float, base, x)
 
     @staticmethod
+    @overload
+    def div(x: Scalar[int], y: Scalar[int]) -> Any: ...
+
+    @staticmethod
+    @overload
+    def div(x: Scalar[float], y: Scalar[float]) -> QuaLibFunctionOutput[float]: ...
+
+    @staticmethod
     def div(x: Scalar[NumberT], y: Scalar[NumberT]) -> QuaLibFunctionOutput[float]:
         r"""Computes the division between two same-type variables $x/y$.
         Takes integer and fixed variables as long as both are of the same type.
-        When both inputs are integer, the return type can be either a fixed point number or an integer, in which case $floor(x/y)$ is outputted.
+        When both inputs are integer, the actual result type (int or fixed) is determined by how the
+        result is used - e.g. the type of the variable it is assigned to. When assigned to an int
+        variable, the result is $floor(x/y)$.
 
         Args:
             x: a QUA int or fixed
@@ -237,7 +277,7 @@ class Math:
         Returns:
             a QUA fixed
         """
-        return _create_output_expression(Math.sqrt, float, x)
+        return _create_output_expression(Math.inv_sqrt, float, x)
 
     @staticmethod
     def inv(x: Scalar[float]) -> QuaLibFunctionOutput[float]:
@@ -550,18 +590,15 @@ class Math:
 
     @staticmethod
     @overload
-    def dot(x: Union[Vector[int], Vector[bool]], y: Union[Vector[int], Vector[bool]]) -> QuaLibFunctionOutput[int]:
-        ...
+    def dot(x: Union[Vector[int], Vector[bool]], y: Union[Vector[int], Vector[bool]]) -> QuaLibFunctionOutput[int]: ...
 
     @staticmethod
     @overload
-    def dot(x: Vector[float], y: VectorOfAnyType) -> QuaLibFunctionOutput[float]:
-        ...
+    def dot(x: Vector[float], y: VectorOfAnyType) -> QuaLibFunctionOutput[float]: ...
 
     @staticmethod
     @overload
-    def dot(x: VectorOfAnyType, y: Vector[float]) -> QuaLibFunctionOutput[float]:
-        ...
+    def dot(x: VectorOfAnyType, y: Vector[float]) -> QuaLibFunctionOutput[float]: ...
 
     @staticmethod
     def dot(x: VectorOfAnyType, y: VectorOfAnyType) -> Union[QuaLibFunctionOutput[float], QuaLibFunctionOutput[int]]:
@@ -714,6 +751,15 @@ class Util:
         i.e. `a ? b : c`, meaning `b` if `a` is true, or `c` if `a` is false.
         There is less computation overhead (less latency) when running this operation relative to the if conditional.
 
+        Args:
+            condition: a QUA boolean expression to evaluate.
+            true_result: the value returned when ``condition`` is true.
+            false_result: the value returned when ``condition`` is false.
+
+        Returns:
+            A QUA expression equal to ``true_result`` if ``condition`` is true,
+            otherwise ``false_result``.
+
         Example:
             ```python
             assign(var, cond(a, b, c)) #where a is a boolean expression
@@ -758,6 +804,9 @@ class Random:
         Args:
             max_int: maximum value
 
+        Returns:
+            A QUA int expression with a pseudorandom value in range [0, max_int).
+
         :Example:
             >>> a = Random()
             >>> assign(b, a.rand_int(max_int))
@@ -766,6 +815,9 @@ class Random:
 
     def rand_fixed(self) -> QuaLibFunctionOutput[float]:
         r"""Returns a pseudorandom fixed in range [0.0, 1.0)
+
+        Returns:
+            A QUA fixed expression with a pseudorandom value in range [0.0, 1.0).
 
         :Example:
             >>> a = Random()

@@ -184,7 +184,7 @@ class OctaveManager:
         opx_q_port: StandardPort,
     ) -> Optional[Tuple[str, int]]:
         warnings.warn(
-            "This function is deprecated since 1.1.6 and will be removed in 1.2.0.",
+            "This function is deprecated since 1.1.6 and will be removed in 1.2.0",
             DeprecationWarning,
             stacklevel=2,
         )
@@ -429,23 +429,31 @@ class OctaveManager:
         """calibrates IQ mixer associated with element
 
         Args:
-            close_open_quantum_machines: Boolean, if true (default) all
-                running QMs
-            octave_output_port
+            octave_output_port: The Octave output port to calibrate, as an
+                (octave_name, port_index) tuple.
             lo_if_frequencies_tuple_list: A list of LO/IF frequencies
                 for which the calibration is to be performed [(LO1,
                 IF1), (LO2, IF2), ...]
-            save_to_db
-            optimizer_parameters
-        will be closed for the calibration. Otherwise,
-        calibration might fail if there are not enough resources for the calibration
+            save_to_db: If true (default), the calibration parameters will
+                be saved to the calibration database.
+            close_open_quantum_machines: If true (default), all running
+                quantum machines will be closed for the calibration.
+                Otherwise, calibration might fail if there are not enough
+                resources for the calibration.
+            optimizer_parameters: Optional advanced parameters passed to the
+                calibration optimizer.
+            offset_frequency: The IF offset frequency, in Hz, used during the
+                calibration. Defaults to 7e6.
+
+        Returns:
+            A mapping from each (LO, IF) pair to its calibration result.
         """
         # warnings.warn(
         #     "This function is deprecated, please use the 'calibrate_element' in the QuantumMachine instance",
         #     category=DeprecationWarning,
         # )
         if kwargs:
-            logger.warning(f"unused kwargs: {list(kwargs)}, please remove them.")
+            logger.warning(f"Unused kwargs: {list(kwargs)}, please remove them")
 
         lo_to_if_mapping = _create_lo_to_if_mapping(lo_if_frequencies_tuple_list)
         lo_freq = list(lo_to_if_mapping)[0]
@@ -672,13 +680,13 @@ def prep_config_for_calibration(
     all_octave_connections = _add_octave_connections_from_octave_config(octave_config)
     all_octave_connections.update(_add_octave_connections_from_pb_config(pb_config))
     if not all_octave_connections:
-        logger.debug("No octave configuration found.")
+        logger.debug("No octave configuration found")
         return pb_config
     all_octave_connections = _filter_only_valid_connections(all_octave_connections, pb_config)
     if not all_octave_connections:
         logger.warning(
             "No valid channels found for calibration, make sure you connect I and Q to the same device, "
-            "and that you declare the relevant ports in the config."
+            "and that you declare the relevant ports in the config"
         )
         return pb_config
 

@@ -268,10 +268,10 @@ def _get_synth_attenuation(lo_freq: float) -> int:
             18.4: 8.0,
         }
         if 18e9 < lo_freq <= 18.4e9:
-            logger.warning("LO frequency is above 18 GHz, this frequency is supported but performance is degraded.")
+            logger.warning("LO frequency is above 18 GHz, this frequency is supported but performance is degraded")
     else:
         if 1.6e9 <= lo_freq < 2e9:
-            logger.warning("LO frequency is below 2 GHz, this frequency is supported but performance is degraded.")
+            logger.warning("LO frequency is below 2 GHz, this frequency is supported but performance is degraded")
         attn_table = {
             1.6: 32.0,
             1.8: 32.0,
@@ -408,10 +408,12 @@ class RFInput:
         else:
             raise ValueError(f"Current RF source of rf input {self._index} is unknown")
 
+    # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
     def set_rf_source(self, name: RFInputRFSource) -> None:
-        """
+        """Set the RF source routed to this RF input.
 
-        :param name:
+        Args:
+            name: The RF source to route to this RF input.
         """
 
         if name not in self._possible_rf_sources:
@@ -444,11 +446,13 @@ class RFInput:
 
         self._context.client.update(crb.get_updates())
 
+    # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
     def set_lo_source(self, source_name: RFInputLOSource, ignore_shared_errors: bool = False) -> None:
-        """
-        Set LO for the selected RFinput
-        @param source_name: The LO type from RFInputLOSource
-        @param ignore_shared_errors: Override shared LO error scenarios and replace with warning instead
+        """Set the LO source for the selected RF input.
+
+        Args:
+            source_name: The LO source for this RF input.
+            ignore_shared_errors: If True, downgrade shared-LO conflicts to warnings instead of raising.
         """
         self._set_lo_source_of_rf_in(source_name, select=True, ignore_shared_errors=ignore_shared_errors)
 
@@ -546,7 +550,7 @@ class RFInput:
         ignore_shared_errors: bool = False,
         check_conflict: bool = False,
     ) -> None:
-        (octave_lo_source, synth_index) = convert_rf_in_enum_to_octave_lo_input(
+        octave_lo_source, synth_index = convert_rf_in_enum_to_octave_lo_input(
             name,
             self._context.connectivity.synth_by_rf_out(),
             self._context.connectivity.synth_by_lo_source(),
@@ -728,24 +732,30 @@ class RFInput:
         """ """
         return _get_if_mode(self._context.client, index=self._if_index, channel=2)
 
+    # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
     def set_if_mode_i(self, mode: IFMode) -> None:
-        """
+        """Set the IF mode for the I channel of the down-converter.
 
-        :param mode:
+        Args:
+            mode: The IF mode to apply to the I channel.
         """
         _set_if_mode(self._context.client, self._if_index, mode, channel_id=1)
 
+    # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
     def set_if_mode_q(self, mode: IFMode) -> None:
-        """
+        """Set the IF mode for the Q channel of the down-converter.
 
-        :param mode:
+        Args:
+            mode: The IF mode to apply to the Q channel.
         """
         _set_if_mode(self._context.client, self._if_index, mode, channel_id=2)
 
+    # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
     def get_temperature(self) -> float:
-        """
+        """Get the temperature of the down-converter module.
 
-        :return: Celsius
+        Returns:
+            The module temperature, in degrees Celsius.
         """
         # we have temperature for all modules, but here the important one is down conv
         data = self._context.client.monitor().modules[api_pb2.OctaveModule.OCTAVE_MODULE_RF_DOWNCONVERTER][
@@ -857,9 +867,9 @@ class RFOutput:
         }
 
         if 18e9 < frequency <= 18.4e9:
-            logger.warning("LO frequency is above 18 GHz, this frequency is supported but performance is degraded.")
+            logger.warning("LO frequency is above 18 GHz, this frequency is supported but performance is degraded")
         if 1.6e9 <= frequency < 2e9:
-            logger.warning("LO frequency is below 2 GHz, this frequency is supported but performance is degraded.")
+            logger.warning("LO frequency is below 2 GHz, this frequency is supported but performance is degraded")
         total_attn_0db = _interp_freq_to_attenuation(frequency, attn_table)
 
         # The gain is given in dB, hence we need to multiply by 2 (to match the units)
@@ -919,10 +929,12 @@ class RFOutput:
             # define default -20 dB on 8Ghz
             self._set_gain(crb, -20, 8e9, True)
 
+    # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
     def set_output(self, mode: RFOutputMode) -> None:
-        """
+        """Set the output mode of this RF output.
 
-        :param mode:
+        Args:
+            mode: The RF output mode controlling when the output is on.
         """
         crb = ClientRequestBuilder()
 
@@ -952,11 +964,13 @@ class RFOutput:
 
         self._context.client.update(crb.get_updates())
 
+    # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
     def set_lo_source(self, source_name: OctaveLOSource, ignore_shared_errors: bool = False) -> None:
-        """
-        Set LO for the selected RFoutput
-        @param source_name: The LO type from OctaveLOSource
-        @param ignore_shared_errors: Override shared LO error scenarios and replace with warning instead
+        """Set the LO source for the selected RF output.
+
+        Args:
+            source_name: The LO source for this RF output.
+            ignore_shared_errors: If True, downgrade shared-LO conflicts to warnings instead of raising.
         """
         self._set_lo_source_of_rf_out(source_name, select=True, ignore_shared_errors=ignore_shared_errors)
 
@@ -1119,10 +1133,12 @@ class RFOutput:
         )
         self._context.client.update(crb.get_updates())
 
+    # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
     def get_temperature(self) -> float:
-        """
+        """Get the temperature of the up-converter module.
 
-        :return: Celsius
+        Returns:
+            The module temperature, in degrees Celsius.
         """
         # we have temperature for all modules, but here the important one is upconv
         data = self._context.client.monitor().modules[api_pb2.OctaveModule.OCTAVE_MODULE_RF_UPCONVERTER][
@@ -1315,16 +1331,20 @@ class Octave:
             raise ValueError(f"{DEFAULT_STATE} can not be the name of a snapshot")
         self._client.recall(snapshot_name)
 
+    # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
     def set_clock(
         self,
         clock_type: Optional[ClockType],
         frequency: Optional[ClockFrequency] = None,
         synth_clock: float = 125e6,
     ) -> None:
-        """
-        @param clock_type: Use external or internal or buffered mode
-        @param frequency: Frequency of the system clock, not relevant for internal mode
-        @param synth_clock: The clock frequency of the synth
+        """Configure the Octave's reference clock.
+
+        Args:
+            clock_type: The clock source mode - internal, external, or buffered.
+            frequency: The reference clock frequency; ignored in internal mode, where the
+                clock is forced to 10 MHz.
+            synth_clock: The synthesizers' reference clock frequency, in Hz. Default 125e6.
         """
 
         clock_update = api_pb2.ClockUpdate(synthesizers_clock=DoubleValue(value=synth_clock))
@@ -1402,10 +1422,15 @@ class Octave:
         ver: api_pb2.GetVersionResponse = self._client.version()
         return json.loads(ver.version)["version"]  # type: ignore[no-any-return]
 
+    # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
     def reset(self) -> bool:
-        """
-        Will reset the entire Octave HW to default off state
-        Warning, will block the code until reset completes
+        """Reset the entire Octave hardware to its default off state.
+
+        Warning:
+            This blocks until the reset completes.
+
+        Returns:
+            True once the Octave hardware has been reset to its default off state.
         """
         if self._client.reset():
             self._health.run_once()  # Reset the connectivity in case something changed after reset

@@ -110,28 +110,23 @@ def _standardize_value_and_size(
 
 
 @overload
-def declare(t: type[NumberT]) -> QuaVariable[NumberT]:
-    ...
+def declare(t: type[NumberT]) -> QuaVariable[NumberT]: ...
 
 
 @overload
-def declare(t: type[NumberT], value: Literal[None], size: int) -> QuaArrayVariable[NumberT]:
-    ...
+def declare(t: type[NumberT], value: Literal[None], size: int) -> QuaArrayVariable[NumberT]: ...
 
 
 @overload
-def declare(t: type[NumberT], *, size: int) -> QuaArrayVariable[NumberT]:
-    ...
+def declare(t: type[NumberT], *, size: int) -> QuaArrayVariable[NumberT]: ...
 
 
 @overload
-def declare(t: type[NumberT], value: Union[int, bool, float]) -> QuaVariable[NumberT]:
-    ...
+def declare(t: type[NumberT], value: Union[int, bool, float]) -> QuaVariable[NumberT]: ...
 
 
 @overload
-def declare(t: type[NumberT], value: Sequence[Union[int, bool, float]]) -> QuaArrayVariable[NumberT]:
-    ...
+def declare(t: type[NumberT], value: Sequence[Union[int, bool, float]]) -> QuaArrayVariable[NumberT]: ...
 
 
 def declare(
@@ -165,14 +160,14 @@ def declare(
     Warning:
 
         some QUA statements accept a variable with a valid range smaller than the full size of the generic
-        QUA variable. For example, ``amp()`` accepts numbers between -2 and 2.
+        QUA variable. For example, ``amplitude_scale`` argument of play and measure, accepts numbers between -2 and 2.
         In case the value stored in the variable is larger than the valid input range, unexpected results
         may occur.
 
     Example:
         ```python
         a = declare(fixed, value=0.3)
-        play('pulse' * amp(a), 'element')
+        play('pulse', 'element', amplitude_scale=a)
 
         array1 = declare(int, value=[1, 2, 3])
         array2 = declare(fixed, size=5)
@@ -271,7 +266,7 @@ def assign(
         with program() as prog:
             v1 = declare(fixed)
             assign(v1, 1.3)
-            play('pulse1' * amp(v1), 'element1')
+            play('pulse1', 'element1', amplitude_scale=v1)
         ```
     """
     statement = inc_qua_pb2.QuaProgram.AssignmentStatement(
@@ -374,5 +369,9 @@ def advance_input_stream(
     See [Input streams](../../Guides/features.md#input-streams) for more information.
 
     -- Available from QOP 2.0 --
+
+    Args:
+        input_stream: the input stream variable or vector to advance to its
+            next available value.
     """
     scopes_manager.append_statement(input_stream.advance())

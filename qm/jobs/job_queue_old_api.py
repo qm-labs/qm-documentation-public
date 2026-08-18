@@ -58,6 +58,9 @@ class QmQueue(QmQueueBase[QmPendingJob]):
             program: A QUA program
             compiler_options: Optional arguments for compilation
 
+        Returns:
+            The pending job that was added to the queue
+
         Example:
             ```python
             qm.queue.add(program)  # adds at the end of the queue
@@ -93,6 +96,9 @@ class QmQueue(QmQueueBase[QmPendingJob]):
             })
             job = pending_job.wait_for_execution()
             ```
+
+        Returns:
+            The pending job that was added to the queue
         """
         execution_overrides = overrides or {}
 
@@ -120,6 +126,8 @@ class QmQueue(QmQueueBase[QmPendingJob]):
             program: A QUA program
             compiler_options: Optional arguments for compilation
 
+        Returns:
+            The pending job that was added to the start of the queue
         """
         return self._insert(program, InsertDirection.start, compiler_options)
 

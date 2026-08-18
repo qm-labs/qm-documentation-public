@@ -39,6 +39,9 @@ class ResultStream(metaclass=abc.ABCMeta):
         """
         Perform a running average on a stream item. The Output of this operation is the running average
         of the values in the stream starting from the beginning of the QUA program.
+
+        Returns:
+            A new stream object emitting the running average of the input stream.
         """
         return UnaryMathOperation(self, "average")
 
@@ -64,6 +67,9 @@ class ResultStream(metaclass=abc.ABCMeta):
             *args: number of items to gather, can either be a single
                 number, which gives the results as a 1d array or
                 multiple numbers for a multidimensional array.
+
+        Returns:
+            A new stream object emitting the gathered items as buffers.
         """
         return BufferOfStream(self, *args)
 
@@ -93,6 +99,9 @@ class ResultStream(metaclass=abc.ABCMeta):
             length: number of items to gather
             skip: number of items to skip for each buffer, starting from
                 the same index as length
+
+        Returns:
+            A new stream object emitting the gathered buffers with the given skip.
         """
         return SkippedBufferOfStream(self, int(length), int(skip))
 
@@ -105,12 +114,18 @@ class ResultStream(metaclass=abc.ABCMeta):
                 item. For example, to compute an average between
                 elements in a buffer you should write
                 ".buffer(len).map(FUNCTIONS.average())"
+
+        Returns:
+            A new stream object emitting the transformed items.
         """
         return MapOfStream(self, function)
 
     def flatten(self) -> "UnaryMathOperation":
         """
         Deconstruct an array item - and send its elements one by one as items
+
+        Returns:
+            A new stream object emitting the deconstructed array elements one by one.
         """
         return UnaryMathOperation(self, "flatten")
 
@@ -119,6 +134,9 @@ class ResultStream(metaclass=abc.ABCMeta):
 
         Args:
             length: number of items to skip
+
+        Returns:
+            A new stream object with the first n items suppressed.
         """
         return DiscardedStream(self, int(length), "skip")
 
@@ -127,6 +145,9 @@ class ResultStream(metaclass=abc.ABCMeta):
 
         Args:
             length: number of items to skip
+
+        Returns:
+            A new stream object with the last n items suppressed.
         """
         return DiscardedStream(self, int(length), "skipLast")
 
@@ -135,6 +156,9 @@ class ResultStream(metaclass=abc.ABCMeta):
 
         Args:
             length: number of items to take
+
+        Returns:
+            A new stream object emitting only the first n items.
         """
         return DiscardedStream(self, int(length), "take")
 
@@ -145,6 +169,9 @@ class ResultStream(metaclass=abc.ABCMeta):
             bins: vector or pairs. each pair indicates the edge of each
                 bin. example: [[1,10],[11,20]] - two bins, one between 1
                 and 10, second between 11 and 20
+
+        Returns:
+            A new stream object emitting the histogram of all items.
         """
         standardized_bins = [(_bin[0], _bin[1]) for _bin in bins]
         return HistogramStream(self, standardized_bins)
@@ -154,6 +181,9 @@ class ResultStream(metaclass=abc.ABCMeta):
 
         Args:
             other: second stream to combine with self
+
+        Returns:
+            A new stream object emitting tuples of the items of both streams.
         """
         return BinaryOperation(other, self, "zip")
 
@@ -186,12 +216,18 @@ class ResultStream(metaclass=abc.ABCMeta):
 
         Args:
             vector: constant vector of numbers
+
+        Returns:
+            A new stream object emitting the dot product of each item with the vector.
         """
         return self.map(DotProduct(vector))
 
     def tuple_dot_product(self) -> "MapOfStream":
         """
         Computes dot product of the given item of the input stream - that should include two vectors
+
+        Returns:
+            A new stream object emitting the dot product of the two vectors in each item.
         """
         return self.map(TupleDotProduct())
 
@@ -202,6 +238,9 @@ class ResultStream(metaclass=abc.ABCMeta):
         Args:
             scalar_or_vector: either a scalar number, or a vector of
                 scalars.
+
+        Returns:
+            A new stream object emitting each item multiplied by the scalar or vector.
         """
         if isinstance(scalar_or_vector, IterableClass):
             return self.map(MultiplyByVector(scalar_or_vector))
@@ -212,6 +251,9 @@ class ResultStream(metaclass=abc.ABCMeta):
         """
         Computes multiplication of the given item of the input stream - that can be any
         combination of scalar and vectors.
+
+        Returns:
+            A new stream object emitting the multiplication of the items in each tuple.
         """
         return self.map(TupleMultiply())
 
@@ -222,10 +264,13 @@ class ResultStream(metaclass=abc.ABCMeta):
         Args:
             constant_vector: vector of numbers
             mode: "full", "same" or "valid"
+
+        Returns:
+            A new stream object emitting the convolution of each item with the constant vector.
         """
         if mode is None:
             warnings.warn(
-                "mode=None is deprecated, use empty-string or (recommended) don't write the mode at-all.",
+                "mode=None is deprecated, use empty-string or (recommended) don't write the mode at-all",
                 DeprecationWarning,
             )
             mode = ""
@@ -236,10 +281,13 @@ class ResultStream(metaclass=abc.ABCMeta):
 
         Args:
             mode: "full", "same" or "valid"
+
+        Returns:
+            A new stream object emitting the convolution of the two vectors in each item.
         """
         if mode is None:
             warnings.warn(
-                "mode=None is deprecated, use empty-string or (recommended) don't write the mode at-all.",
+                "mode=None is deprecated, use empty-string or (recommended) don't write the mode at-all",
                 DeprecationWarning,
             )
             mode = ""
@@ -273,6 +321,9 @@ class ResultStream(metaclass=abc.ABCMeta):
     def boolean_to_int(self) -> "MapOfStream":
         """
         converts boolean to an integer number - 1 for true and 0 for false
+
+        Returns:
+            A new stream object emitting integers (1 for true, 0 for false).
         """
         return self.map(BooleanToInt())
 
@@ -287,6 +338,12 @@ class ResultStream(metaclass=abc.ABCMeta):
         """Allows addition between streams. The addition is done element-wise.
         Can also be performed on buffers and other operators, but they must have the
         same dimensions.
+
+        Args:
+            other: the stream, scalar or vector to add to this stream.
+
+        Returns:
+            A new stream object emitting the element-wise sum.
 
         Example:
             ```python
@@ -315,6 +372,12 @@ class ResultStream(metaclass=abc.ABCMeta):
         Can also be performed on buffers and other operators, but they must have the
         same dimensions.
 
+        Args:
+            other: the stream, scalar or vector to subtract from this stream.
+
+        Returns:
+            A new stream object emitting the element-wise difference.
+
         Example:
             ```python
             i = declare(int)
@@ -342,6 +405,12 @@ class ResultStream(metaclass=abc.ABCMeta):
         Can also be performed on buffers and other operators, but they must have the
         same dimensions.
 
+        Args:
+            other: the stream, scalar or vector to multiply this stream by.
+
+        Returns:
+            A new stream object emitting the element-wise product.
+
         Example:
             ```python
             i = declare(int)
@@ -368,6 +437,12 @@ class ResultStream(metaclass=abc.ABCMeta):
         """Allows division between streams. The division is done element-wise.
         Can also be performed on buffers and other operators, but they must have the
         same dimensions.
+
+        Args:
+            other: the stream, scalar or vector to divide this stream by.
+
+        Returns:
+            A new stream object emitting the element-wise quotient.
 
         Example:
             ```python
@@ -512,7 +587,11 @@ class ResultStreamSource(ResultStream, OutputStreamInterface):
         return self._configuration.var_name
 
     def with_timestamps(self) -> "ResultStreamSource":
-        """Get a stream with the relevant timestamp for each stream-item"""
+        """Get a stream with the relevant timestamp for each stream-item
+
+        Returns:
+            A new stream source emitting each value alongside its timestamp.
+        """
         return ResultStreamSource(
             dataclasses.replace(
                 self._configuration,
@@ -521,7 +600,13 @@ class ResultStreamSource(ResultStream, OutputStreamInterface):
         )
 
     def timestamps(self) -> "ResultStreamSource":
-        """Get a stream with only the timestamps of the stream-items"""
+        """Get a stream with only the timestamps of the stream-items.
+
+        Deprecated since 1.2.3; will be removed in 2.0.0. Use ``with_timestamps()`` instead.
+
+        Returns:
+            A new stream source emitting only the timestamps of the stream-items.
+        """
         warnings.warn(
             deprecation_message(
                 method="timestamps",
@@ -540,11 +625,19 @@ class ResultStreamSource(ResultStream, OutputStreamInterface):
         )
 
     def input1(self) -> "ResultStreamSource":
-        """A stream of raw ADC data from input 1. Only relevant when saving data from measure statement."""
+        """A stream of raw ADC data from input 1. Only relevant when saving data from measure statement.
+
+        Returns:
+            A new stream source emitting the raw ADC data from input 1.
+        """
         return ResultStreamSource(dataclasses.replace(self._configuration, input=1))
 
     def input2(self) -> "ResultStreamSource":
-        """A stream of raw ADC data from input 2. Only relevant when saving data from measure statement."""
+        """A stream of raw ADC data from input 2. Only relevant when saving data from measure statement.
+
+        Returns:
+            A new stream source emitting the raw ADC data from input 2.
+        """
         return ResultStreamSource(dataclasses.replace(self._configuration, input=2))
 
     def auto_reshape(self) -> "ResultStreamSource":
@@ -552,6 +645,9 @@ class ResultStreamSource(ResultStream, OutputStreamInterface):
 
         For example, when running the following program the result "reshaped" will have
         shape of (30,10):
+
+        Returns:
+            A new stream source buffered according to the QUA program structure.
 
         Example:
             ```python

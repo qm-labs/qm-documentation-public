@@ -4,7 +4,7 @@ import logging
 import warnings
 from pathlib import Path
 from dataclasses import field, dataclass
-from typing import Any, Dict, List, Union, Mapping, Iterable, Optional, TypedDict, Collection
+from typing import Any, Dict, List, Tuple, Union, Mapping, Iterable, Optional, TypedDict, Collection
 
 import marshmallow
 import packaging.version
@@ -18,6 +18,7 @@ from qm.program import Program, load_config
 from qm.type_hinting.general import PathLike
 from qm.api.v2.job_api.job_api import JobData
 from qm.quantum_machine import QuantumMachine
+from qm.api.models.channel import TlsFilePaths
 from qm.api.models.debug_data import DebugData
 from qm.jobs.simulated_job import SimulatedJob
 from qm.logging_utils import set_logging_level
@@ -40,9 +41,10 @@ from qm.api.simulation_api import SimulationApi, create_simulation_request
 from qm.type_hinting.config_types import FullQuaConfig, ControllerQuaConfig
 from qm.octave.octave_manager import OctaveManager, prep_config_for_calibration
 from qm.api.v2.qmm_api import Controller, ControllerBase, QmmApiWithDeprecations
-from qm.exceptions import QmmException, ConfigSchemaError, ConfigValidationException
 from qm.api.models.compiler import CompilerOptionArguments, standardize_compiler_params
 from qm.api.models.capabilities import QopCaps, Capability, ServerCapabilities, offline_capabilities
+from qm.simulate.credentials import CredentialOverrides, create_credentials, validate_client_cert_pair
+from qm.exceptions import QmmException, ConfigSchemaError, InvalidCredentialsError, ConfigValidationException
 
 from ._stream_results import StreamsManager
 from .program._dict_to_pb_converter import DictToQuaConfigConverter
@@ -129,6 +131,40 @@ class Devices:
     octaves: Dict[str, OctaveDetails]
 
 
+def _resolve_credentials(
+    credentials: Optional[Union[ssl.SSLContext, CredentialOverrides]],
+) -> Tuple[Optional[ssl.SSLContext], Optional[TlsFilePaths]]:
+    """Normalize ``credentials`` into an SSLContext plus the PEM file paths gRPC needs.
+
+    grpcio cannot consume an ``ssl.SSLContext`` (it requires raw PEM bytes) and Python's
+    SSLContext does not expose the loaded private key / client certificate. To support a
+    custom root CA and mutual TLS (mTLS) we therefore also pass the PEM file paths down to
+    the gRPC channel.
+
+    - ``None`` -> insecure / default connection (no SSLContext, no paths).
+    - ``CredentialOverrides`` -> build an SSLContext (used by the non-gRPC redirection path)
+      and return the CA / client-cert / client-key paths for the gRPC channel.
+    - ``ssl.SSLContext`` -> legacy path: returned as-is with no PEM paths. A custom root CA
+      or client certificate cannot be recovered from an SSLContext, so for mTLS or a custom
+      CA use ``CredentialOverrides`` instead.
+    """
+    if credentials is None:
+        return None, None
+    if isinstance(credentials, CredentialOverrides):
+        validate_client_cert_pair(credentials.client_cert_path, credentials.client_key_path)
+        try:
+            ssl_context = create_credentials(credentials)
+        except (OSError, ssl.SSLError) as e:
+            raise InvalidCredentialsError(f"Failed to load TLS credentials from the provided paths: {e}") from e
+        tls_paths = TlsFilePaths(
+            ca_cert_path=credentials.certificate_path or None,
+            client_cert_path=credentials.client_cert_path or None,
+            client_key_path=credentials.client_key_path or None,
+        )
+        return ssl_context, tls_paths
+    return credentials, None
+
+
 class QuantumMachinesManager:
     def __init__(
         self,
@@ -140,7 +176,7 @@ class QuantumMachinesManager:
         log_level: Union[int, str] = logging.INFO,
         connection_headers: Optional[Dict[str, str]] = None,
         add_debug_data: bool = False,
-        credentials: Optional[ssl.SSLContext] = None,
+        credentials: Optional[Union[ssl.SSLContext, CredentialOverrides]] = None,
         store: Optional[BaseStore] = None,
         file_store_root: Optional[str] = None,
         octave: Optional[QmOctaveConfig] = None,
@@ -156,6 +192,11 @@ class QuantumMachinesManager:
             cluster_name (string): The name of the cluster. Requires redirection between devices.
             timeout (float): The timeout, in seconds, for detecting the qmm and most other gateway API calls. Default is 60.
             log_level (Union[int, string]): The logging level for the connection instance. Defaults to `INFO`. Please check `logging` for available options.
+            connection_headers (Dict[str, str]): Additional HTTP headers to attach to every request sent to the gateway.
+            add_debug_data (bool): If True, collects debug information about the requests sent to the gateway. Defaults to False.
+            credentials (ssl.SSLContext): An optional SSL context used to establish a secure (TLS) connection to the gateway.
+            store (BaseStore): An object used to persist job data. Deprecated since 1.2.3; will be removed in 2.0.0.
+            file_store_root (str): The root directory used by the default file-based store. Deprecated since 1.2.3; will be removed in 2.0.0.
             octave (QmOctaveConfig): The configuration for the Octave devices. Deprecated from QOP 2.4.0.
             octave_calibration_db_path (PathLike): The path for storing the Octave's calibration database. It can also be a calibration database which is an instance of `AbstractCalibrationDB`.
             follow_gateway_redirections (bool): If True (default), the client will follow redirections to find a QuantumMachinesManager and Octaves. Otherwise, it will only connect to the given host and port.
@@ -168,7 +209,7 @@ class QuantumMachinesManager:
         host = host or self._user_config.manager_host or ""
         octave_calibration_db_path = octave_calibration_db_path or self._user_config.octave_calibration_db_path
         if host is None:
-            message = "Failed to connect to QuantumMachines server. No host given."
+            message = "Failed to connect to QuantumMachines server. No host given"
             logger.error(message)
             raise QmmException(message)
 
@@ -220,7 +261,7 @@ class QuantumMachinesManager:
                 warnings.warn(
                     "QMM was opened with OctaveConfig. Please note that from QOP2.4.0 the octave devices "
                     "are managed by the cluster setting in the QM-app. It is recommended to remove the "
-                    "OctaveConfig from the QMM instantiation.",
+                    "OctaveConfig from the QMM instantiation",
                     category=DeprecationWarning,
                 )
             else:
@@ -266,16 +307,18 @@ class QuantumMachinesManager:
         port: Optional[int],
         timeout: Optional[float],
         add_debug_data: bool,
-        credentials: Optional[ssl.SSLContext],
+        credentials: Optional[Union[ssl.SSLContext, CredentialOverrides]],
         connection_headers: Optional[Dict[str, str]],
         follow_gateway_redirections: bool,
         async_follow_redirects: bool,
         async_trust_env: bool,
     ) -> ServerDetails:
+        ssl_context, tls_paths = _resolve_credentials(credentials)
         server_details = detect_server(
             cluster_name=self._cluster_name,
             user_token=self._user_config.user_token,
-            ssl_context=credentials,
+            ssl_context=ssl_context,
+            tls_paths=tls_paths,
             host=host,
             port_from_user_config=self._user_config.manager_port,
             user_provided_port=port,
@@ -291,6 +334,10 @@ class QuantumMachinesManager:
 
     @property
     def store(self) -> BaseStore:
+        """The persistence store.
+
+        Deprecated since 1.2.3; will be removed in 2.0.0.
+        """
         warnings.warn(
             deprecation_message("qmm.store", "1.2.3", "2.0.0"),
             DeprecationWarning,
@@ -302,10 +349,12 @@ class QuantumMachinesManager:
 
     @property
     def capabilities(self) -> ServerCapabilities:
+        """The capabilities supported by the connected QOP server."""
         return self._caps
 
     @property
     def octave_manager(self) -> OctaveManager:
+        """The Octave manager for this QMM instance."""
         # warnings.warn(
         #     "Do not use OctaveManager, it will be removed in the next version", DeprecationWarning, stacklevel=2
         # )
@@ -326,6 +375,7 @@ class QuantumMachinesManager:
 
     @property
     def cluster_name(self) -> str:
+        """The name of the cluster this QMM is connected to, or ``"any"`` if none was specified."""
         return self._cluster_name or "any"
 
     def perform_healthcheck(self, strict: bool = True) -> None:
@@ -364,11 +414,14 @@ class QuantumMachinesManager:
             if local_proto_version < qop_proto_version:
                 logger.warning(
                     "You are using an outdated version of `qm-qua` which was not tested against the current QOP "
-                    "version. Please consider updating to the latest qm-qua version."
+                    "version. Please consider updating to the latest qm-qua version"
                 )
 
     def version_dict(self) -> Version:
-        """
+        """Returns a dictionary with the qm-qua and QOP versions.
+
+        Deprecated since 1.3.0; will be removed in 2.0.0. Use ``qmm.version()`` instead.
+
         Returns:
             A dictionary with the qm-qua and QOP versions
         """
@@ -471,7 +524,7 @@ class QuantumMachinesManager:
             A quantum machine obj that can be used to execute programs
         """
         if kwargs:
-            logger.warning(f"unused kwargs: {list(kwargs)}, please remove them.")
+            logger.warning(f"Unused kwargs: {list(kwargs)}, please remove them")
 
         loaded_config = self._load_config(config, disable_marshmallow_validation=validate_with_protobuf)
 
@@ -542,6 +595,8 @@ class QuantumMachinesManager:
 
     def open_qm_from_file(self, filename: str, close_other_machines: bool = True) -> Union[QuantumMachine, QmApi]:
         """Opens a new quantum machine with config taken from a file on the local file system
+
+        Deprecated since 1.2.0; will be removed in 2.0.0.
 
         Args:
             filename: The path to the file that contains the config
@@ -663,6 +718,13 @@ class QuantumMachinesManager:
             return self._frontend.list_open_quantum_machines()
 
     def list_open_quantum_machines(self) -> List[str]:
+        """Returns a list of open quantum machines.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. Renamed to ``qmm.list_open_qms()``.
+
+        Returns:
+            A list of the ids of the currently open quantum machines.
+        """
         warnings.warn(
             deprecation_message(
                 "qmm.list_open_quantum_machines",
@@ -738,6 +800,10 @@ class QuantumMachinesManager:
         self._server_details.connection_details.close()
 
     def close_all_quantum_machines(self) -> None:
+        """Closes all open quantum machines.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. Renamed to ``qmm.close_all_qms()``.
+        """
         warnings.warn(
             deprecation_message(
                 "qmm.close_all_quantum_machines",
@@ -751,7 +817,13 @@ class QuantumMachinesManager:
         self.close_all_qms()
 
     def get_controllers(self) -> List[ControllerBase]:
-        """Returns a list of all the controllers that are available"""
+        """Returns a list of all the controllers that are available.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0. The return type will change.
+
+        Returns:
+            A list of the controllers available in the cluster.
+        """
         if self._api:
             warnings.warn(
                 deprecation_message(
@@ -783,6 +855,11 @@ class QuantumMachinesManager:
             }
 
     def get_devices(self) -> Devices:
+        """Returns all devices connected to the system, including controllers and Octaves.
+
+        Returns:
+            A ``Devices`` object holding the connected controllers and Octaves.
+        """
         controllers = self._get_controllers_as_dict()
         octaves: Dict[str, OctaveDetails] = {}
         if self._octave_config is not None:
@@ -792,7 +869,10 @@ class QuantumMachinesManager:
         return Devices(controllers=controllers, octaves=octaves)
 
     def clear_all_job_results(self) -> None:
-        """Deletes all data from all previous jobs"""
+        """Deletes all data from all previous jobs.
+
+        Deprecated since 1.2.0; will be removed in 2.0.0.
+        """
         if self._api:
             warnings.warn(
                 deprecation_message(
