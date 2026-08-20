@@ -31,3 +31,5 @@ sourceFile.close()
 ```
 
 This code will create a file, `debug.py`, which is a standalone runnable serialized QUA program.
+
+See the [Serialization API](API_references/serialization.md) reference for the full signature of {{f("qm.serialization.generate_qua_script.generate_qua_script")}} and the related {{f("qm.serialization.generate_qua_script.assert_programs_are_equal")}}.
