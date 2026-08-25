@@ -7,6 +7,14 @@ search:
 
 A QUA program defines not only the pulses that are played, but also specifies when they should be played.
 
+## Minimum Pulse and Wait Durations
+
+The minimum duration accepted by {{f("qm.qua.play")}} and {{f("qm.qua.wait")}} depends on the QOP version in use.
+
+{{ requirement("QOP", "3.3") }} The minimum pulse and wait duration is 4 ns if set in the configuration, or 8 ns if set from QUA.
+
+Prior to QOP 3.3, the minimum pulse and wait duration was 16 ns (4 clock cycles), both from the configuration and from QUA.
+
 ## Pulse Dependency
 
 The QUA syntax defines an implicit pulse dependency, which determines the order of pulses execution.

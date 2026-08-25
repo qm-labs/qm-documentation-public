@@ -274,6 +274,9 @@ If a scalar `A` is supplied to a [MWInput Element](#mwinput-element) or a [Mixed
 
 For usage examples, see {{f("qm.qua.play")}}.
 
+!!! Important
+    When multiple elements play to the same output port simultaneously, the manipulated waveforms described above are summed at that port. Keeping the combined signal within the port's output range is the user's responsibility: if the sum of the simultaneous amplitudes exceeds full scale, the output overflows and the signal is clipped.
+
 ## Digital Waveform Manipulations
 
 To understand how digital signals are treated, we will consider the following example: We output an analog signal

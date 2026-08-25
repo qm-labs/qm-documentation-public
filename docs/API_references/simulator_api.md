@@ -25,6 +25,21 @@ port = "1-1"  # FEM 1, port 1
 dt_ns = 1e9 / samples.con1.analog_sampling_rate[port]
 ```
 
+## Waveform Report
+
+The waveform report describes the analog and digital waveforms played during a simulated job, and can
+be rendered to a human-readable string.
+
+::: qm.waveform_report.WaveformReport
+    options:
+        heading_level: 3
+        show_root_full_path: false
+
+::: qm.waveform_report.Event
+    options:
+        heading_level: 3
+        show_root_full_path: false
+
 ## Cloud Simulator API
 
 ::: qm_saas.client

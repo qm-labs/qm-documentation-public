@@ -447,7 +447,7 @@ Make sure to press the optical cables firmly into the ports until a click is hea
 
 ??? Information "Recovering access if the IP is unreachable"
 
-    If a device is set to DHCP but does not receive an address, the OPX1000 falls back to a link-local address through which it can still be reached. See [Recovering Access via a Link-Local Address](network_and_router.md#recovering-access-via-a-link-local-address).
+    If a device becomes unreachable — because DHCP failed, or (from QOPA 2.1.0) because a static IP was misconfigured — the OPX1000 can still be reached over a link-local address. See [Recovering Access via a Link-Local Address](network_and_router.md#recovering-access-via-a-link-local-address).
 
 ??? Information "Cluster Devices"
 

@@ -11,8 +11,35 @@ Therefore, we would be happy to receive any comments or suggestions.
 - Pulse amplitude and duration should be set in the configuration whenever possible. 
   The reason being that modifying pulses in the program (i.e., `* amp()` and
   `duration`) requires real-time computation, which can introduce time gaps in the program's execution. 
-  For example, If you require two different amplitudes, define two different operations.
+  For example, if you require two different amplitudes, define two different operations.
   Ideally, real-time modification of pulses should only be used when sweeping parameters, either dynamically in QUA or manually.
+  When troubleshooting timing for a sequence that uses values changed in real-time, the [QOP simulator](../Guides/simulator.md) is a valuable tool for predicting and verifying pulse timing. Alternatively, one can use [timestamp streams](features.md#timestamp-stream) during execution to record the actual start time of selected {{f("qm.qua.play")}} or {{f("qm.qua.measure")}}
+  commands (see example below). 
+
+    ??? "Timestamp stream example"
+
+        ```python
+        with program() as prog:
+            delay = declare(int)
+            wait_duration = declare(int)
+            pulse_1_timestamp = declare_stream()
+            pulse_2_timestamp = declare_stream()
+            with for_each_(delay, debug_delays):
+                assign(wait_duration, delay)
+                play('x180', 'qubit', timestamp_stream=pulse_1_timestamp)
+                wait(wait_duration, 'qubit')
+                play('y90', 'qubit', timestamp_stream=pulse_2_timestamp)
+            with stream_processing():
+                pulse_1_timestamp.save_all("first_pulse")
+                pulse_2_timestamp.save_all("second_pulse")
+        ```
+
+    After execution, fetch both timestamp streams and subtract paired entries on the client side to check whether a gap was introduced. **Use timestamp streams for debugging only**. Do not leave them enabled for long-running programs unless the timestamps are part of the required data, because they can add unnecessary stream-processing load.
+
+- When several elements play to the same output port at the same time, their waveforms are
+  [summed at the output](../Introduction/qua_overview.md#analog-waveform-manipulations). Keep the
+  combined signal within the port's output range — if the sum of the simultaneous amplitudes exceeds
+  full scale, the output overflows and is clipped.
 
 - Beware of accumulated errors when using [sticky elements](features.md#sticky-element) and when using [frame rotations](../Introduction/qua_overview.md#updating-the-frame-phase). Make sure to reset the
   values using {{f("qm.qua.ramp_to_zero")}} and {{f("qm.qua.reset_frame")}}.

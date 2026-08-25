@@ -501,7 +501,8 @@ The unsafe flag allows the compiler to minimize the latency required to jump to 
 * No parametrized wait commands in the cases (i.e., duration is not a QUA variable)
 * No parametrized frame_rotations commands in the cases (i.e., the angle is not a QUA variable)
 * No other commands besides the above (e.g., no `align()` commands)
-
+* OPX+ Only - The first command in all cases is not a frame_rotation() command.
+  
 The usage can be seen in the following example:
 
 ```python
@@ -513,7 +514,7 @@ with for_(j, 0, j < 16, j + 1):
                 play(f'op{i}', 'qe')
     ...
 ```
-
+    
 #### Conditional Play
 
 It is also possible to add a condition directly in the {{f("qm.qua.play")}} command. 
@@ -862,7 +863,7 @@ The resulting pulse sequence is shown below, where the sticky element is in blue
 The duration of each pulse is 1000 samples, with the sticky element in blue maintaining its final value between its first
 and second play commands. Furthermore, the second pulse on the sticky element is added to the last pulse sample.
 At the end of the program, the blue trace is ramped to zero within 200 clock cycles, as defined in the configuration.
-The lower panel shows the non-sticky (blue) and the sticky (orange) digital markers associated with each element, 
+The lower panel shows the sticky (blue) and the non-sticky (orange) digital markers associated with each element, 
 with the sticky pulse also held between pulses.
 
 !!! Note

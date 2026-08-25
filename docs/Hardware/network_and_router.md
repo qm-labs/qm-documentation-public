@@ -177,6 +177,33 @@ To connect to an OPX1000 over its link-local address:
 
 3. From the Admin Panel, set the device back to a valid IP address so it can be reached normally.
 
+!!! Note
+    From QOPA 2.1.0, the DHCP-failure link-local fallback can be turned off, for environments where a link-local address is not desired.
+
+### Recovery IP (configurable secondary static address)
+
+{{ requirement("OPX1000", 3) }} {{ requirement("QOPA", "2.1.0") }}
+
+Starting from QOPA 2.1.0, the OPX1000 can keep a permanent **secondary static IP** in the `169.254.0.0/16` link-local range, in addition to its primary IP (DHCP or static). This is called **Recovery IP** in the Admin Panel — like the link-local fallback above, it's intended for recovery and management access only, not normal use — and provides a known, always-available recovery address, so you no longer need to discover a self-assigned link-local address as described above, even when the primary IP is a static address rather than a failed DHCP lease.
+
+Starting from {{ requirement("BSP", "1.4.0") }}, Recovery IP is enabled by default, and its default octets are derived automatically from the device's MAC address (see below). On earlier BSP versions, Recovery IP must be enabled and configured manually, with no MAC-derived default.
+
+The secondary address is configurable:
+
+- The first two octets are fixed at `169.254`. The **third and fourth octets** can be changed.
+- The **netmask** is configurable; the default is `255.255.0.0` (a `/16`), with the first two octets fixed at `255.255`.
+- {{ requirement("BSP", "1.4.0") }} The default third and fourth octets are derived deterministically from the **5th and 6th bytes** of the interface MAC address (converted from hexadecimal to decimal), so they are predictable per device while minimizing address collisions when multiple OPX1000 devices share a network. If a resulting octet would be a reserved link-local value (`0`, `1`, or `255`), it is incremented by 4, wrapping within the octet range — so `0` becomes `4`, `1` becomes `5`, and `255` becomes `3`.
+
+For example, an OPX1000 with the MAC address `fa:00:e7:01:04:a0` is assigned the default secondary static IP `169.254.4.160` (`0x04` → `4`, `0xa0` → `160`). A MAC ending in `00:01` instead yields `169.254.4.5`, because the reserved values `0` and `1` are each incremented by 4.
+
+This applies to both the 1 GbE and the 100 GbE interfaces.
+
+!!! Note
+    Like the link-local fallback above, Recovery IP is intended for **recovery and management access only**; full system functionality is not guaranteed over it.
+
+!!! Note
+    Recovery IP can be turned off independently of the link-local fallback, for example, in enterprise networks that do not permit a device to hold more than one IP address.
+
 ## Configuring the QM router
 
 ??? Router password

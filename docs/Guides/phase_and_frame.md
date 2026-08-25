@@ -28,7 +28,7 @@ where $\tilde{\omega_{IF}}$ and $\tilde{t}$ are the intermediate frequency of th
 in which the command {{f("qm.qua.reset_if_phase")}} was applied. From that point forward the phase $\tilde{\phi}$
 is subtracted from the global phase of the element.
 
-The reset is applied with the next `play()` or `align()` involving that element.
+The reset is applied with the next `play()`, `measure()` or `align()` involving that element.
 This also includes an [implicit align](timing_in_qua.md#the-implicit-align), such as the one added at the beginning of flow-control branches that involve several elements.
 
 !!! Note

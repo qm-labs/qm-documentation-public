@@ -3,7 +3,49 @@
 Here you can find release notes and version files for the latest version of QOP Admin (QOPA).
 Note that the admin was taken out of the QOP package and is a separate package starting from QOP 2.5 and QOP 3.3.
 
+## QOPA 2.1.0
+
+### Download
+
+[QOPA2.1.0.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1787231047-4nt6m1/QOPA2.1.0.tar.gz.age)
+
+*SHA-256 checksum:* `998182e881f55594ebe8f2df468a2f92b875de3b763a1405e09eb2287d4bf753`
+
+### Release Notes
+
+**Added**
+
+- Added recovery IP configuration to allow for easier system recovery.
+- Added the ability to install a BSP package. **Note:** This feature is unlocked when the device is equipped with BSP 1.4.0. Devices with an earlier version must first upgrade to BSP 1.4.0 via the USB method.
+- Added `sdk`, `driver`, and `service` fields to the OPNIC UI.
+- Added time period selection for log collection.
+
+**Changed**
+
+- Only unclustered devices can now install QOPA from the Devices menu.
+- QOP downgrades are no longer blocked completely below 3.6.3 (introduced in QOPA 1.6.1 and 2.0.1) - blocking is now only done when the specific hardware revision does not support it.
+
+**Known Issues**
+
+- Clusters can show a "Failed" status while operations, such as a QOP update or clustering, are in progress.
+
+## QOPA 2.0.2
+
+### Download
+
+[QOPA2.0.2.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1786270700-7maeuy/QOPA2.0.2.tar.gz.age)
+
+*SHA-256 checksum:* `986c1566bab9fefdcfe298065476cdad863d9f9b0a5f14ca5ff47908e8039dbc`
+
+### Release Notes
+
+**Added**
+
+- Added a fallback action to power down FEMs on system shutdown, to prevent rare voltage spikes.
+
 ## QOPA 2.0.1
+
+### Download
 
 [QOPA2.0.1.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1783587807-auda87/QOPA2.0.1.tar.gz.age)
 
@@ -19,7 +61,7 @@ Note that the admin was taken out of the QOP package and is a separate package s
 
 **Added**
 
-- Add support for QOP3.8.x
+- Added support for QOP3.8.x
 
 **Changed**
 

@@ -35,6 +35,41 @@ set_logging_level(level)
     It is possible to disable the output of the logger into the stdout by adding an environment variable named
     `QM_DISABLE_STREAMOUTPUT` to the OS
 
+Both mechanisms above change the level on the top-level `qm` logger, and the change reaches every SDK logger because Python's `logging` module propagates level changes down the logger hierarchy.
+
+A `logging.Filter` behaves differently: it is only evaluated on the logger it is attached to, not on loggers below it in the hierarchy. Adding a filter to `logging.getLogger("qm")` therefore has no effect on messages emitted by the SDK's submodule loggers, such as `qm.api.frontend_api`. To filter specific messages, attach the filter directly to the submodule logger that emits them.
+
+For example, to silence this message:
+
+```
+2024-11-14 18:34:29,642 - qm - INFO     - Sending program to QOP for compilation
+```
+
+attach the filter to `qm.api.frontend_api`, the logger that actually emits it:
+
+```python
+import logging
+
+class BusyFilter(logging.Filter):
+    def filter(self, record):
+        return record.getMessage() != "Sending program to QOP for compilation"
+
+logging.getLogger("qm.api.frontend_api").addFilter(BusyFilter())
+```
+
+!!! Note
+    The console output always shows `qm` as the logger name, regardless of which submodule logger emitted the message, so the logger name to filter on cannot be read off the printed output. To find it, temporarily add a second handler with a format that includes `%(name)s`:
+
+    ```python
+    import logging
+
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)-8s - %(message)s"))
+    logging.getLogger("qm").addHandler(handler)
+    ```
+
+    Once the real logger name is printed alongside the message, remove the temporary handler and attach the filter to that logger.
+
 ## Runtime Errors
 
 When running a QUA program, run-time errors may occur. In this section we address all common error
