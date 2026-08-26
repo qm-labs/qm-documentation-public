@@ -168,7 +168,7 @@ with client.simulator(QOPVersion("v3_3_0")) as instance:
 
 #### Simulation of different OPX+ hardware configurations
 
-For details about simulating different OPX+ hardware configurations, see the [QOP simulator guide](simulator.md#simulating-multiple-controllers). 
+For details about simulating different OPX+ hardware configurations, see the [QOP simulator guide](simulator.md#simulating-multiple-opx-controllers). 
 
 #### Simulation of different OPX1000 hardware configurations
 
@@ -185,6 +185,9 @@ Attempting to add two FEMs to a single slot will result in an error.
     Therefore, a `ClusterConfig` with a single controller will create a cluster with 5 OPX1000s. 
     There is no need for a `ClusterConfig` with multiple controllers.
     It is enough only to provide one, and it will automatically apply to all other controllers in the cluster.
+
+!!! Warning
+    In QOP 3.x, the simulator does not support simulating programs that require data transfer between chassis.
 
 [//]: # (Multiple controllers can be added; they are automatically named `con1`, `con2`, etc., according to their creation order.)
 
