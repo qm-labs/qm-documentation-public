@@ -149,7 +149,7 @@ This passage of information takes several clock cycles and introduces gaps to th
 In cases where the duration of the operation on all the elements is known during compilation (Deterministic case),
 the compiler optimizes the sequence and replaces the hardware sync with precalculated wait commands for each element.
 This optimization ensures that there are no gaps formed in a deterministic case. However, if the run-time of one of the elements is not known during compilation
-(non-Deterministic case), gaps will be formed. See examples 3 and 4 below for more details. 
+(non-Deterministic case), gaps will be formed. Any dependence on a QUA variable — for example a duration or a branch condition — is treated as non-deterministic, even if its value could in principle be inferred at compile time (e.g. a fixed-range loop with no feedback); the compiler does not attempt that resolution. See examples 3 and 4 below for more details. 
 
 The syncing duration also depends on the system topology, i.e. the relative location of the channels being aligned. 
 When the channels are on the same module (either the same OPX+ or the same FEM of an OPX1000) the sync is fastest. 
@@ -240,6 +240,8 @@ with program() as prog:
 ```
 
 While `t` is calculated in real-time.
+
+This is non-deterministic regardless of how `t` is derived — whether from a measurement result or from another QUA variable (e.g. a loop index) — since any dependence on a QUA variable is treated as non-deterministic.
 
 <figure markdown>
   ![timing_example4](assets/timing_example4.PNG)
