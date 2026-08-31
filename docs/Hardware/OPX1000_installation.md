@@ -134,7 +134,7 @@ To add one or more FEMs to an already-configured chassis:
 
 If the system is running QOP 3.6 or later and the new FEMs carry an older QOPF firmware version, the system does not complete its normal boot process. The topology screen in the Admin Panel displays a prompt to reinstall QOPF. Follow the on-screen instructions to update QOPF as described in the [QOP installation guide](../Releases/qop_installation_guide.md).
 
-This procedure applies equally to LF-FEMs and MW-FEMs. There are no additional steps specific to MW-FEMs.
+This procedure applies equally to all FEMs types.
 
 ### Connectivity Scheme
 
