@@ -5,6 +5,9 @@ measurement commands via a simulated loopback interface.
 
 The simulator returns the samples that will be played to the analog and digital ports.
 
+!!! Warning "IO operations are not supported in simulation"
+    Input streams, IO variables (`IO1`/`IO2`), {{f("qm.qua.wait_for_trigger")}}, and {{f("qm.qua.pause")}}/{{f("qm.jobs.running_qm_job.RunningQmJob.resume")}} depend on a live running job and are not currently supported when using {{f("qm.quantum_machines_manager.QuantumMachinesManager.simulate")}}. Using them in a simulated program will raise an error. See [Pause, Resume and IO variables](features.md#pause-resume-and-io-variables), [Input streams](features.md#input-streams), and [External Triggering](external_trigger.md).
+
 !!!Note "OPX1000 MW-FEM"
     
     {{ requirement("QOP", "3.0") }}

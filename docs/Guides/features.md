@@ -655,6 +655,9 @@ for val in current_vals:
 !!! Note
     `IO1` cannot currently be used together with [input streams](#input-streams) in the same QUA program. `IO2` is not affected by this limitation.
 
+!!! Warning
+    Pause, resume, and IO variables are not currently supported when using the [simulator](simulator.md). Using them in a simulated program will raise an error.
+
 ### Reading an IO variable
 
 IO values can also be used to extract information of a running program. For example, update the LO frequency to some value calculated in real-time, in the OPX.
@@ -730,6 +733,9 @@ while some_cond:
 
 !!! Note
     Input streams cannot currently be used together with `IO1` in the same QUA program. `IO2` is not affected by this limitation.
+
+!!! Warning
+    Input streams are not currently supported when using the [simulator](simulator.md). Using them in a simulated program will raise an error.
 
 ## Timestamp Stream
 {{ requirement("QOP", "2.2") }}
@@ -1035,7 +1041,10 @@ It is also possible to add a "self-crosstalk term", this will cause an amplitude
         Using the crosstalk matrix adds a delay of 8 cycles (32 ns).
         Adding a crosstalk term to any LF-FEM output port will delay **all** analog pulses coming out from all LF-FEM analog ports.
         It is possible to add the [compilation flag](features.md#compilation-options) `disable-crosstalk-matrix-ports-alignment` to only delay the ports that participate in the Crosstalk Correction Matrix.
-        
+
+    !!! Note
+        Crosstalk terms are limited to the range of $-2$ to $2 - 2^{-25}$.
+
 === "OPX+"
 
     !!! Warning

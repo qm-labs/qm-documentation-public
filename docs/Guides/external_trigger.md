@@ -29,6 +29,9 @@ The pulse 'wait_pulse' will be played continuously until the arrival of the trig
 !!! Note
     The external trigger port is sampled at a frequency of 250 MHz. Therefore, the temporal resolution is 4 ns.
 
+!!! Warning
+    `wait_for_trigger` is not currently supported when using the [simulator](simulator.md). Using it in a simulated program will raise an error.
+
 ## Triggering Multiple Elements
 
 When we want to trigger multiple elements in the same controller, (i.e., same trigger signal), we can simply write multiple
