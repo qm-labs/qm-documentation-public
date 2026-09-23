@@ -19,8 +19,8 @@ See the user manual for the full description of channels, contact configurations
 
 **Download**
 
-- [Windows firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qswitch/qswitch-fw-update_2.0.exe)
-- [Linux firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qswitch/qswitch-fw-update-linux_2.0)
+- [Windows firmware updater](https://qmpublic.s3.amazonaws.com/QSwitch/firmware-2.0/1790165373-chmrho/qswitch-fw-update_2.0.exe)
+- [Linux firmware updater](https://qmpublic.s3.amazonaws.com/QSwitch/firmware-2.0/1790165373-chmrho/qswitch-fw-update-linux_2.0)
 
 !!! Important
     Please follow the instructions in the user manual for performing a firmware update.

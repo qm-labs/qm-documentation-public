@@ -17,9 +17,9 @@ Below are links to the manuals and firmware updates for the QDAC-II, QDAC-II Com
     - [QDAC-II Compact User Manual](assets/QDAC-II%20Compact%20Operation%20Manual.pdf)
     - [QDAC-II Compact Command Reference](assets/QDAC-II%20Compact%20Command%20Reference.pdf)
     - Firmware update version 14-1.70:
-        - [Windows firmware updater*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update_14-1.70.exe)
-        - [MacOS firmware updater*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-macos_14-1.70)
-        - [Linux firmware updater*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-linux_14-1.70)
+        - [Windows firmware updater*](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-14-1.70/1790165373-a10nd1/qdac2-fw-update_14-1.70.exe)
+        - [MacOS firmware updater*](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-14-1.70/1790165373-a10nd1/qdac2-fw-update-macos_14-1.70)
+        - [Linux firmware updater*](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-14-1.70/1790165373-a10nd1/qdac2-fw-update-linux_14-1.70)
     - [Firmware release notes](assets/QDAC-II%20Firmware%20Release%20Notes.pdf)
     
     !!! Important
@@ -41,21 +41,21 @@ Below are links to the manuals and firmware updates for the QDAC-II, QDAC-II Com
 === "Previous firmware versions (QDAC-II)"
 
     - 13-1.57
-        - [Windows 13-1.57 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update_13-1.57.exe)
-        - [MacOS 13-1.57 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-macos_13-1.57)
-        - [Linux 13-1.57 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-linux_13-1.57)
+        - [Windows 13-1.57 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-13-1.57/1790165373-nokarr/qdac2-fw-update_13-1.57.exe)
+        - [MacOS 13-1.57 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-13-1.57/1790165373-nokarr/qdac2-fw-update-macos_13-1.57)
+        - [Linux 13-1.57 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-13-1.57/1790165373-nokarr/qdac2-fw-update-linux_13-1.57)
     - 13-1.54
-        - [Windows 13-1.54 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update_13-1.54.exe) 
-        - [MacOS 13-1.54 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-macos_13-1.54)
-        - [Linux 13-1.54 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-linux_13-1.54)
+        - [Windows 13-1.54 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-13-1.54/1790165373-12m8hs/qdac2-fw-update_13-1.54.exe) 
+        - [MacOS 13-1.54 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-13-1.54/1790165373-12m8hs/qdac2-fw-update-macos_13-1.54)
+        - [Linux 13-1.54 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-13-1.54/1790165373-12m8hs/qdac2-fw-update-linux_13-1.54)
     - 11-1.21
-        - [Windows 11-1.21 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update_11-1.21.exe)
-        - [MacOS 11-1.21 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-macos_11-1.21)
-        - [Linux 11-1.21 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-linux_11-1.21)
+        - [Windows 11-1.21 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-11-1.21/1790165373-wr2d16/qdac2-fw-update_11-1.21.exe)
+        - [MacOS 11-1.21 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-11-1.21/1790165373-wr2d16/qdac2-fw-update-macos_11-1.21)
+        - [Linux 11-1.21 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-11-1.21/1790165373-wr2d16/qdac2-fw-update-linux_11-1.21)
     - 7-0.17.5
-        - [Windows 7-0.17.5 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update_7-0.17.5.exe)
-        - [MacOS 7-0.17.5 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-macos_7-0.17.5)
-        - [Linux 7-0.17.5 firmware updater](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-linux_7-0.17.5)
+        - [Windows 7-0.17.5 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-7-0.17.5/1790165373-qlllme/qdac2-fw-update_7-0.17.5.exe)
+        - [MacOS 7-0.17.5 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-7-0.17.5/1790165373-qlllme/qdac2-fw-update-macos_7-0.17.5)
+        - [Linux 7-0.17.5 firmware updater](https://qmpublic.s3.amazonaws.com/QDAC_II/firmware-7-0.17.5/1790165373-qlllme/qdac2-fw-update-linux_7-0.17.5)
 
 
 ## Drivers and code examples
