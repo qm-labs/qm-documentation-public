@@ -13,14 +13,14 @@ Below are links to the manuals and firmware updates for the QDAC-II, QDAC-II Com
 
 === "QDAC-II / QDAC-II Compact"
 
-    - [QDAC-II User Manual](https://qm.quantum-machines.co/hubfs/QDAC%20II%20-%20User%20manual%20-%20v2.4%20(2025-20-06).pdf)
-    - [QDAC-II Compact User Manual](https://qm.quantum-machines.co/hubfs/QDAC%20II%20Compact%20-%20Operation%20manual%20-%20v1.3%20(2025-20-06).pdf)
-    - [QDAC-II Compact Command Reference](https://qm.quantum-machines.co/hubfs/QDAC%20II%20(Compact)%20-%20Command%20reference%20-%20v1.2%20(2025-20-06).pdf)
+    - [QDAC-II User Manual](assets/QDAC-II%20User%20Manual.pdf)
+    - [QDAC-II Compact User Manual](assets/QDAC-II%20Compact%20Operation%20Manual.pdf)
+    - [QDAC-II Compact Command Reference](assets/QDAC-II%20Compact%20Command%20Reference.pdf)
     - Firmware update version 14-1.70:
         - [Windows firmware updater*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update_14-1.70.exe)
         - [MacOS firmware updater*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-macos_14-1.70)
         - [Linux firmware updater*](https://qdevil-public.s3.eu-west-1.amazonaws.com/qdac2/qdac2-fw-update-linux_14-1.70)
-    - [Firmware release notes](https://qm.quantum-machines.co/hubfs/QDAC-II%20Firmware%20release%20notes.pdf?hsLang=en)
+    - [Firmware release notes](assets/QDAC-II%20Firmware%20Release%20Notes.pdf)
     
     !!! Important
         $*$ Please follow the instructions in the user manual for performing a firmware update.
@@ -29,7 +29,7 @@ Below are links to the manuals and firmware updates for the QDAC-II, QDAC-II Com
 
 === "QDAC-I"
 
-    - [QDAC-I User Manual](https://6821620.hubspotpreview-na1.com/hubfs/All%20QDAC%20manuals.pdf)
+    - [QDAC-I User Manual](assets/QDAC-I%20User%20Manual.pdf)
     - Firmware update version 1.07:
         - [Windows firmware updater](https://qmpublic.s3.us-east-1.amazonaws.com/QDAC/firmware-1.07/1765369755-gv9y4j/firmwareUpdaterWin_V_1.07.exe)
         - [MacOS firmware updater](https://qmpublic.s3.us-east-1.amazonaws.com/QDAC/firmware-1.07/1765369755-gv9y4j/firmwareUpdaterMac_V_1.07)
@@ -65,7 +65,6 @@ Below are links to the manuals and firmware updates for the QDAC-II, QDAC-II Com
     - The [QDAC-II QCoDeS driver](https://github.com/QCoDeS/Qcodes_contrib_drivers/tree/main/src/qcodes_contrib_drivers/drivers/QDevil) is located in the _QCoDeS_contrib_drivers_ repository.
     - QCoDeS coding examples can be found [here](https://qcodes.github.io/Qcodes_contrib_drivers/examples/QDevil/index.html).
     - Other miscellaneous Python applications and snippets can be found [here](https://github.com/QDevil/qdac2-tools).
-    - [Labber driver v0.6](https://github.com/QDevil/qdac2-tools) (limited functionality).
 
 === "QDAC-I"
 
