@@ -48,7 +48,7 @@ The Admin Panel can be accessed by navigating to the OPX1000's IP address in you
         4. Data: Connect the others OPX1000's Comm port to the *main* OPX1000's Comm ports via the supplied optical cables. Remove the connectors' protectors, if present, and press the optical cables firmly into the ports until a click is heard, ensuring a proper connection. Please see the [connectivity scheme](#connectivity-scheme) for more details.
         5. Clock: Connect the others OPX1000's clock input to the *main* OPX1000's clock outputs via the supplied SMA cables. Make sure to use the QM-provided cables, or alternatively make sure to use cables of the same type and length, to keep the distributed clock aligned across the chassis. Please see the [connectivity scheme](#connectivity-scheme) for more details.
     2. Octaves:
-        1. If there are any Octaves, connect their clock inputs to any OPX1000's clock outputs.
+        1. If there are any Octaves, first connect the OPX1000 chassis clock, then connect the octave clock inputs to the lowest numbered available OPX1000 clock output, in order.
         2. If all OPX1000es' clock outputs have been used, and there are still unconnected Octaves, then connect the Octave's clock input to other Octave's clock outputs.
     3. Optional: Connect any of the *main* OPX1000 clock inputs to an external reference clock.
 
