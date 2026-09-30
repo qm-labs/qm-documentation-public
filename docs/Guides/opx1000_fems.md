@@ -45,6 +45,8 @@ The analog outputs can operate in one of two modes, set in the config at the out
 * `direct` - The output range is between -0.5 V and 0.5 V.
 * `amplified` - The output range is between -2.5 V and 2.5 V. This mode does not amplify your waveform values; it merely allows higher amplitudes to be set. The hardware filters are also optimized for a cleaner step response.
 
+In both modes, the positive end of the range is excluded; see [Waveforms](../Introduction/config.md#waveforms) for the largest sample value.
+
 !!! Note
     The `direct` mode is optimized for modulated signals and is designed to achieve high SFDR, but it results in an output impedance of 35 Ω.
     Despite being 35 Ω, the specification is given for a 50 Ω matched load.
@@ -183,7 +185,7 @@ The analog output power is defined using the field `full_scale_power_dbm`.
 Starting from {{ requirement("QOP","3.7") }}, it can be set between `-11` and `18` dBm with a 1 dB granularity.
 In earlier QOP 3.x releases, the upper limit is `16` dBm.
 Note that output power above `16` dBm is not guaranteed across the entire frequency range.
-This will set the power delivered to a 50 Ω load when the waveform is set to full scale (`{-1, 1}`). 
+This will set the power delivered to a 50 Ω load when the waveform is set to full scale (`{-1, 1}`; the largest positive sample is `1 - 2^-15`). 
 The amplitude is linear in voltage, not power. For example, `full_scale_power_dbm = 10 dBm` and `wf_amplitude=0.1` outputs (to 50 Ohm) `100 mV`, thus keeping
 the same `full_scale_power_dbm` value and setting `wf_amplitude=0.2` outputs (to 50 Ohm) `200 mV`.
 Therefore, for a given waveform, its voltage-shape should be identical between the LF-FEMs and the MW-FEMs (and OPX+) up to a gain factor.

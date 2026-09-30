@@ -4,6 +4,8 @@ import deprecation
 from enum import Enum
 import logging
 import re
+import ssl
+from typing import Union
 
 from qm_saas.api import Client
 
@@ -36,8 +38,10 @@ class QOPVersion:
         """
 
         self._name = name
-        pattern = re.compile("v(\\d+)_(\\d+)_(\\d+)")
+        pattern = re.compile("^v(\\d+)_(\\d+)_(\\d+)$")
         match = pattern.match(name)
+        if match is None:
+            raise ValueError(f"Invalid version name {name}; expecting 'v<major>_<minor>_<patch>'")
         self._major = int(match.group(1))
         self._minor = int(match.group(2))
         self._patch = int(match.group(3))
@@ -68,6 +72,29 @@ class QOPVersion:
         if self.minor != other.minor:
             return self.minor > other.minor
         return self.patch > other.patch
+
+    def __eq__(self, other) -> bool:
+        """
+        Compare if this version is equal to another version.
+
+        Args:
+            other (QOPVersion): The other version to compare against.
+
+        Returns:
+            True if both versions have the same major, minor and patch numbers, False otherwise.
+        """
+        if not isinstance(other, QOPVersion):
+            return NotImplemented
+        return (self.major, self.minor, self.patch) == (other.major, other.minor, other.patch)
+
+    def __hash__(self) -> int:
+        """
+        Return the hash of the version, consistent with __eq__.
+
+        Returns:
+            The hash of the version.
+        """
+        return hash((self.major, self.minor, self.patch))
 
     @property
     def major(self) -> int:
@@ -110,52 +137,6 @@ class QOPVersion:
         return self._name
 
 
-@deprecation.deprecated(details="QoPVersion is deprecated and `QoPVersion.latest` might not give the latest version. Use `QOPVersion` returned by `QmSaas.versions()` or `QmSaas.latest_version()` instead.")
-class QoPVersion(Enum):
-    """
-    An enum containing the available Quantum Orchestration Platform (QoP) versions.
-    """
-    def __new__(cls, *args, **kwds):
-        obj = object.__new__(cls)
-        obj._value_ = args[0]
-        return obj
-
-    def __init__(self, _: str):
-        pattern = re.compile("v(\\d+)_(\\d+)_(\\d+)")
-        match = pattern.match(_)
-        self._major = int(match.group(1))
-        self._minor = int(match.group(2))
-        self._patch = int(match.group(3))
-
-    def __str__(self):
-        return "%s.%s" % (self.__class__.__name__, self._name_)
-
-    @property
-    def major(self):
-        return self._major
-
-    @property
-    def minor(self):
-        return self._minor
-
-    @property
-    def patch(self):
-        return self._patch
-
-    @property
-    def as_version(self) -> QOPVersion:
-        return QOPVersion(self._value_)
-
-    latest = "v3_2_4"
-    v3_2_4 = "v3_2_4"
-    v3_2_0 = "v3_2_0"
-
-    v3_1_0 = "v3_1_0"
-    v2_4_0 = "v2_4_0"
-    v2_2_2 = "v2_2_2"
-    v2_2_0 = "v2_2_0"
-    v2_1_3 = "v2_1_3"
-
 
 class FemType(Enum):
     """
@@ -179,6 +160,7 @@ class ControllerConfig:
         Args:
             *slots: The slots for the LF FEMs.
         """
+        self._validate_slots(slots)
         for slot in slots:
             self._add_slot(slot, FemType.LF_FEM)
         return self
@@ -190,9 +172,29 @@ class ControllerConfig:
         Args:
             *slots: The slots for the MW FEMs.
         """
+        self._validate_slots(slots)
         for slot in slots:
             self._add_slot(slot, FemType.MW_FEM)
         return self
+
+    def _validate_slots(self, slots: tuple[int, ...]) -> None:
+        """
+        Validate all slot numbers before any of them is applied, so that an
+        invalid slot leaves the configuration unchanged.
+
+        Args:
+            slots: The slot numbers to validate.
+        """
+        seen = set()
+        for slot in slots:
+            if not _FEM_MIN_SLOT <= slot <= _FEM_MAX_SLOT:
+                raise ValueError(f"Invalid slot number {slot}, must be [{_FEM_MIN_SLOT}, {_FEM_MAX_SLOT}]")
+            if slot in seen:
+                raise ValueError(f"Slot number {slot} is specified more than once")
+            seen.add(slot)
+            key = f"{slot}"
+            if key in self._slots.keys():
+                raise ValueError(f"Slot number {key} is already configured as {self._slots[key]}")
 
     def _add_slot(self, slot: int, fem_type: FemType):
         key = f"{slot}"
@@ -272,13 +274,13 @@ class QmSaasInstance:
     A simulator instance on the cloud platform.
     """
 
-    def __init__(self, client: Client, version: any, cluster_config: ClusterConfig = None, auto_cleanup: bool = True, log: logging.Logger = None):
+    def __init__(self, client: Client, version: Union[QOPVersion, str], cluster_config: ClusterConfig = None, auto_cleanup: bool = True, log: logging.Logger = None):
         """
         Create a simulator instance on the cloud platform.
 
         Args:
             client (Client): The client to use for the simulator instance
-            version (QoPVersion|QOPVersion|str): The version to use for the simulator instance
+            version (QOPVersion|str): The version to use for the simulator instance
             cluster_config (ClusterConfig): The cluster configuration for the simulator instance for QoP v3.x.x
             auto_cleanup (bool): If true (default), automatically delete the simulator instance when the context manager exits
                           otherwise it will be left running until it timeouts or is manually closed.
@@ -286,8 +288,6 @@ class QmSaasInstance:
         """
         if isinstance(version, QOPVersion):
             normalized_version = version
-        elif isinstance(version, type(QoPVersion.latest)):  # ugly hack because of decorator wrapping the class
-            normalized_version = version.as_version
         elif isinstance(version, str):
             normalized_version = QOPVersion(version)
         else:
@@ -361,39 +361,52 @@ class QmSaasInstance:
         self._expires_at = datetime.datetime.fromisoformat(response["expires_at"]).replace(tzinfo=datetime.timezone.utc)
         self._log.info(f"Simulator created with id {self._id} at {self._host}:{self._port}")
 
-    @property
-    @deprecation.deprecated(details="Will be remove in the next version.")
-    def qm_manager_parameters(self):
-        if not self._spawned:
-            raise ValueError("Simulator is not spawned")
-        return dict(host=self._host, port=self._port, sim_id=self._id, sim_token=self._token)
-
-    @property
-    def default_connection_headers(self):
+    def _default_connection_headers(self) -> dict:
         return {
             _AUTHORIZATION_ID_HEADER_NAME: self._id,
             _AUTHORIZATION_TOKEN_HEADER_NAME: self._token
         }
 
     @property
-    @deprecation.deprecated(details="Use 'token' instead")
-    def sim_token(self):
-        return self._token
+    @deprecation.deprecated(details="Use 'qmm_connection_params' instead")
+    def default_connection_headers(self) -> dict:
+        return self._default_connection_headers()
+
+    def _default_credentials(self) -> ssl.SSLContext:
+        """
+        Get the TLS credentials for the gRPC connection to the simulator instance.
+
+        Returns:
+            An SSL context that verifies the server certificate against the system trust store.
+        """
+        context = ssl.create_default_context(purpose=ssl.Purpose.SERVER_AUTH)
+        context.minimum_version = ssl.TLSVersion.TLSv1_2
+        context.set_alpn_protocols(["h2"])
+        return context
 
     @property
-    @deprecation.deprecated(details="Use 'id' instead")
-    def sim_id(self):
-        return self._id
+    @deprecation.deprecated(details="Use 'qmm_connection_params' instead")
+    def default_credentials(self) -> ssl.SSLContext:
+        return self._default_credentials()
 
     @property
-    @deprecation.deprecated(details="Use 'host' instead")
-    def sim_host(self):
-        return self._host
+    def qmm_connection_params(self) -> dict:
+        """
+        Get the parameters required to connect a `QuantumMachinesManager` to the simulator instance.
 
-    @property
-    @deprecation.deprecated(details="Use 'port' instead")
-    def sim_port(self):
-        return self._port
+        Usage:
+            qmm = QuantumMachinesManager(**instance.qmm_connection_params)
+
+        Returns:
+            A dict with `host`, `port`, `connection_headers`, `credentials` and `follow_gateway_redirections`.
+        """
+        return {
+            "host": self._host,
+            "port": self._port,
+            "connection_headers": self._default_connection_headers(),
+            "credentials": self._default_credentials(),
+            "follow_gateway_redirections": False,
+        }
 
     @property
     def host(self) -> str:
@@ -480,11 +493,6 @@ class QmSaasInstance:
         return self._cluster_config.controllers if self._cluster_config else None
 
 
-@deprecation.deprecated(details="Use qm_saas.QmSaasInstance instead")
-class QoPSaaSInstance(QmSaasInstance):
-    def __init__(self, client: Client, version: QoPVersion, cluster_config=None, auto_cleanup: bool = True, log: logging.Logger = None):
-        super().__init__(client, version, cluster_config, auto_cleanup, log)
-
 
 class QmSaas:
     """
@@ -528,23 +536,29 @@ class QmSaas:
             log=self.log,
         )
 
-    def simulator(self, version: any = None, cluster_config: ClusterConfig = None) -> QmSaasInstance:
+    def simulator(self, version: Union[str, QOPVersion] = None, cluster_config: ClusterConfig = None) -> QmSaasInstance:
         """
         Create a simulator instance on the cloud platform.
 
         Args:
-            version: The QOP version to use for the simulator instance. Defaults to the latest version
+            version (QOPVersion|str): The QOP version to use for the simulator instance. Defaults to the latest version
             cluster_config: The cluster configuration for the simulator instance for QoP v3.x.x
         """
-        if cluster_config is not None and version.major != 3:
-            raise ValueError("Cluster configuration is only supported for QoP v3.x.x")
-
         if version is None:
-            version = self.latest_version()
+            qop_version = self.latest_version()
+        elif isinstance(version, QOPVersion):
+            qop_version = version
+        elif isinstance(version, str):
+            qop_version = QOPVersion(version)
+        else:
+            raise TypeError("Parameter 'version' must be a str or a QOPVersion")
+
+        if cluster_config is not None and qop_version.major != 3:
+            raise ValueError("Cluster configuration is only supported for QoP v3.x.x")
 
         return QmSaasInstance(
             client=self._client,
-            version=version,
+            version=qop_version,
             cluster_config=cluster_config,
             auto_cleanup=self.auto_cleanup,
             log=self.log,
@@ -600,17 +614,3 @@ class QmSaas:
             The host of the endpoint of the cloud platform api
         """
         return self._client.host
-
-
-@deprecation.deprecated(details="Use qm_saas.QmSaas instead")
-class QoPSaaS(QmSaas):
-    def __init__(
-        self,
-        host: str = "qm-saas.quantum-machines.co",
-        port: int = 443,
-        email: str = None,
-        password: str = None,
-        auto_cleanup: bool = True,
-        log: logging.Logger = None,
-    ):
-        super().__init__(host, port, email, password, auto_cleanup, log)

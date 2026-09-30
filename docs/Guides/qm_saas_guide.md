@@ -50,14 +50,19 @@ from qm_saas import *
 
 with client.simulator(client.latest_version()) as instance:
     # Use the instance object to simulate QUA programs
-    qmm = QuantumMachinesManager(host=instance.host,
-                                 port=instance.port,
-                                 connection_headers=instance.default_connection_headers)
+    qmm = QuantumMachinesManager(**instance.qmm_connection_params)
     # Continue as usual with opening a quantum machine and simulation of a qua program
 ```
 
-Note the usage of the additional `connection_headers` keyword argument in the `QuantumMachinesManager` object. 
-This is only required when connecting to a cloud simulator instance and not for usage with real hardware (where it defaults to `None`). 
+{{ requirement("SaaS", "1.2.0") }} The `qmm_connection_params` property of the instance holds all the keyword arguments
+that `QuantumMachinesManager` needs to connect to the cloud simulator instance: the host, the port, the authentication
+headers, and the TLS credentials. Unpack it into `QuantumMachinesManager` as shown above.
+This is only required when connecting to a cloud simulator instance and not for usage with real hardware.
+
+!!! Warning
+    The cloud simulator requires TLS-secured connections. Code that passes only `host`, `port` and
+    `connection_headers=instance.default_connection_headers`, as in `qm-saas` versions before 1.2.0, can no longer
+    connect. Upgrade to `qm-saas` 1.2.0 or later and use `qmm_connection_params` instead.
 
 The usage of the context manager ensures that the simulator instance is spawned correctly before use and closed when the context is exited.
 This is recommended for simple usage, but includes a performance overhead for each context manager block, as spawning a new instance can take 10-20 seconds.
@@ -160,9 +165,7 @@ from qm import QuantumMachinesManager
 
 with client.simulator(QOPVersion("v3_3_0")) as instance:
     # Use the instance object to simulate QUA programs
-    qmm = QuantumMachinesManager(host=instance.host,
-                                 port=instance.port,
-                                 connection_headers=instance.default_connection_headers)
+    qmm = QuantumMachinesManager(**instance.qmm_connection_params)
     # Continue as usual with opening a quantum machine and simulation of a qua program
 ```
 
@@ -176,7 +179,7 @@ When simulating the OPX1000, there is a default configuration of 5 OPX1000 with 
 It is possible to define a custom FEM configuration of the simulator instance. 
 This is done by creating a `ClusterConfig` object and adding the required controllers and FEMs to it. 
 Initially, a controller needs to be added to the configuration via `ClusterConfig.controller()`. 
-The FEMs can then be added to this controller object via the `lf_fem(List[int])` and `mw_fem(List[int])` methods. 
+The FEMs can then be added to this controller object via the `lf_fems(*slots)` and `mw_fems(*slots)` methods. 
 Available slots are 1-8, and both LF-FEMs and MW-FEMs can be added. 
 Attempting to add two FEMs to a single slot will result in an error.
 
@@ -194,7 +197,8 @@ Attempting to add two FEMs to a single slot will result in an error.
 The `ClusterConfig` object is then passed to the `simulator` method to create an instance with the given configuration.
 
 ```python
-from qm_saas import ClusterConfig, client, QOPVersion
+from qm import QuantumMachinesManager, SimulationConfig
+from qm_saas import ClusterConfig, QOPVersion
 
 cluster_config = ClusterConfig()
 controller = cluster_config.controller()
@@ -203,9 +207,7 @@ controller.mw_fems(5, 6, 7, 8)
 
 with client.simulator(QOPVersion("v3_3_0"), cluster_config) as instance:
     # Use the instance object to simulate QUA programs on a config of 4 LF and 4 MW-FEMs
-    qmm = QuantumMachinesManager(host=instance.host,
-                                 port=instance.port,
-                                 connection_headers=instance.default_connection_headers)
+    qmm = QuantumMachinesManager(**instance.qmm_connection_params)
     # Continue as usual with opening a quantum machine and simulation of a qua program
     job = qmm.simulate(qua_config, qua_program, SimulationConfig(int(1e4)))
     job.wait_until("Done", timeout=10)

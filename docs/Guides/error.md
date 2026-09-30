@@ -85,8 +85,8 @@ Below we outline different runtime error types and what do they mean.
 
 ### Analog output overflow
 
-Indicates if the value played to an analog output at any sample is outside the range -0.5 to $0.5 - 2^{-16}$,
-which causes an output overflow.
+Indicates if the value played to an analog output at any sample is outside the output's range, which is $-A$ to $A \cdot (1 - 2^{-15})$ for a full scale $A$
+(for example, -0.5 to $0.5 - 2^{-16}$ for the OPX+ and the LF-FEM in `direct` mode), which causes an output overflow.
 
 !!! Note
     It is possible for an overflow to occur with no indication. Therefore when in doubt, it always smart to double check

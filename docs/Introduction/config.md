@@ -469,8 +469,14 @@ For example, in the code below we define a constant 0.4 amplitude waveform and a
    },
 ```
 
-For the OPX+ or a LF-FEM using the waveform, the sample values give the output in volts and must be within [-0.5, 0.5] (or [-2.5, 2.5] for the LF-FEM in amplified mode). 
-For a MW-FEM using the waveform, the sample values give the output amplitude as a fraction of the `full_scale_power_dbm` and must be within [-1.0, 1.0].
+For the OPX+ or a LF-FEM using the waveform, the sample values give the output in volts and must be within [-0.5, 0.5) (or [-2.5, 2.5) for the LF-FEM in amplified mode). 
+For a MW-FEM using the waveform, the sample values give the output amplitude as a fraction of the `full_scale_power_dbm` and must be within [-1.0, 1.0).
+
+!!! Note
+    The positive end of each range is excluded. The largest sample an output can play is `full_scale * (1 - 2^-15)`:
+    `0.5 - 2^-16` for the OPX+ and the LF-FEM in `direct` mode, `2.5 - 5 * 2^-16` for the LF-FEM in `amplified` mode,
+    and `1 - 2^-15` for the MW-FEM. A sample set exactly to the positive end (for example, `1.0` on a MW-FEM) is
+    implicitly rounded down to this value, without a warning.
 
 !!! Note
     In LF-FEM, OPX+, and OPX1.0, waveform amplitude translates directly into Voltage. Considering the example from the snippet above `sample: 0.4` translates to 0.4 V in the mentioned instruments. Note that the LF-FEM

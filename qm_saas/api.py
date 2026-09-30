@@ -2,6 +2,13 @@ from logging import Logger
 import requests
 
 
+def _error_message(response: requests.Response) -> str:
+    try:
+        return response.json().get("message", "no message provided")
+    except requests.exceptions.JSONDecodeError:
+        return f"non-JSON response body: {response.text[:200]!r}"
+
+
 class Client:
 
     def __init__(self, protocol: str, host: str, port: int, email: str, password: str, log: Logger):
@@ -53,7 +60,7 @@ class Client:
         response = requests.post(url=endpoint, headers=headers, json=payload)
 
         if response.status_code != 201:
-            error = response.json().get("message", "no message provided")
+            error = _error_message(response)
             self.log.error(f"Authentication for {self.email} failed: HTTP{response.status_code} {error}")
             raise Exception(f"Authentication failed: {error}")
         self._jwt = response.json()["jwt"]
@@ -64,7 +71,7 @@ class Client:
         response = requests.delete(url=endpoint, headers=headers)
 
         if response.status_code != 200:
-            message = response.json().get("message", "no message provided")
+            message = _error_message(response)
             self.log.error(f"HTTP {response.status_code}: {message}")
             raise Exception(f'Closing the simulator instance {instance_id} failed: {message}')
 
@@ -73,7 +80,7 @@ class Client:
         headers = self._headers_authenticated()
         response = requests.delete(url=endpoint, headers=headers)
         if response.status_code != 200:
-            message = response.json().get("message", "no message provided")
+            message = _error_message(response)
             self.log.error(f"HTTP {response.status_code}: {message}")
             raise Exception(f'Closing all simulator instances failed: {message}')
 
@@ -87,7 +94,7 @@ class Client:
         response = requests.post(url=endpoint, headers=headers, json=payload)
 
         if response.status_code != 201:
-            message = response.json().get("message", "no message provided")
+            message = _error_message(response)
             self.log.error(f"HTTP {response.status_code}: {message}")
             raise Exception(f"Could not spawn simulator of version {version}: {message}")
 
@@ -99,7 +106,7 @@ class Client:
         response = requests.get(url=endpoint, headers=headers)
 
         if response.status_code != 200:
-            message = response.json().get("message", "no message provided")
+            message = _error_message(response)
             self.log.error(f"HTTP {response.status_code}: {message}")
             raise Exception(f"Could not retrieve versions: {message}")
 

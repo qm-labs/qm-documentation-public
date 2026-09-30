@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 1.2.0 - 2026-09-30
+
+**Added**
+
+- Added equals operator to `QOPVersion`
+- Added `QmSaasInstance.qmm_connection_params` holding all parameters needed to connect a `QuantumMachinesManager`
+  to the simulator over a TLS-secured connection. The cloud will reject unencrypted connections, so use:
+  ```python
+  qmm = QuantumMachinesManager(**instance.qmm_connection_params)
+  ```
+
+**Deprecated**
+
+- Deprecated `QmSaasInstance.default_connection_headers`, use `QmSaasInstance.qmm_connection_params` instead
+- Deprecated `QmSaasInstance.default_credentials`, use `QmSaasInstance.qmm_connection_params` instead
+
+**Removed**
+
+- Removed deprecated class `QoPVersion`
+- Removed deprecated properties from class `QmSaasInstance`
+- Removed deprecated class `QoPSaaS`
 
 ## 1.1.8 - 2026-04-16
 
