@@ -3,9 +3,9 @@
 The following page describes the installation procedure of an OPX1000 system, and for systems with Octaves.
 It covers network configuration, OPX1000 connectivity, rack scheme and more.
 
-## Rack and Power Requirements
+## System Installation Requirements
 
-The rack and power requirements can be found [here](assets/OPX1000%20Rack%20and%20Power%20Requirements.pdf).
+The rack, power, and network requirements can be found [here](assets/OPX1000%20System%20Installation%20Requirements.pdf).
 
 ### Rack Mounting and Grounding Installation Guide
 
@@ -75,7 +75,7 @@ The Admin Panel can be accessed by navigating to the OPX1000's IP address in you
       ```
       You should see the message `qm - INFO - Health check passed` in the console.
 
-      `cluster_name` is optional and only required for multiple clusters connected with a QM router (according to [network configuration](network_and_router.md#network-overview-and-configuration) A or C).
+      `cluster_name` is optional and only required for multiple clusters connected with a QM router (according to [network configuration](network_and_router.md#network-overview-and-configuration) B or D).
 
 !!! Important
     When connecting SMA cables to the OPX1000 chassis or FEMs, always use a properly torqued wrench set to 0.3-0.6 Newton-meter (Nm). Applying excessive torque or over-tightening may damage the connectors.
@@ -116,6 +116,13 @@ The Admin Panel can be accessed by navigating to the OPX1000's IP address in you
 
 
 ### Required components for the installation
+
+The network infrastructure is provided by the customer, with one Ethernet port per chassis.
+See the [network overview page](network_and_router.md#network-overview-and-configuration) for the available network configurations.
+
+!!! Note
+    OPX1000 systems shipped before October 2026 also included a router, pre-configured by QM, and its power supply.
+    Systems shipped from October 2026 onwards do not include a router.
 
 ??? Information "List of Components"
 
@@ -434,6 +441,10 @@ Make sure to press the optical cables firmly into the ports until a click is hea
 
 ??? Information "Check Devices IP"
 
+    If your system does not include a QM router, the devices are connected to your own network. Check the DHCP leases on your network to find their IP addresses, or reach a device over its [link-local address or Recovery IP](network_and_router.md#recovering-access-via-a-link-local-address).
+
+    If your system includes a QM router, the devices' IP addresses can be listed from the router:
+
     1. Connect the devices and a computer to the local network of the QM router (ports 2-10)
     2. In CMD run:
     ```
@@ -455,4 +466,4 @@ Make sure to press the optical cables firmly into the ports until a click is hea
 
 ### Configuring the QM router
 
-See [this page](network_and_router.md#configuring-the-qm-router).
+If your system includes a QM router, see [this page](network_and_router.md#configuring-the-qm-router).

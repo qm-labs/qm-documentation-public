@@ -1,0 +1,4 @@
+Number,Label,Description
+1-8,Analog Outputs 1-8,8 analog output SMA connectors
+In1-In2,Analog Inputs In1-In2,2 analog input SMA connectors
+1-8 (red),Digital Outputs 1-8,8 digital output connectors (to be connected via a supplied braid)

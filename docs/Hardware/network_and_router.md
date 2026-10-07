@@ -2,20 +2,60 @@
 
 ## Possible Network Configurations
 
-We ship the OPXes & Octaves with an external router for network management (hereafter, the QM router). Using this router is optional.
+OPXes & Octaves shipped before October 2026 included an external router for network management, pre-configured by QM (hereafter, the QM router).
+Starting from October 2026, the OPX1000 is no longer shipped with a QM router, and the network infrastructure is provided by the customer, with one Ethernet port per chassis.
+
+!!! Important
+    A router provided by the customer is not a replacement for the QM router.
+    The QM router is delivered pre-configured for QM devices, and the configurations and instructions on this page that involve it apply to that unit only.
+    If your system does not include a QM router, use Option A below, in which the devices are connected directly to your own network.
+
 There are a few possible network configurations, and each modifies how we access the cluster. 
 We list below four possible configurations and details on accessing the cluster. Please choose your relevant configuration by clicking on the tabs under the figure. 
+Option A applies to any system. Options B, C and D require a QM router, and are therefore relevant only for systems that were shipped with one.
 
-![Networkconfig_options](assets/Network_configuration.png)
+![Networkconfig_options](assets/Network_configuration.svg)
 
 !!! Note
-    If you plan to connect the system to your local network, please check if it requires whitelisting the MAC address.
-    Depending on the configuration below, you might need to whitelist the supplied router MAC address or the individual devices' MAC addresses.
+    If you plan to connect the system to your institution's network, please check if it requires whitelisting the MAC address.
+    In Option A, the MAC addresses of the individual devices need to be whitelisted. In Option B, the QM router's MAC address needs to be whitelisted.
     All QM devices have their MAC address printed on them. To find the QM router MAC address, follow the [guide](#configuring-the-qm-router) below or contact your QM representative.
 
 ## Accessing the Cluster
 
 === "Option A"
+    
+    !!! Warning
+        This option is only officially supported from {{ requirement("QOP", "2.2") }}
+
+    In this scenario, no QM router is used, and all QM devices are connected directly to your own network (typically a router).
+    This is the configuration for OPX1000 systems that were shipped without a QM router, and it requires one Ethernet port per chassis.  
+    
+    !!! Note
+        All QM devices shipped after June 2023 are configured to DHCP. Devices shipped before were configured with a static IP - 192.168.88.XXX.
+
+    **Network Setup:**  
+   
+    1. Determine the IP requirements of your network, and set the devices' IPs accordingly. Contact QM support for assistance with changing IP addresses.
+       If a static IP is required, it must be provided by the institution's IT department.
+       Note that this frequently requires whitelisting the MAC addresses of all QM devices in advance.
+   
+    Accessing the Admin Panel and connecting to the cluster using Python can be done in the following way:  
+
+    ===  "QOP >= 2.2.x"  
+    
+        To access the Admin Panel, type any device's IP in a web browser to access all clusters using the same QOP version.
+        To find the IP of the devices, check the DHCP leases on your network, or reach a device over its [link-local address or Recovery IP](#recovering-access-via-a-link-local-address).
+        
+        To open a communication with the cluster in Python, use the following:
+
+        ``` python
+        qmm = QuantumMachinesManager(host='MAIN_OPX_IP') # Connect to a cluster by using the cluster's main OPX IP address
+        qmm = QuantumMachinesManager(host='ANY_QM_OPX_IP', cluster_name='My_cluster_name') # Alternatively, you can type the IP of any OPX, and use the `cluster_name` argument
+        ```
+
+
+=== "Option B"
 
     In this scenario, both the QM router and the client PC are connected to the institute's network, with the QM router listed as a device on the network. 
     All QM devices are in a local area network (LAN) behind the QM router.
@@ -53,7 +93,8 @@ We list below four possible configurations and details on accessing the cluster.
         qmm = QuantumMachinesManager(host='QM_Router_IP')  
         ```
 
-=== "Option B"
+
+=== "Option C"
 
       In this scenario the QM router and the client PC are connected to a local unmanaged switch.
       All QM devices are in a local area network (LAN) behind the QM router.
@@ -89,7 +130,8 @@ We list below four possible configurations and details on accessing the cluster.
         qmm = QuantumMachinesManager(host='QM_Router_IP')  
         ```
 
-=== "Option C"
+
+=== "Option D"
 
     In this scenario, the client PC is directly connected to the QM router.  
     The QM devices and the PC are in a local area network (LAN) behind the QM router.
@@ -128,35 +170,6 @@ We list below four possible configurations and details on accessing the cluster.
         qmm = QuantumMachinesManager(host='Main_OPX_IP')
         ```
 
-=== "Option D" 
-    
-    !!! Warning
-        This option is only officially supported from {{ requirement("QOP", "2.2") }}
-
-    In this scenario, the QM router is unused, and all QM devices will be directly connected to your own network (typically a router).  
-    
-    !!! Note
-        All QM devices shipped after June 2023 are configured to DHCP. Devices shipped before were configured with a static IP - 192.168.88.XXX.
-
-    **Network Setup:**  
-   
-    1. Determine the IP requirements of your network, and set the devices' IPs accordingly. Contact QM support for assistance with changing IP addresses.
-       If a static IP is required, it must be provided by the institution's IT department.
-       Note that this frequently requires whitelisting the MAC addresses of all QM devices in advance.
-   
-    Accessing the Admin Panel and connecting to the cluster using Python can be done in the following way:  
-
-    ===  "QOP >= 2.2.x"  
-    
-        To access the Admin Panel, type any device's IP in a web browser to access all clusters using the same QOP version.
-        To find the IP of the devices connected, follow the steps [below](#configuring-the-qm-router)
-        
-        To open a communication with the cluster in Python, use the following:
-
-        ``` python
-        qmm = QuantumMachinesManager(host='MAIN_QM_OPX_IP') # If you have multiple clusters in the network, use the main OPX of each cluster 
-        qmm = QuantumMachinesManager(host='ANY_QM_OPX_IP', cluster_name='My_cluster_name')
-        ```
 
 ## Recovering Access via a Link-Local Address
 
@@ -205,6 +218,9 @@ This applies to both the 1 GbE and the 100 GbE interfaces.
     Recovery IP can be turned off independently of the link-local fallback, for example, in enterprise networks that do not permit a device to hold more than one IP address.
 
 ## Configuring the QM router
+
+This section applies to the QM router only, which is shipped pre-configured with the default password, IP address and network described below.
+It does not apply to a router provided by the customer, which must be configured according to the vendor's own instructions.
 
 ??? Router password
     
@@ -282,7 +298,7 @@ This applies to both the 1 GbE and the 100 GbE interfaces.
 ### Introduction
 
 This guide is tailored for environments where network access and proxy configurations may interfere with normal operations.
-And in which the computer connected to the OPXes via a LAN (as shown in [configurations B & C above](#possible-network-configurations)) and is also connected to another network with a proxy server.
+And in which the computer connected to the OPXes via a LAN (as shown in [configurations C & D above](#possible-network-configurations)) and is also connected to another network with a proxy server.
 These are common in academic institutions, corporate environments, and other organizations with strict network policies.
 
 [![Network With Proxy](assets/Network_configuration_proxy.png)](assets/Network_configuration_proxy.png)
@@ -291,7 +307,7 @@ This guide provides instructions for configuring the proxy settings on the PC, b
 These settings ensure uninterrupted communication with the OPX for both HTTP (Admin Panel) and gRPC protocols (Python job execution).
 
 !!! Note
-    All of the values that are written below (e.g. `192.168.88`, `192.168.88.0/24`) are for the default MikroTik network, as appears in [Option C](#possible-network-configurations).
+    All of the values that are written below (e.g. `192.168.88`, `192.168.88.0/24`) are for the default MikroTik network, as appears in [Option D](#possible-network-configurations).
     Please adjust these values according to your network configuration.
 
 ---

@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="690" viewBox="0 0 900 690" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <defs>
+    <g id="devices">
+      <rect x="14" y="14" width="140" height="58" fill="#ffffff" stroke="#4d4d4d"/>
+      <rect x="7" y="7" width="140" height="58" fill="#ffffff" stroke="#4d4d4d"/>
+      <rect x="0" y="0" width="140" height="58" fill="#ffffff" stroke="#4d4d4d"/>
+      <text x="70" y="34" text-anchor="middle">OPXs / Octaves</text>
+    </g>
+    <g id="clientpc">
+      <rect x="0" y="0" width="100" height="66" fill="#ffffff" stroke="#4d4d4d"/>
+      <text x="50" y="38" text-anchor="middle">Client PC</text>
+    </g>
+    <g id="qmrouter">
+      <rect x="0" y="0" width="110" height="34" fill="#cfe2f3" stroke="#4d4d4d"/>
+      <text x="55" y="22" text-anchor="middle">QM Router</text>
+    </g>
+    <g id="userrouter">
+      <rect x="0" y="0" width="110" height="34" fill="#d9ead3" stroke="#4d4d4d"/>
+      <text x="55" y="22" text-anchor="middle">User's Router</text>
+    </g>
+    <g id="userrouterOpt">
+      <rect x="0" y="0" width="110" height="34" fill="#eaf3e6" stroke="#8c8c8c" stroke-dasharray="4 3"/>
+      <text x="55" y="22" text-anchor="middle" fill="#595959">User's Router</text>
+    </g>
+    <g id="userswitch">
+      <rect x="0" y="0" width="110" height="34" fill="#fce5cd" stroke="#4d4d4d"/>
+      <text x="55" y="22" text-anchor="middle">User's Switch</text>
+    </g>
+    <polygon id="head" points="0,0 -4.5,-9 4.5,-9" fill="#4d4d4d"/>
+    <polygon id="headDashed" points="0,0 -4.5,-9 4.5,-9" fill="#8c8c8c"/>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="690" fill="#ffffff"/>
+
+  <!-- ============ Option A : devices connected directly to the user's network ============ -->
+  <g transform="translate(10,10)">
+    <rect x="0" y="0" width="430" height="325" fill="none" stroke="#666666"/>
+    <text x="16" y="26" font-size="15">A</text>
+
+    <g transform="translate(160,66)"><use href="#userrouter"/></g>
+    <g transform="translate(30,215)"><use href="#devices"/></g>
+    <g transform="translate(285,212)"><use href="#clientpc"/></g>
+
+    <g stroke="#4d4d4d" fill="none" stroke-width="1.5">
+      <path d="M 195 100 L 195 150 L 75 150 L 75 205"/>
+      <path d="M 215 100 L 215 172 L 115 172 L 115 205"/>
+      <path d="M 250 100 L 250 150 L 335 150 L 335 203"/>
+    </g>
+    <use href="#head" x="75" y="208"/>
+    <use href="#head" x="115" y="208"/>
+    <use href="#head" x="335" y="206"/>
+  </g>
+
+  <!-- ============ Option B : institute network, QM router as a network device ============ -->
+  <g transform="translate(460,10)">
+    <rect x="0" y="0" width="430" height="325" fill="none" stroke="#666666"/>
+    <text x="16" y="26" font-size="15">B</text>
+
+    <g transform="translate(160,66)"><use href="#userrouter"/></g>
+    <g transform="translate(30,148)"><use href="#qmrouter"/></g>
+    <g transform="translate(30,215)"><use href="#devices"/></g>
+    <g transform="translate(285,212)"><use href="#clientpc"/></g>
+    <text x="26" y="140" font-size="11" fill="#595959">Port 1</text>
+
+    <g stroke="#4d4d4d" fill="none" stroke-width="1.5">
+      <path d="M 195 100 L 195 124 L 85 124 L 85 138"/>
+      <path d="M 250 100 L 250 124 L 335 124 L 335 203"/>
+      <path d="M 65 182 L 65 205"/>
+      <path d="M 105 182 L 105 205"/>
+    </g>
+    <use href="#head" x="85" y="145"/>
+    <use href="#head" x="335" y="206"/>
+    <use href="#head" x="65" y="208"/>
+    <use href="#head" x="105" y="208"/>
+  </g>
+
+  <!-- ============ Option C : local unmanaged switch + QM router ============ -->
+  <g transform="translate(10,355)">
+    <rect x="0" y="0" width="430" height="325" fill="none" stroke="#666666"/>
+    <text x="16" y="26" font-size="15">C</text>
+
+    <g transform="translate(150,66)"><use href="#userswitch"/></g>
+    <g transform="translate(300,20)"><use href="#userrouterOpt"/></g>
+    <g transform="translate(30,148)"><use href="#qmrouter"/></g>
+    <g transform="translate(30,215)"><use href="#devices"/></g>
+    <g transform="translate(285,212)"><use href="#clientpc"/></g>
+    <text x="26" y="140" font-size="11" fill="#595959">Port 1</text>
+
+    <g stroke="#4d4d4d" fill="none" stroke-width="1.5">
+      <path d="M 185 100 L 185 124 L 85 124 L 85 138"/>
+      <path d="M 240 100 L 240 124 L 325 124 L 325 203"/>
+      <path d="M 65 182 L 65 205"/>
+      <path d="M 105 182 L 105 205"/>
+    </g>
+    <use href="#head" x="85" y="145"/>
+    <use href="#head" x="325" y="206"/>
+    <use href="#head" x="65" y="208"/>
+    <use href="#head" x="105" y="208"/>
+
+    <g stroke="#8c8c8c" fill="none" stroke-width="1.5" stroke-dasharray="5 4">
+      <path d="M 355 54 L 355 203"/>
+    </g>
+    <use href="#headDashed" x="355" y="206"/>
+  </g>
+
+  <!-- ============ Option D : client PC connected directly to the QM router ============ -->
+  <g transform="translate(460,355)">
+    <rect x="0" y="0" width="430" height="325" fill="none" stroke="#666666"/>
+    <text x="16" y="26" font-size="15">D</text>
+
+    <g transform="translate(300,20)"><use href="#userrouterOpt"/></g>
+    <g transform="translate(30,148)"><use href="#qmrouter"/></g>
+    <g transform="translate(30,215)"><use href="#devices"/></g>
+    <g transform="translate(285,212)"><use href="#clientpc"/></g>
+    <text x="26" y="140" font-size="11" fill="#595959">Port 1 unused</text>
+
+    <g stroke="#4d4d4d" fill="none" stroke-width="1.5">
+      <path d="M 65 182 L 65 205"/>
+      <path d="M 105 182 L 105 205"/>
+      <path d="M 140 165 L 320 165 L 320 203"/>
+    </g>
+    <use href="#head" x="65" y="208"/>
+    <use href="#head" x="105" y="208"/>
+    <use href="#head" x="320" y="206"/>
+
+    <g stroke="#8c8c8c" fill="none" stroke-width="1.5" stroke-dasharray="5 4">
+      <path d="M 355 54 L 355 203"/>
+    </g>
+    <use href="#headDashed" x="355" y="206"/>
+  </g>
+</svg>
