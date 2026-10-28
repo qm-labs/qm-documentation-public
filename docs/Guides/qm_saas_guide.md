@@ -146,7 +146,7 @@ To see all available versions, use `client.versions()`.
 It is also possible to get on the latest QOP version by using `client.latest_version()`.
 
 !!! Note
-    The latest version will be the one with the highest version number, e.g. `v3_3_0` is higher than `v2_4_3`.
+    The latest version will be the one with the highest version number, e.g. `v3_8_1` is higher than `v2_6_0`.
     This implies that it will always give the latest OPX1000 version.
 
 e.g.
@@ -157,13 +157,13 @@ for version in client.versions():
 ```
 
 The `QOPVersion` object is then passed to the `simulator` method when creating an instance.
-e.g. `QOPVersion("v2_4_3")` will give an instance of an OPX+ simulator with QOP version `2.4.3` and `QOPVersion("v3_3_0")` will give an instance of an OPX1000 simulator with QOP version `3.3.0`.
+e.g. `QOPVersion("v2_6_0")` will give an instance of an OPX+ simulator with QOP version `2.6.0` and `QOPVersion("v3_8_1")` will give an instance of an OPX1000 simulator with QOP version `3.8.1`.
 
 ```python
 from qm_saas import QOPVersion
 from qm import QuantumMachinesManager
 
-with client.simulator(QOPVersion("v3_3_0")) as instance:
+with client.simulator(QOPVersion("v3_8_1")) as instance:
     # Use the instance object to simulate QUA programs
     qmm = QuantumMachinesManager(**instance.qmm_connection_params)
     # Continue as usual with opening a quantum machine and simulation of a qua program
@@ -205,7 +205,7 @@ controller = cluster_config.controller()
 controller.lf_fems(1, 2, 3, 4)
 controller.mw_fems(5, 6, 7, 8)
 
-with client.simulator(QOPVersion("v3_3_0"), cluster_config) as instance:
+with client.simulator(QOPVersion("v3_8_1"), cluster_config) as instance:
     # Use the instance object to simulate QUA programs on a config of 4 LF and 4 MW-FEMs
     qmm = QuantumMachinesManager(**instance.qmm_connection_params)
     # Continue as usual with opening a quantum machine and simulation of a qua program

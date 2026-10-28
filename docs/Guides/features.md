@@ -527,12 +527,9 @@ play('op', 'qe', condition=a > 0)
 
 It is important to note that unlike the `if_` statement, the play command will take the same amount of time to execute regardless of the condition. This implies that a false condition will be equivalent to a wait command.
 
-!!! important
-    In versions up to {{ requirement("QOP", "2.2.0") }}, any digital pulse associated with the operation will always play, regardless of the condition.
-
 #### Port Condition
 
-{{ requirement("QOP", "3.2") }}
+{{ requirement("QOP", "3") }} {{ requirement("MW") }}
 
 The MW-FEM allows for a faster conditional play mechanism. To use, open a context manager via `port_condition` and include all the relevant elements. 
 When sending several pulses to the same port (multiplexing), it is impossible to only block one of them. 
@@ -738,7 +735,6 @@ while some_cond:
     Input streams are not currently supported when using the [simulator](simulator.md). Using them in a simulated program will raise an error.
 
 ## Timestamp Stream
-{{ requirement("QOP", "2.2") }}
 It is possible to retrieve the precise timestamp of any {{f("qm.qua.play")}} and {{f("qm.qua.measure")}} 
 commands from the beginning of an executed program, 
 and use it for circuit analysis and verification. 
@@ -783,19 +779,16 @@ diff_timestamps = job.result_handles.get('diff_timestamps').fetch_all()
 When an element is defined as *sticky*, the last analog value played at the end of a pulse will be held until the next pulse begins. 
 This is useful, for example, for semiconductor qubits where one wants to avoid the noise associated with the switching of the bias voltage. 
 
-Starting from {{ requirement("QUA","1.1.3") }} an element can be defined as *sticky* by adding the `'sticky': {'analog': True }` dict to its configuration.
-The previous API, used up until {{ requirement("QUA","1.1.1") }} using `'hold_offset': 50` is still supported, and a deprecation warning will be issued. 
+An element can be defined as *sticky* by adding the `'sticky': {'analog': True }` dict to its configuration.
 Importantly, when an element is sticky, the values of the currently playing pulse will be **added** to the previously held value.
 A sticky element always ramps back to its DC offset value when the element has reached its final instruction of the program.
 The duration of the ramp in ns can be set by configuring `'sticky': {'analog': True, 'duration': 50 }`. 
 This ramp can also be explicitly initiated by the {{f("qm.qua.ramp_to_zero")}} function.
 
 !!! Note
-    With the previous API the ramp time was defined in clock cycles using `hold_offset` using the new API with {{ requirement("QUA","1.1.3") }}
-    the ramp time is defined in ns, consistently with any time duration in the configuration. Note that this is not a breaking change since the old API, 
-    i.e. using `hold_offset` to define the ramp duration in clock cycles is still supported.
+    The deprecated `'hold_offset'` key, which defined the ramp duration in clock cycles, is still supported but issues a deprecation warning. Use `'sticky'` instead.
 
-Starting from {{ requirement("QOP","2.2") }}, it is possible to set the digital marker, associated with the sticky element, to be sticky as well
+It is possible to set the digital marker, associated with the sticky element, to be sticky as well
 by configuring `sticky: {analog: True, digital: True }`. Doing so will hold the last value of the digital
 marker until the next pulse begins. Playing the next digital marker will override the held value, and once again the last
 value will be held. Once a ramp to zero has been initiated at the end of the sequence or upon command, 
@@ -1304,8 +1297,6 @@ Here we specify a 110 ns delay for all signals coming out of port 1 and a 21 del
 
 ## Inverted Digital Marker
 
-{{ requirement("QOP","2.2") }}
-
 The digital marker can be configured to be inverted, for example to suit both 'normally on' and 'normally off' switch types. 
 The HIGH state will be the default state when configuring
 `'inverted': True` for a digital output, and the marker will switch to the LOW state when a digital pulse is played.
@@ -1516,15 +1507,15 @@ These options can be activated by passing a list of flags to the execution, comp
 The following is a short list of optional flags and their description:
 
 - 'disable-filtered-ports-alignment' - Starting from version {{ requirement("QOP","2") }} on OPX+, this flag will disable the temporal alignment between analog ports that are filtered with a digital output filter and those that are not. This will reduce latency for unfiltered ports when using the filters. In addition, this flag will disable the automatic adjustment of the time-of-flight and digital delays parameters in the configuration. Read more about the latency in the [output filter guide](../Guides/output_filter.md).
-- 'disable-crosstalk-matrix-ports-alignment' - Starting from version {{ requirement("QOP","2.1") }} on OPX+, this flag will disable the temporal alignment between analog ports that participate in the Crosstalk Correction Matrix and those that are not. This will reduce latency for these ports when using the Crosstalk Correction Matrix. In addition, this flag will disable the automatic adjustment of the time-of-flight and digital delays parameters in the configuration. Read more about the latency in the [crosstalk correction matrix guide](#crosstalk-correction-matrix).
+- This flag will disable the temporal alignment between analog ports that participate in the Crosstalk Correction Matrix and those that are not. This will reduce latency for these ports when using the Crosstalk Correction Matrix. In addition, this flag disables automatic adjustment of the time-of-flight and digital delays parameters in the configuration. Read more about the latency in the [crosstalk correction matrix guide](#crosstalk-correction-matrix).
 - 'skip-loop-unrolling' -  Disables an optimization over loop iterations. This gives faster compilation time at the cost of more program memory use and possibly more gaps.
 - 'skip-loop-rolling' - Disables another optimization over loop iterations. This gives faster compilation time at the cost of more program memory use.
 - 'skip-amp-loop-optimization' - {{ requirement("QOP","3.6.2") }} Disables loop optimizations related to pulse amplitude calculations. While in most cases this optimization reduces gaps, it can create gaps between loop iterations when amplitude modulation is performed first; disabling the optimization can remove those gaps.
 - 'skip-add-implicit-align' - Removes the automatically added [implicit align](timing_in_qua.md#the-implicit-align) from all control flows.
 - 'not-strict-timing' - {{ requirement("QOP","2") }} Gaps within a {{f("qm.qua.strict_timing_")}} block will not block execution by raising warnings instead of errors. Read more about the strict timing feature [here](timing_in_qua.md#strict-timing).
-- 'enable-reset-all-phases-at-program-start' - {{ requirement("QOP","3.3") }} Adds a {{f("qm.qua.reset_global_phase")}} at the beginning of the program, which will reset the MW-FEM upconverters phase. Starting from {{ requirement("QOP","3.6") }}, this is the default behavior.
+- 'enable-reset-all-phases-at-program-start' - {{ requirement("QOP","3") }} Adds a {{f("qm.qua.reset_global_phase")}} at the beginning of the program, which will reset the MW-FEM upconverters phase. Starting from {{ requirement("QOP","3.6") }}, this is the default behavior.
 
-The way to use these compilation options depends on the `qm-qua` Python package version. Choose your version below to see how:
+Pass the flags through `CompilerOptionArguments`:
 
 ```python
 from qm import CompilerOptionArguments

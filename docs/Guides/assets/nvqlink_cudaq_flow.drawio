@@ -1,0 +1,123 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6">
+  <diagram id="nvqlink-cudaq-flow" name="NVQLink CUDA-Q Flow">
+    <mxGraphModel dx="1296" dy="1634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="760" background="#0d1117" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bg" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0d1117;strokeColor=none;locked=1;fontColor=light-dark(#ffffff, #59626e);" value="" vertex="1">
+          <mxGeometry height="760" width="1300" as="geometry" />
+        </mxCell>
+        <mxCell id="7NQ57h7G-VbJFy4gHTPP-1" edge="1" parent="1" source="role_calibrator" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;" target="bg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="role_calibrator" parent="1" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=1.5;fontSize=17;align=center;verticalAlign=middle;" value="&lt;b&gt;Calibrator&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;publishes the QUAM config&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;Python: quam, quam_config_generator&lt;/font&gt;" vertex="1">
+          <mxGeometry height="72" width="220" x="310" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="role_client" parent="1" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#1f6f8b;strokeColor=#7fd4f0;strokeWidth=1.5;fontColor=#ffffff;fontSize=17;align=center;verticalAlign=middle;" value="&lt;b&gt;Client&lt;/b&gt;&lt;br&gt;&lt;b&gt;&lt;font style=&quot;font-size:12px&quot;&gt;runs CUDA-Q programs&lt;/font&gt;&lt;br&gt;&lt;/b&gt;&lt;font style=&quot;font-size:11px&quot;&gt;cudaq (Python) · nvq++ (C++)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="82" width="220" x="550" as="geometry" />
+        </mxCell>
+        <mxCell id="7NQ57h7G-VbJFy4gHTPP-2" edge="1" parent="1" source="hlsw_boundary" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="role_client" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="hlsw_boundary" parent="1" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#5b6472;strokeWidth=4;fontColor=light-dark(#ffffff, #59626e);fontSize=14;verticalAlign=top;align=center;spacingTop=-24;" value="&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;QM BE Host&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="220" width="480" x="310" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="7NQ57h7G-VbJFy4gHTPP-8" edge="1" parent="1" source="cudaq_frontend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="config_server" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cudaq_frontend" parent="1" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#134e6f;strokeColor=#4f9cff;strokeWidth=1.5;fontColor=#ffffff;fontSize=16;align=center;verticalAlign=middle;" value="&lt;b&gt;cudaq-frontend&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;accepts CUDA-Q programs&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="240" x="540" y="175" as="geometry" />
+        </mxCell>
+        <mxCell id="7NQ57h7G-VbJFy4gHTPP-9" edge="1" parent="1" source="config_server" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="cudaq_frontend" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="config_server" parent="1" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=1.5;fontSize=16;align=center;verticalAlign=middle;" value="&lt;b&gt;config-server&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;stores the QUAM config&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="350" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="ir_gateway" parent="1" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#134e6f;strokeColor=#4f9cff;strokeWidth=1.5;fontColor=#ffffff;fontSize=16;align=center;verticalAlign=middle;" value="&lt;b&gt;ir-transpiler&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;transpiles gates → pulses&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="420" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="qop_device" parent="1" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#2b5e30;strokeColor=#7fce85;strokeWidth=1.5;fontColor=#ffffff;fontSize=15;align=center;verticalAlign=middle;" value="&lt;b&gt;OPX1000 Controller&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="430" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="qpu" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#7fce85;strokeWidth=5;fontColor=#d9f2db;fontSize=17;align=center;verticalAlign=middle;fontStyle=1" value="QPU" vertex="1">
+          <mxGeometry height="70" width="240" x="420" y="557" as="geometry" />
+        </mxCell>
+        <mxCell id="accel_boundary" parent="1" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#7a5a9e;strokeWidth=1.5;fontColor=light-dark(#ffffff, #59626e);fontSize=14;verticalAlign=top;align=center;spacingTop=-24;fontStyle=1" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Accelerator Server&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="330" x="777" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="opnic" parent="1" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#4a2f6b;strokeColor=#b892e0;strokeWidth=1.5;fontColor=#ffffff;fontSize=15;align=center;verticalAlign=middle;" value="&lt;b&gt;OPNIC&lt;/b&gt;" vertex="1">
+          <mxGeometry height="55" width="140" x="787" y="462.5" as="geometry" />
+        </mxCell>
+        <mxCell id="gpu_cpu" parent="1" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#4a2f6b;strokeColor=#b892e0;strokeWidth=1.5;fontColor=#ffffff;fontSize=15;align=center;verticalAlign=middle;" value="&lt;b&gt;GPU &amp;#8202;/&amp;#8202; CPU&lt;/b&gt;" vertex="1">
+          <mxGeometry height="55" width="160" x="937" y="462.5" as="geometry" />
+        </mxCell>
+        <mxCell id="accel_services" parent="1" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#b892e0;strokeWidth=1.2;fontColor=#e2d3f2;fontSize=12;align=center;verticalAlign=middle;" value="OPNIC bridge (cudaq-realtime)" vertex="1">
+          <mxGeometry height="65" width="140" x="787" y="525" as="geometry" />
+        </mxCell>
+        <mxCell id="e_publish" edge="1" parent="1" source="role_calibrator" style="edgeStyle=none;rounded=0;html=1;strokeColor=#4f9cff;strokeWidth=1.8;endArrow=block;endFill=1;labelBackgroundColor=none;fontColor=#e8b878;fontSize=12;" target="config_server" value="publish config">
+          <mxGeometry relative="1" x="0.3103" y="-40" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_submit" edge="1" parent="1" source="role_client" style="edgeStyle=none;rounded=0;html=1;strokeColor=#4f9cff;strokeWidth=1.8;endArrow=block;endFill=1;labelBackgroundColor=none;fontColor=#e8b878;fontSize=12;startArrow=block;startFill=1;" target="cudaq_frontend" value="submit job /&amp;nbsp;&lt;div&gt;get results&lt;/div&gt;">
+          <mxGeometry relative="1" x="-0.2329" y="40" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_qubit_alloc" edge="1" parent="1" source="config_server" style="edgeStyle=none;rounded=0;html=1;strokeColor=#d79b00;strokeWidth=1.6;endArrow=block;endFill=1;labelBackgroundColor=none;fontColor=#e8b878;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#ffe6cc;" target="cudaq_frontend" value="qubit&lt;div&gt;data&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_transpile" edge="1" parent="1" source="cudaq_frontend" style="edgeStyle=none;rounded=0;html=1;strokeColor=#4f9cff;strokeWidth=2;endArrow=none;endFill=0;labelBackgroundColor=none;fontColor=#e8b878;fontSize=12;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="ir_gateway" value="">
+          <mxGeometry relative="1" x="-0.0023" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="600" y="270" />
+              <mxPoint x="585" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_config_gates" edge="1" parent="1" source="config_server" style="edgeStyle=none;rounded=0;html=1;strokeColor=#d6b656;strokeWidth=1.6;startArrow=none;startFill=0;endArrow=block;endFill=1;labelBackgroundColor=none;fontColor=#e8b878;fontSize=11;entryX=0.25;entryY=0;entryDx=0;entryDy=0;fillColor=#fff2cc;" target="ir_gateway" value="config &amp; gates">
+          <mxGeometry relative="1" x="-0.619" y="-40" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="420" y="270" />
+              <mxPoint x="475" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_run_job" edge="1" parent="1" source="cudaq_frontend" style="edgeStyle=none;rounded=0;html=1;strokeColor=#4f9cff;strokeWidth=2;endArrow=block;endFill=1;labelBackgroundColor=none;fontColor=#e8b878;fontSize=13;exitX=0.75;exitY=1;exitDx=0;exitDy=0;startArrow=block;startFill=1;" target="qop_device" value="run job /&amp;nbsp;&lt;div&gt;send results&lt;/div&gt;">
+          <mxGeometry relative="1" x="0.2911" y="20" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="720" y="390" />
+              <mxPoint x="540" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_opx_qpu" edge="1" parent="1" source="qop_device" style="edgeStyle=none;rounded=0;html=1;strokeColor=#7fce85;strokeWidth=1.8;endArrow=block;endFill=1;labelBackgroundColor=none;" target="qpu" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_opnic_link" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;strokeColor=#7fce85;strokeWidth=1.8;startArrow=block;startFill=1;endArrow=block;endFill=1;labelBackgroundColor=none;fontColor=#9fe0a5;fontSize=11;" value="μs-latency comm.">
+          <mxGeometry relative="1" x="0.0219" y="20" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="650.0000000000002" y="492" as="sourcePoint" />
+            <mxPoint x="787" y="492" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7NQ57h7G-VbJFy4gHTPP-6" parent="1" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#b892e0;strokeWidth=1.2;fontColor=#e2d3f2;fontSize=12;align=center;verticalAlign=middle;" value="Device Calls:&amp;nbsp;&lt;div&gt;CUDA  /  C++&lt;/div&gt;" vertex="1">
+          <mxGeometry height="65" width="160" x="937" y="525" as="geometry" />
+        </mxCell>
+        <mxCell id="7NQ57h7G-VbJFy4gHTPP-11" parent="1" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="" vertex="1">
+          <mxGeometry height="30" width="20" x="312" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="7NQ57h7G-VbJFy4gHTPP-12" parent="1" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="" vertex="1">
+          <mxGeometry height="30" width="20" x="555" y="6" as="geometry" />
+        </mxCell>
+        <mxCell id="7NQ57h7G-VbJFy4gHTPP-13" parent="1" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="" vertex="1">
+          <mxGeometry height="30" width="20" x="943" y="529" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -12,7 +12,7 @@ The simulator returns the samples that will be played to the analog and digital 
     
     {{ requirement("QOP", "3.0") }}
 
-    Simulation of MW signals from a MW-FEM returns a complex signal of the I and Q quadratures, before the upconversion to GHz freuqency.
+    Simulation of MW signals from a MW-FEM returns a complex signal of the I and Q quadratures, before the upconversion to GHz frequency.
 
 
 ## Usage
@@ -26,10 +26,19 @@ This function should receive the configuration and program that are desired for 
 
 For examples, to simulate a program for 10 us (2500 cycles), we would use:
 
-```python
-simulated_job = qmm.simulate(config, prog, SimulationConfig(duration=2500))
-simulated_job.wait_until("Done")
-```
+=== "OPX1000 (QOP 3.x)"
+
+    ```python
+    simulated_job = qmm.simulate(config, prog, SimulationConfig(duration=2500))
+    simulated_job.wait_until("Done")
+    ```
+
+=== "OPX+ (QOP 2.x)"
+
+    ```python
+    simulated_job = qmm.simulate(config, prog, SimulationConfig(duration=2500))
+    simulated_job.result_handles.wait_for_all_values()
+    ```
 
 To obtain the simulated samples use the {{f("qm.jobs.simulated_job.SimulatedJob.get_simulated_samples")}} function of the simulated job object.
 
@@ -47,7 +56,7 @@ To obtain the simulated samples use the {{f("qm.jobs.simulated_job.SimulatedJob.
 !!! Note
     Starting from {{ requirement("QOP", "3.7") }}, the simulate command is fully non-blocking. Simulation involves two stages: the actual simulation (typically a few seconds, longer for complex programs) and data processing (typically a few milliseconds). The command returns immediately after the simulation starts, before either stage completes.
 
-    Always add `simulated_job.wait_until("Done")` before fetching any data or samples from the job object.
+    Always wait for the job before fetching any data or samples from the job object: use `simulated_job.wait_until("Done")` on QOP 3.x (OPX1000), or `simulated_job.result_handles.wait_for_all_values()` on QOP 2.x (OPX+), where `wait_until` is not available. See the [Job API (QOP 2.x)](../API_references/qm_job_api.md) and the [OPX1000 API](../API_references/qm_opx1000_api.md).
 
 ### Simulation Interfaces
 
@@ -112,9 +121,6 @@ See the complete [simulator API page](../API_references/simulator_api.md) in the
 
 ## Waveform Report
 
-!!! Note 
-    {{ requirement("QOP","2.2") }}
-
 Executing quantum circuits at the pulse level and with real-time processing is a challenging task.
 The Waveform Report is a feature that helps users to design, execute, and test their desired quantum circuits.
 The OPX Simulator, simulating all analog and digital outputs, is the software equivalent of connecting the OPX to an oscilloscope, 
@@ -132,7 +138,7 @@ To use the waveform report you first need to generate it from a simulated job:
 job = qmm.simulate(config, prog, SimulationConfig(
         duration=duration,                    # duration of simulation in units of 4 ns
 ))
-job.wait_until("Done")
+job.wait_until("Done")  # QOP 3.x. On OPX+ (QOP 2.x), use job.result_handles.wait_for_all_values()
 
 # get DAC and digital samples (optional).
 samples = job.get_simulated_samples()

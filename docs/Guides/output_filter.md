@@ -120,7 +120,7 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
 
 === "OPX1000"
 
-    {{ requirement("QOP", "3.3") }} {{ requirement("LF") }}
+    {{ requirement("LF") }}
     
     The OPX1000 LF-FEM output filter consists of one FIR filter with 48 taps, and 6 IIR filters, each with a single feedback tap.
     The IIR filters can cover exponential decays and high-pass compensation filters with time constants ranging from 1 ns to 1 second.
@@ -132,114 +132,59 @@ $$s(t) = \left(e^{-\frac{t}{\tau_{hp}}} + A_2e^{-\frac{t}{\tau_2}} + A_3e^{-\fra
 
     The filter for every LF-FEM output channel can be configured in the OPX configuration file under `filter` in the LF-FEM `analog_outputs` field.
 
-    === "QOP 3.5 and later"
+    {{ requirement("QOP", "3.5") }}
 
-        {{ requirement("QOP", "3.5") }}
-
-        * To configure the FIR filter, set the taps directly in the `feedforward` field. Feedforward taps are limited to the range (-2,2).
-        * To configure the IIR filters, set the filter parameters in the `exponential` and `exponential_dc_gain` fields.
-            * The `exponential` field accepts a list of tuples of the form `[(A1, tau1), ...]`, where `A` is the amplitude and `tau` is the time constant (see [above](#general-form-for-multiple-exponential-filters)).
-                * There are no strict hard limits for the values of the parameters, but for achieving good performance with a single exponent it is recommended to keep `-0.8<A<4`. 
-                * Exponents with `tau`s that are close in value "affect" each other, so this slightly changes the limits of the `A`s in multi-exponent cases.
-                * There are combinations of (A, tau) that cannot be supported and will give an error, but this is not expected in realistic scenarios.
-            * The `exponential_dc_gain` field accepts a single value `A_dc`, and its default value is `1`.
-            * The `high_pass` field can also be used, but only when the `exponential_dc_gain` is not set. 
-                * It accepts a single value `tau_hp`, the time constant of the high-pass filter.
-                * Using it is equivalent to setting `exponential_dc_gain` to $0$ and adding to the exponential list the value ($1$, $\tau_{hp}$). 
-        ```python
-        'controllers': {
-            'con1': {
-                'type':'opx1000',
-                'fems': {
-                    1 :{
-                        'type': 'LF',
-                        'analog_outputs': {
-                            1: {
-                                ...,
-                                'filter': {
-                                    'feedforward': [0.8, 0.3],
-                                    'exponential': [(A1, tau1), (A2, tau2), ...],
-                                    'exponential_dc_gain': A_dc
-                                    },
+    * To configure the FIR filter, set the taps directly in the `feedforward` field. Feedforward taps are limited to the range (-2,2).
+    * To configure the IIR filters, set the filter parameters in the `exponential` and `exponential_dc_gain` fields.
+        * The `exponential` field accepts a list of tuples of the form `[(A1, tau1), ...]`, where `A` is the amplitude and `tau` is the time constant (see [above](#general-form-for-multiple-exponential-filters)).
+            * There are no strict hard limits for the values of the parameters, but for achieving good performance with a single exponent it is recommended to keep `-0.8<A<4`. 
+            * Exponents with `tau`s that are close in value "affect" each other, so this slightly changes the limits of the `A`s in multi-exponent cases.
+            * There are combinations of (A, tau) that cannot be supported and will give an error, but this is not expected in realistic scenarios.
+        * The `exponential_dc_gain` field accepts a single value `A_dc`, and its default value is `1`.
+        * The `high_pass` field can also be used, but only when the `exponential_dc_gain` is not set. 
+            * It accepts a single value `tau_hp`, the time constant of the high-pass filter.
+            * Using it is equivalent to setting `exponential_dc_gain` to $0$ and adding to the exponential list the value ($1$, $\tau_{hp}$). 
+    ```python
+    'controllers': {
+        'con1': {
+            'type':'opx1000',
+            'fems': {
+                1 :{
+                    'type': 'LF',
+                    'analog_outputs': {
+                        1: {
+                            ...,
+                            'filter': {
+                                'feedforward': [0.8, 0.3],
+                                'exponential': [(A1, tau1), (A2, tau2), ...],
+                                'exponential_dc_gain': A_dc
                                 },
                             },
                         },
                     },
                 },
             },
-        }
-        ```
+        },
+    }
+    ```
 
-        To disable a filter, we simply omit it from the configuration or set it to an empty list/None in the following way:
+    To disable a filter, we simply omit it from the configuration or set it to an empty list/None in the following way:
 
-        ```python
-        'controllers': {
-            'con1': {
-                'type':'opx1000',
-                'fems': {
-                    1 :{
-                        'type': 'LF',
-                        'analog_outputs': {
-                            1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[], 'exponential_dc_gain':None}},
-                        },
+    ```python
+    'controllers': {
+        'con1': {
+            'type':'opx1000',
+            'fems': {
+                1 :{
+                    'type': 'LF',
+                    'analog_outputs': {
+                        1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[], 'exponential_dc_gain':None}},
                     },
                 },
             },
-        }
-        ```
-        
-    === "QOP 3.4 and earlier"
-
-        The filters are cascaded sequentially, such that the output of one filter is the input of the next one.
-        !!! Note
-
-            The cascaded implementation of the exponential filters means that the actual coefficients of the filters is convolved.
-
-        * To configure the FIR filter, set the taps directly in the `feedforward` field. Feedforward taps are limited to the range (-2,2).
-        * To configure the IIR filters, set the filter parameters in the `exponential` and `high-pass` fields.
-            * The `exponential` field accepts a list of tuples of the form `[(A1, tau1), ...]`, where `A` is the amplitude and `tau` is the time constant (see [above](#general-form-for-multiple-exponential-filters)).
-            * The `high_pass` field accepts a single value `tau_hp`, the time constant of the high-pass filter. Note that a decay of 0.5 seconds is automatically added to the high-pass filter.
-    
-        ```python
-        'controllers': {
-            'con1': {
-                'type':'opx1000',
-                'fems': {
-                    1 :{
-                        'type': 'LF',
-                        'analog_outputs': {
-                            1: {
-                                ...,
-                                'filter': {
-                                    'feedforward': [0.8, 0.3],
-                                    'exponential': [(A1, tau1), (A2, tau2), ...],
-                                    'high_pass': tau_hp
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        }
-        ```
-    
-        To disable a filter, we simply omit it from the configuration or set it to an empty list/None in the following way:
-        
-        ```python
-        'controllers': {
-            'con1': {
-                'type':'opx1000',
-                'fems': {
-                    1 :{
-                        'type': 'LF',
-                        'analog_outputs': {
-                            1: {'offset': 0, "filter": {'feedforward': [], 'exponential':[], 'high_pass':None}},
-                        },
-                    },
-                },
-            },
-        }
-        ```
+        },
+    }
+    ```
         
     !!! Note
         
@@ -374,21 +319,9 @@ When using the [compilation flag](features.md#compilation-options) `disable-filt
 
     The delay values below apply to LF-FEM analog outputs only. MW-FEM analog outputs are unaffected.
 
-    === "QOP 3.5 and later"
-
-        - FIR Filter: The delay is 8 cycles (32 ns).
-        - IIR Filters: The delay is 17 cycles (68 ns), regardless of the number of IIR filters used.
-        - FIR + IIR Filters: The delay is 25 cycles (100 ns).
-
-    === "QOP 3.4 and earlier"
-
-        - FIR Filter: The delay is 8 cycles (32 ns).
-        - IIR + FIR Filters: Using any number of IIR filters will add 21 cycles (84 ns) to the delay. Note that this includes the FIR filters, as it is not possible to use the IIR without using the FIR.
-                             In addition, there will be an additional delay according to the number of IIR filters used:
-            - The latency of the short filter is 9 cycles (36 ns) - It is used if the shortest $\tau$ is below 300 ns.
-            - The latency of the long filters is 10, 20, 30, 35, 40 cycles (40, 80, 120, 140, 160 ns) when using 1, 2, 3, 4, 5 filters respectively.
-        
-        e.g. Using all filters (FIR + 6 IIR) will add a total of 70 cycles (280 ns) to the delay. 
+    - FIR Filter: The delay is 8 cycles (32 ns).
+    - IIR Filters: The delay is 17 cycles (68 ns), regardless of the number of IIR filters used.
+    - FIR + IIR Filters: The delay is 25 cycles (100 ns).
 
 === "OPX+"
     

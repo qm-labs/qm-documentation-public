@@ -9,11 +9,10 @@ A QUA program defines not only the pulses that are played, but also specifies wh
 
 ## Minimum Pulse and Wait Durations
 
-The minimum duration accepted by {{f("qm.qua.play")}} and {{f("qm.qua.wait")}} depends on the QOP version in use.
+The minimum duration accepted by {{f("qm.qua.play")}} and {{f("qm.qua.wait")}} depends on the platform.
 
-{{ requirement("QOP", "3.3") }} The minimum pulse and wait duration is 4 ns if set in the configuration, or 8 ns if set from QUA.
-
-Prior to QOP 3.3, the minimum pulse and wait duration was 16 ns (4 clock cycles), both from the configuration and from QUA.
+- OPX1000: the minimum pulse and wait duration is 4 ns if set in the configuration, or 8 ns if set from QUA.
+- OPX+: the minimum pulse and wait duration is 16 ns (4 clock cycles), both from the configuration and from QUA.
 
 ## Pulse Dependency
 

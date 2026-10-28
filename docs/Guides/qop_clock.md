@@ -20,7 +20,7 @@ When we want to synchronize two or more OPX modules to one clock or use a clock 
 
 === "OPX+"
 
-    Starting with QOP 2.4, there are three allowed clock schemes for the QOP. In all of them choosing between internal and external clock is done exclusively via the QM-APP:
+    There are three allowed clock schemes for the QOP. In all of them choosing between internal and external clock is done exclusively via the QM-APP:
     
     1. Setting cluster clock when an OPT is present
     
@@ -83,8 +83,6 @@ When we want to synchronize two or more OPX modules to one clock or use a clock 
 
 === "OPX+"
 
-    {{ requirement("QOP", "2.0") }}
-    
     !!! Note
         This is for a single OPX+, for multiple OPX+es, please see the OPT tab on how to connect your external clock.
     
@@ -94,8 +92,6 @@ When we want to synchronize two or more OPX modules to one clock or use a clock 
 
 === "OPX+ & Octave"
 
-    {{ requirement("QOP", "2.0") }}
-    
     !!! Note
         This is for a single OPX+ with an Octave and without an OPT.
     
@@ -152,9 +148,6 @@ When we want to synchronize two or more OPX modules to one clock or use a clock 
     | 10 MHz    | -5 dBm | 4 dBm           | 6 dBm |
     | 100 MHz   | -5 dBm | 4 dBm           | 6 dBm |
     | 1 GHz     | -3 dBm | 0 dBm           | 6 dBm |
-
-    !!! Note "Octave's External Clock in QOP 2.2.2 and below"
-        For the Octave's external clock in QOP 2.2.2 and below please see the [Octave guide](octave.md#setting-the-octaves-clock)
 
 === "OPT"
 
@@ -218,8 +211,6 @@ When we want to synchronize two or more OPX modules to one clock or use a clock 
             Changing the clock frequency will result in a system reboot.
 
 === "OPX+"
-
-    {{ requirement("QOP", "2.0") }}
 
     === "QOPA 2.x"
 

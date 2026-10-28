@@ -13,10 +13,6 @@ Idle values are the hardware state the QM enforces on output channels **between 
 
 === "OPX1000"
 
-    !!! note "QOP 3.4 or earlier"
-        The idle-value lifecycle described in this tab applies to the **OPX1000 with {{ requirement("QOP","3.5") }} or later**.
-        For earlier QOP versions, refer to the **OPX+** tab.
-
     ### Lifecycle
 
     | Event | Hardware output | Idle value |
@@ -70,9 +66,6 @@ Idle values are the hardware state the QM enforces on output channels **between 
 
 === "OPX+"
 
-    !!! note "QOP 3.4 or earlier"
-        Before QOP 3.5, OPX1000 behaved in the same way as the OPX+.
-    
     On the OPX+ the offset field in the config is used to initialise the DC offset when the QM is opened,
     but the **persistence model is different from the OPX1000**:
 

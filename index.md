@@ -95,7 +95,7 @@ Use this page to navigate the main documentation areas and the most common start
     - Green shields indicate the required minimal version of QUA.
     - Orange shields indicate required hardware add-ons, such as Octave.
 
-    For example, a feature that only works on an OPX+ with QOP version >2.0, with the Octave add-on, and requires QUA version >0.3.3 will have these shields:
-    {{ requirement("OPX+", "2.0.0") }}
-    {{ requirement("QUA", "0.3.3") }}
+    For example, a feature that only works on an OPX+ with QOP version 2.4.0 or later, with the Octave add-on, and requires QUA version 1.2.1 or later will have these shields:
+    {{ requirement("OPX+", "2.4.0") }}
+    {{ requirement("QUA", "1.2.1") }}
     {{ requirement("Octave") }}

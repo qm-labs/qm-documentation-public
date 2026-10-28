@@ -330,7 +330,7 @@ OPNIC host server minimal configuration:
 
 === "Ubuntu 24.04 **ARM64**"
     ??? "1. Linux installation"
-        - Download and install Ubuntu 24.04 ARM64 Server from: [link](https://cdimage.ubuntu.com/releases/24.04.4/release/)
+        - Download and install Ubuntu 24.04 ARM64 Server from: [link](https://cdimage.ubuntu.com/ubuntu/releases/24.04/release/)
         - Create a bootable USB drive (disk‑on‑key) and install the OS using a preferred USB imaging tool (e.g., Rufus or Ventoy).
 
     ??? "2. Install GCC13"

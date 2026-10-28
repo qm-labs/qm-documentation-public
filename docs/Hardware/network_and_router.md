@@ -24,9 +24,6 @@ Option A applies to any system. Options B, C and D require a QM router, and are 
 ## Accessing the Cluster
 
 === "Option A"
-    
-    !!! Warning
-        This option is only officially supported from {{ requirement("QOP", "2.2") }}
 
     In this scenario, no QM router is used, and all QM devices are connected directly to your own network (typically a router).
     This is the configuration for OPX1000 systems that were shipped without a QM router, and it requires one Ethernet port per chassis.  
@@ -42,17 +39,15 @@ Option A applies to any system. Options B, C and D require a QM router, and are 
    
     Accessing the Admin Panel and connecting to the cluster using Python can be done in the following way:  
 
-    ===  "QOP >= 2.2.x"  
+    To access the Admin Panel, type any device's IP in a web browser to access all clusters using the same QOP version.
+    To find the IP of the devices, check the DHCP leases on your network, or reach a device over its [link-local address or Recovery IP](#recovering-access-via-a-link-local-address).
     
-        To access the Admin Panel, type any device's IP in a web browser to access all clusters using the same QOP version.
-        To find the IP of the devices, check the DHCP leases on your network, or reach a device over its [link-local address or Recovery IP](#recovering-access-via-a-link-local-address).
-        
-        To open a communication with the cluster in Python, use the following:
+    To open a communication with the cluster in Python, use the following:
 
-        ``` python
-        qmm = QuantumMachinesManager(host='MAIN_OPX_IP') # Connect to a cluster by using the cluster's main OPX IP address
-        qmm = QuantumMachinesManager(host='ANY_QM_OPX_IP', cluster_name='My_cluster_name') # Alternatively, you can type the IP of any OPX, and use the `cluster_name` argument
-        ```
+    ``` python
+    qmm = QuantumMachinesManager(host='MAIN_OPX_IP') # Connect to a cluster by using the cluster's main OPX IP address
+    qmm = QuantumMachinesManager(host='ANY_QM_OPX_IP', cluster_name='My_cluster_name') # Alternatively, you can type the IP of any OPX, and use the `cluster_name` argument
+    ```
 
 
 === "Option B"
@@ -70,28 +65,15 @@ Option A applies to any system. Options B, C and D require a QM router, and are 
 
     Accessing the Admin Panel and connecting to the cluster using Python can be done in the following way:  
 
-    === "QOP >= 2.2.x"
+    There is one Admin Panel for all devices and clusters that is accessible by typing the IP address of the QM router in a web browser. 
+    If you are unsure what is the QM router's IP address is, see [here](#configuring-the-qm-router).
+    Moreover, all clusters behind the router must have the same version for the Admin Panel to control them.
     
-        There is one Admin Panel for all devices and clusters that is accessible by typing the IP address of the QM router in a web browser. 
-        If you are unsure what is the QM router's IP address is, see [here](#configuring-the-qm-router).
-        Moreover, all clusters behind the router must have the same version for the Admin Panel to control them.
-        
-        To open a communication with the cluster in Python, use the following with the name of the cluster, as defined in the Admin Panel.
+    To open a communication with the cluster in Python, use the following with the name of the cluster, as defined in the Admin Panel.
 
-        ``` python
-        qmm = QuantumMachinesManager(host='QM_Router_IP', cluster_name='My_cluster_name')
-        ```
-
-    === "QOP <= 2.1.x:"
-    
-        There is one cluster per router, and the Admin Panel is available by typing in the IP address of the QM router in a web browser.
-        If you are unsure what is the QM router's IP address is, see [here](#configuring-the-qm-router).
-        
-        To open a communication with the cluster in Python, use the following:
-
-        ``` python
-        qmm = QuantumMachinesManager(host='QM_Router_IP')  
-        ```
+    ``` python
+    qmm = QuantumMachinesManager(host='QM_Router_IP', cluster_name='My_cluster_name')
+    ```
 
 
 === "Option C"
@@ -107,28 +89,15 @@ Option A applies to any system. Options B, C and D require a QM router, and are 
 
     Accessing the Admin Panel and connecting to the cluster using Python can be done in the following way:  
 
-    === "QOP >= 2.2.x"
+    There is one Admin Panel for all devices and clusters that is accessible by typing the IP address of the QM router in a web browser. 
+    If you are unsure what is the QM router's IP address is, see [here](#configuring-the-qm-router).
+    Moreover, all clusters behind the router must have the same version for the Admin Panel to control them.
     
-        There is one Admin Panel for all devices and clusters that is accessible by typing the IP address of the QM router in a web browser. 
-        If you are unsure what is the QM router's IP address is, see [here](#configuring-the-qm-router).
-        Moreover, all clusters behind the router must have the same version for the Admin Panel to control them.
-        
-        To open a communication with the cluster in Python, use the following with the name of the cluster, as defined in the Admin Panel.
+    To open a communication with the cluster in Python, use the following with the name of the cluster, as defined in the Admin Panel.
 
-        ``` python
-        qmm = QuantumMachinesManager(host='QM_Router_IP', cluster_name='My_cluster_name')
-        ```
-
-    === "QOP <= 2.1.x:"
-    
-        There is one cluster per router, and the Admin Panel is available by typing in the IP address of the QM router in a web browser. 
-        If you are unsure what is the QM router's IP address is, see [here](#configuring-the-qm-router).
-        
-        To open a communication with the cluster in Python, use the following:
-
-        ``` python
-        qmm = QuantumMachinesManager(host='QM_Router_IP')  
-        ```
+    ``` python
+    qmm = QuantumMachinesManager(host='QM_Router_IP', cluster_name='My_cluster_name')
+    ```
 
 
 === "Option D"
@@ -149,26 +118,15 @@ Option A applies to any system. Options B, C and D require a QM router, and are 
 
     Accessing the Admin Panel and connecting to the cluster using Python can be done in the following way:  
 
-    ===  "QOP >= 2.2.x"  
+    To access the Admin Panel, type any device's IP in a web browser to access all clusters using the same QOP version.
+    To find the IP of the devices connected, follow the steps [below](#configuring-the-qm-router)
     
-        To access the Admin Panel, type any device's IP in a web browser to access all clusters using the same QOP version.
-        To find the IP of the devices connected, follow the steps [below](#configuring-the-qm-router)
-        
-        To open a communication with the cluster in Python, use the following:
+    To open a communication with the cluster in Python, use the following:
 
-        ``` python
-        qmm = QuantumMachinesManager(host='MAIN_QM_OPX_IP') # If you have multiple clusters in the network, use the main OPX of each cluster 
-        qmm = QuantumMachinesManager(host='ANY_QM_OPX_IP', cluster_name='My_cluster_name')
-        ```
-    ===  "QOP <= 2.1.x:"
-
-        To access the Admin Panel, type the IP of the main OPX of the cluster in a web browser.
-
-        To open a communication with the cluster in Python, use the following:
-
-        ``` python
-        qmm = QuantumMachinesManager(host='Main_OPX_IP')
-        ```
+    ``` python
+    qmm = QuantumMachinesManager(host='MAIN_QM_OPX_IP') # If you have multiple clusters in the network, use the main OPX of each cluster 
+    qmm = QuantumMachinesManager(host='ANY_QM_OPX_IP', cluster_name='My_cluster_name')
+    ```
 
 
 ## Recovering Access via a Link-Local Address
@@ -239,38 +197,19 @@ It does not apply to a router provided by the customer, which must be configured
 
     If static IP is needed for your system, follow these steps:
 
-    === "QOP >= 2.2.x"
+    1. Connect a computer to the router (to any port 2-10).
+    2. Connect to the router web interface by typing in the browser `http://192.168.88.1:81`
+    3. Click cancel in the change password dialog.
+    4. Click **"Quick Set"** at the top banner.
+    5. Set up the Static IP:
 
-        1. Connect a computer to the router (to any port 2-10).
-        2. Connect to the router web interface by typing in the browser `http://192.168.88.1:81`
-        3. Click cancel in the change password dialog.
-        4. Click **"Quick Set"** at the top banner.
-        5. Set up the Static IP:
-   
-        ![staticIP](assets/staticIP.png)
-   
-        6. Click **"apply configuration"** to save changes.
-        7. Disconnect the computer from the router.
-   
-        !!! Note
-            The router's IP and MAC addresses can also be seen on this page.
+    ![staticIP](assets/staticIP.png)
 
-    === "QOP <= 2.1.x"
+    6. Click **"apply configuration"** to save changes.
+    7. Disconnect the computer from the router.
 
-        1. Connect a computer to the router (to any port 2-10).
-        2. Connect to the router web interface by typing in the browser `http://192.168.88.1`
-        3. Click cancel in the change password dialog.
-        4. Click **"Quick Set"** at the top banner.
-        5. Set up the Static IP:
-   
-        ![staticIP](assets/staticIP.png)
-   
-        6. Click **"apply configuration"** to save changes.
-        7. Disconnect the computer from the router.
-   
-        !!! Note
-            The router's IP and MAC addresses can also be seen on this page.
-
+    !!! Note
+        The router's IP and MAC addresses can also be seen on this page.
 
 ??? Information "View the router's IP and MAC addresses"
 

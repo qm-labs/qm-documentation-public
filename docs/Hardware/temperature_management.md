@@ -24,10 +24,10 @@ Choose the relevant hardware tab below.
 
     The OPX+ monitors several internal temperatures and provides warning messages before thermal protection thresholds are reached.
 
-    | Component | Working limit | Prevention threshold in QOP 2.2.2 | Prevention threshold in QOP 2.4.0 and later |
-    |-----------|---------------|-----------------------------------|---------------------------------------------|
-    | FPGA | 100 C | 80 C | 95 C |
-    | CPU | 105 C | 70 C | 100 C |
+    | Component | Working limit | Prevention threshold |
+    |-----------|---------------|----------------------|
+    | FPGA | 100 C | 95 C |
+    | CPU | 105 C | 100 C |
 
     If a component reaches a critical temperature, the device shuts itself down, the cluster becomes inactive, and a warning is shown in both Python and the QM app.
 

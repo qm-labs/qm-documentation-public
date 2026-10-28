@@ -2,8 +2,6 @@
 
 Here you can find release notes and version files for the latest version of {{ requirement("OPX1000",3) }}
 
-!!! Note
-    Attempting to use qm-qua <1.2.2a3 with QOP 3.3.0 or higher will result in the inability to fetch results from the OPX1000.
 
 ## QOP 3.8.x
 

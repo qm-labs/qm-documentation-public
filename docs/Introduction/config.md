@@ -18,7 +18,7 @@ In the following tutorial, we describe the configuration components and the prin
 
 === "OPX1000"
 
-    {{ requirement("QOP", "3.5") }} For previous versions, please see the OPX+ version.
+    {{ requirement("QOP", "3.5") }}
     
     The configuration is a crucial piece of the QOP which enables writing advanced QUA protocols simply and intuitively,
     using 'human language.'

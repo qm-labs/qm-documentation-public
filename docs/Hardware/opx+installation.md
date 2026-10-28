@@ -183,12 +183,10 @@ The multi OPX+ system has four required connectivity groups. Clock & sync, Inter
 
 ??? Information "Configuring the Device's IP"
     
-    {{ requirement("QOP", "2.2") }} 
     It is possible to change the IP of the devices. If it is needed, please contact QM for assistance.
 
 ??? Information "Cluster Devices"
 
-    {{ requirement("QOP", "2.2") }}
     Follow the steps in [this video](https://www.youtube.com/watch?v=ZVuvnJkSbDA)
 
 ### Configuring the QM router

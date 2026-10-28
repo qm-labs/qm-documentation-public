@@ -88,19 +88,41 @@ The Admin Panel can be accessed by navigating to the OPX1000's IP address in you
 
 ### OPX1000 power requirements
 
+#### Power consumption
+
+The chassis draws approximately 400W, and each FEM adds approximately 100-150W.
+A fully populated chassis draws up to 1.6kW.
+All consumed power is dissipated as heat, so the same figures apply when planning cooling.
+
+The actual draw depends on the number of installed FEMs, the running program (mostly the outputs' duty cycle), and the output settings (for example, amplified vs. direct mode and how many output filters are used).
+There is no high-power phase during boot.
+
+When multiple PSUs are installed, the load is shared approximately equally between them (within ~10%).
+
+#### PSU current rating
+
+The per-PSU current ratings below (13A at 100-127VAC, 10A at 200-240VAC) are the maximum input current of each PSU, which is rated for 2kW.
+They are not the normal operating draw: a PSU only reaches its rated current in case of a catastrophic failure, such as an internal short circuit.
+We recommend sizing each circuit for the full PSU rating and protecting it with an upstream circuit breaker or PDU fuse, so that such a failure does not affect other instruments on the same AC supply.
+
+#### PSU configuration
+
+PSU power cables can be connected or disconnected while the system is running.
+
 === "Main electricity 100-127VAC (Mostly in the US, Canada, Japan)"
 
     The OPX1000 has two installed PSUs (power supply units) and room for a third, allowing for 2+1 PSU redundancy.
 
+    With up to 4 FEMs, a single PSU is sufficient, so the two installed PSUs already provide PSU redundancy.
     If more than 4 FEMs are used, two PSUs must be used simultaneously to provide the system with sufficient power.
-    They must be connected to separate wall outlets, as each PSU can carry up to 13A.
+    They must be connected to separate wall outlets, as each PSU is rated for up to 13A.
     A 3rd power supply can be added to achieve PSU redundancy.
 
 === "Main electricity 200-240VAC (Europe and most of the world)"
 
-    The OPX1000 has two installed PSUs (power supply units) and room for a third, allowing for 1+2 PSU redundancy and 1+2 power grid redundancy.
+    The OPX1000 has two installed PSUs (power supply units) and room for a third, allowing for 1+2 PSU redundancy and 1+2 power grid redundancy (a single PSU is sufficient, and the other two provide redundancy).
 
-    If multiple PSUs are used, they must be connected to separate wall outlets, as each PSU can carry up to 10A.
+    If multiple PSUs are used, they must be connected to separate wall outlets, as each PSU is rated for up to 10A.
     It is also possible to achieve power-source redundancy by connecting the PSUs to different power grids.
 
 !!! Important Safety Information

@@ -258,7 +258,7 @@ with program() as prog:
                     fixed,
                     "Q",
                     auto_buffer=True,
-                    average_axes=["shots", "tau"],
+                    average_axes=["shots", "frequency"],
                 )
                 wait(tau)
                 measure(
@@ -269,7 +269,7 @@ with program() as prog:
                 )
 ```
 
-`I` keeps the `frequency` and `tau` axes and averages over `shots`. `Q` keeps only `frequency` and averages over both `shots` and `tau`.
+`I` keeps the `frequency` and `tau` axes and averages over `shots`. `Q` keeps only `tau` and averages over both `shots` and `frequency`.
 
 !!! Note
     `average_axes` requires `auto_buffer=True`.

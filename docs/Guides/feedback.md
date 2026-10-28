@@ -6,8 +6,6 @@ The OPX makes it seamless to pass data between different controllers/FEM (Front 
 
 === "OPX1000"
 
-    {{ requirement("QOP", "3.3") }}
-
     Variables are generally available for all elements, and the user does not need to worry about assigning them to specific elements.
     However, when performing measurements, the result value is only saved for the element that is being measured.
     When the user attempts to use this variable for feedback purposes, it is automatically passed to any element that needs it.
