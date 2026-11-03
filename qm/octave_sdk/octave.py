@@ -905,7 +905,7 @@ class RFOutput:
         """ """
         up_conv_state = self._get_current_state()
         mode = up_conv_state.fast_switch_mode
-        enabled = up_conv_state.enabled
+        enabled = up_conv_state.enabled.value
 
         if mode == api_pb2.RFUpConvUpdate.FastSwitchMode.FAST_SWITCH_MODE_OFF:
             if enabled:
@@ -924,7 +924,7 @@ class RFOutput:
     def _set_default_if_needed(self, crb: ClientRequestBuilder) -> None:
         up_conv_state = self._get_current_state()
         # TODO enabled = up_conv_state.enabled and up_conv_state.power_amp_enabled
-        enabled = up_conv_state.power_amp_enabled
+        enabled = up_conv_state.power_amp_enabled.value
         if not enabled:
             # define default -20 dB on 8Ghz
             self._set_gain(crb, -20, 8e9, True)
@@ -1407,11 +1407,12 @@ class Octave:
         else:
             raise ValueError("can not validate clock mode")
 
-        if response.clock_frequency == 10e6:
+        response_frequency = response.clock_frequency.value
+        if response_frequency == 10e6:
             frequency = ClockFrequency.MHZ_10
-        elif response.clock_frequency == 100e6:
+        elif response_frequency == 100e6:
             frequency = ClockFrequency.MHZ_100
-        elif response.clock_frequency == 1000e6:
+        elif response_frequency == 1000e6:
             frequency = ClockFrequency.MHZ_1000
         else:
             raise ValueError("can not validate clock frequency")

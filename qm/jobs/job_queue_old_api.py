@@ -17,6 +17,10 @@ logger = logging.getLogger(__name__)
 
 
 class QmQueue(QmQueueBase[QmPendingJob]):
+    """The pending-jobs queue of a [QuantumMachine][qm.quantum_machine.QuantumMachine], accessed
+    via `qm.queue`. Used with the OPX+ on QOP2.x.
+    """
+
     def __init__(
         self,
         config: inc_qua_config_pb2.QuaConfig,

@@ -284,6 +284,10 @@ class AdcAcquisition:
 
 @dataclass(frozen=True)
 class Event:
+    """A phase-reset or timestamp-reset event recorded for an element during a simulated job.
+    Collected as part of a [WaveformReport][qm.waveform_report.WaveformReport].
+    """
+
     name: str
     timestamp: int
     controller: str
@@ -364,6 +368,12 @@ class _SingleControllerMapping(Dict[int, FemToWaveformMap]):
 
 @dataclass(frozen=True)
 class WaveformReport:
+    """Describes the analog and digital waveforms, ADC acquisitions, and events recorded while
+    simulating a QUA program. Obtained via `QmJob.get_simulated_waveform_report`. Can be converted
+    to a dictionary or a human-readable string, and rendered as an interactive HTML plot alongside
+    the simulated samples.
+    """
+
     job_id: Union[int, str]
     analog_waveforms: List[PlayedAnalogWaveform]
     digital_waveforms: List[PlayedDigitalWaveform]

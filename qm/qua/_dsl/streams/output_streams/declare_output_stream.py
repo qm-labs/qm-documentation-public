@@ -4,6 +4,7 @@ from typing import Union, Literal, Optional, get_args, overload
 from qm.type_hinting import NumberT
 from qm.exceptions import QmQuaException
 from qm.utils import deprecation_message
+from qm.utils.deprecation_utils import QmQuaDeprecationWarning
 from qm.qua._expressions import StructT, QuaExternalOutgoingStream
 from qm.qua._scope_management.scopes_manager import scopes_manager
 from qm.qua._dsl.streams.common import StreamEndpoints, _validate_number_type
@@ -59,7 +60,7 @@ def declare_stream(adc_trace: Optional[bool] = None) -> "ResultStreamSource":
             removed_in="2.0.0",
             details=deprecation_message_details,
         ),
-        DeprecationWarning,
+        QmQuaDeprecationWarning,
         stacklevel=2,
     )
 

@@ -32,7 +32,7 @@ In this Cookie Policy we use the term “cookies” to refer to any applicable t
      | Google Analytics    | Analytics     | <https://policies.google.com/privacy>                                                |
      | Microsoft Clarity   | Analytics     | <https://privacy.microsoft.com/en-us/privacystatement>                               |
      | Hotjar              | Analytics     | <https://www.hotjar.com/legal/policies/privacy>                                      |
-     | Hubspot             | Marketing     | <https://legal.hubspot.com/privacy-policy/>                                          |
+     | Hubspot             | Marketing     | <https://legal.hubspot.com/privacy-policy>                                           |
      | reCaptcha by Google | Security      | <https://policies.google.com/terms?hl=en><https://policies.google.com/privacy?hl=en> |
 
 4. We use the following First-Party Cookies:

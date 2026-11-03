@@ -1,12 +1,13 @@
 import random
-import warnings
+from typing_extensions import deprecated
 from typing import Any, List, Type, Tuple, Union, TypeVar, Callable, Optional, Sequence, overload
 
 from qm._loc import _get_loc
 from qm.grpc.qm.pb import inc_qua_pb2
 from qm.type_hinting.general import NumberT
+from qm.utils import get_iterable_elements_datatype
 from qm.qua._dsl.variable_handling import assign, declare
-from qm.utils import deprecation_message, get_iterable_elements_datatype
+from qm.utils.deprecation_utils import QmQuaDeprecationWarning
 from qm.qua._expressions import (
     Scalar,
     Vector,
@@ -81,6 +82,13 @@ def _create_vectors_output_expression(
 
 
 # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
+@deprecated(
+    'call_library_function is deprecated since "1.2.2" and will be removed in "2.0.0". \n'
+    "Please call the required function directly from the available classes.\n"
+    "For instance, instead of using call_library_function(Random.rand_int, int, x, y), simply use Random(x).rand_int(y)",
+    category=QmQuaDeprecationWarning,
+    stacklevel=1,
+)
 def call_library_function(
     function: SomeCallable, output_type: Type[NumberT], *args: ScalarOfAnyType
 ) -> QuaLibFunctionOutput[NumberT]:
@@ -98,20 +106,17 @@ def call_library_function(
     Returns:
         A QUA library-function output expression of the given output type.
     """
-    warnings.warn(
-        deprecation_message(
-            method="call_library_function",
-            deprecated_in="1.2.2",
-            removed_in="2.0.0",
-            details="""
-Please call the required function directly from the available classes.
-For instance, instead of using call_library_function(Random.rand_int, int, x, y), simply use Random(x).rand_int(y).""",
-        )
-    )
     return _create_output_expression(function, output_type, *args)
 
 
 # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
+@deprecated(
+    'call_vectors_library_function is deprecated since "1.2.2" and will be removed in "2.0.0". \n'
+    "Please call the required function directly from the available classes.\n"
+    "For instance, instead of using call_vectors_library_function(Math.sum, x.dtype, x), simply use Math.sum(x)",
+    category=QmQuaDeprecationWarning,
+    stacklevel=1,
+)
 def call_vectors_library_function(
     function: SomeCallable, output_type: Type[S], *args: Vector[NumberT]
 ) -> QuaLibFunctionOutput[S]:
@@ -129,16 +134,6 @@ def call_vectors_library_function(
     Returns:
         A QUA library-function output expression of the given output type.
     """
-    warnings.warn(
-        deprecation_message(
-            method="call_vectors_library_function",
-            deprecated_in="1.2.2",
-            removed_in="2.0.0",
-            details="""
-Please call the required function directly from the available classes.
-For instance, instead of using call_vectors_library_function(Math.sum, x.dtype, x), simply use Math.sum(x).""",
-        )
-    )
     return _create_vectors_output_expression(function, output_type, *args)
 
 

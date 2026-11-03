@@ -2,6 +2,7 @@ from collections.abc import Sequence
 from typing import Tuple, Union, Optional, overload
 
 from qm.grpc.qm.pb import inc_qua_pb2
+from qm.config import Pulse, Operation
 from qm.exceptions import QmQuaException
 from qm.qua._dsl._type_hints import MessageExpressionType
 from qm.qua._expressions import Scalar, to_scalar_pb_expression
@@ -13,8 +14,7 @@ AmpValuesType = Tuple[
     Optional[MessageExpressionType],
 ]
 AmplitudeScaleTypes = Optional[Union[Scalar[float], tuple[Scalar[float], Scalar[float], Scalar[float], Scalar[float]]]]
-
-MeasurePulseType = Union[str, Tuple[str, AmpValuesType]]
+MeasurePulseType = Union[str, Pulse, Tuple[str, AmpValuesType], Operation]
 
 
 def standardize_pulse_and_amplitude(
@@ -37,11 +37,16 @@ def standardize_pulse_and_amplitude(
     """
     amp_to_return = None
     if isinstance(pulse, tuple):
-        pulse, amp_to_return = pulse
+        pulse_name, amp_to_return = pulse
         if amplitude is not None:
             raise QmQuaException(
                 "Amplitude ambiguity - please use only the `amplitude_scale` keyword argument and not the `amp` function"
             )
+
+    elif isinstance(pulse, (Pulse, Operation)):
+        pulse_name = pulse.name
+    else:
+        pulse_name = pulse
 
     if amplitude is not None:
         if isinstance(amplitude, Sequence):
@@ -56,7 +61,7 @@ def standardize_pulse_and_amplitude(
         else:
             amp_inst = _PulseAmp(to_scalar_pb_expression(amplitude), None, None, None)
         amp_to_return = amp_inst.value()
-    return pulse, amp_to_return
+    return pulse_name, amp_to_return
 
 
 # Although _PulseAmp is a protected class, it is used by QUAM.

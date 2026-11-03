@@ -4,6 +4,7 @@ import dataclasses
 from enum import Enum
 from dataclasses import dataclass
 from typing import Optional, Sequence
+from typing_extensions import deprecated
 from typing import Iterable as IterableClass
 from typing import List, Tuple, Union, Literal
 
@@ -14,8 +15,8 @@ from qm._loc import _get_loc
 from qm.type_hinting import Number
 from qm.grpc.qm.pb import inc_qua_pb2
 from qm.exceptions import QmQuaException
-from qm.utils import deprecation_message
 from qm.qua._dsl._type_hints import OneOrMore
+from qm.utils.deprecation_utils import QmQuaDeprecationWarning
 from qm.qua._scope_management.scopes_manager import scopes_manager
 from qm.qua._dsl.stream_processing.stream_processing_utils import _ARRAY_SYMBOL, create_array
 from qm.qua._expressions import ScalarOfAnyType, OutputStreamInterface, create_qua_scalar_expression
@@ -271,7 +272,7 @@ class ResultStream(metaclass=abc.ABCMeta):
         if mode is None:
             warnings.warn(
                 "mode=None is deprecated, use empty-string or (recommended) don't write the mode at-all",
-                DeprecationWarning,
+                QmQuaDeprecationWarning,
             )
             mode = ""
         return self.map(Convolution(constant_vector, mode))
@@ -288,7 +289,7 @@ class ResultStream(metaclass=abc.ABCMeta):
         if mode is None:
             warnings.warn(
                 "mode=None is deprecated, use empty-string or (recommended) don't write the mode at-all",
-                DeprecationWarning,
+                QmQuaDeprecationWarning,
             )
             mode = ""
         return self.map(TupleConvolution(mode))
@@ -599,6 +600,12 @@ class ResultStreamSource(ResultStream, OutputStreamInterface):
             )
         )
 
+    @deprecated(
+        'timestamps is deprecated since "1.2.3" and will be removed in "2.0.0". '
+        "timestamps() is deprecated, please use with_timestamps() instead",
+        category=QmQuaDeprecationWarning,
+        stacklevel=1,
+    )
     def timestamps(self) -> "ResultStreamSource":
         """Get a stream with only the timestamps of the stream-items.
 
@@ -607,16 +614,6 @@ class ResultStreamSource(ResultStream, OutputStreamInterface):
         Returns:
             A new stream source emitting only the timestamps of the stream-items.
         """
-        warnings.warn(
-            deprecation_message(
-                method="timestamps",
-                deprecated_in="1.2.3",
-                removed_in="2.0.0",
-                details="timestamps() is deprecated, please use with_timestamps() instead.",
-            ),
-            DeprecationWarning,
-            stacklevel=2,
-        )
         return ResultStreamSource(
             dataclasses.replace(
                 self._configuration,

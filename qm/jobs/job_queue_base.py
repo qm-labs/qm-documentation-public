@@ -25,6 +25,13 @@ class QmNewApiNotImplementedError(NotImplementedError):
 
 
 class QmQueueBase(Generic[JobTypeVar]):
+    """Base interface for the pending-jobs queue of a
+    [QuantumMachine][qm.quantum_machine.QuantumMachine]. Not instantiated directly; obtained via
+    `qm.queue` as either [QmQueue][qm.jobs.job_queue_old_api.QmQueue] (OPX+ with QOP2.x) or
+    [QmQueueWithDeprecations][qm.jobs.job_queue_with_deprecations.QmQueueWithDeprecations]
+    (OPX1000 with QOP3.x).
+    """
+
     def __init__(self, capabilities: ServerCapabilities):
         self._capabilities = capabilities
 

@@ -48,6 +48,11 @@ logger = logging.getLogger(__name__)
 
 
 class QuantumMachine:
+    """Handle to an opened quantum machine on a QOP 2.x controller, obtained from
+    `QuantumMachinesManager.open_qm`. Used to compile and queue QUA programs, inspect the
+    currently running job, and calibrate Octave elements.
+    """
+
     def __init__(
         self,
         machine_id: str,

@@ -2,6 +2,10 @@ import warnings
 from typing import Any, TypeVar, Optional
 
 
+class QmQuaDeprecationWarning(DeprecationWarning):
+    pass
+
+
 # Internal API: not part of the public interface (no leading underscore, but kept for internal reuse).
 def throw_warning(message: str, category: Optional[type] = None, stacklevel: int = 1, source: Any = None) -> None:
     """

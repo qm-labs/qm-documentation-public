@@ -62,7 +62,74 @@ If the system was previously configured, you can skip directly to step 4.
 
 ??? "Step 3: OPNIC Drivers Installation and Update"
 
-    === "QOP >= 3.7.0"
+    === "Release>=1.0.0"
+
+        Starting from OPNIC release 1.0.0, the package now includes an automatic installation script that installs all the necessary OPNIC drivers, services and components.
+        Before installing, complete the server setup described in [Appendix 1](#appendix-1-server-installation).
+
+        1. Download the OPNIC software package, provided by QM, based on your server architecture and CUDA requirement. Copy the directory into the server and unzip it.
+
+        2. Enter the extracted release directory and add execute permissions to the scripts. Replace `<release_number>` with the downloaded release number:
+
+            ```bash
+            cd opnic-release-<release_number>
+            chmod +x install.sh
+            chmod +x uninstall.sh
+            ```
+
+            For the no-CUDA variant, also add execute permission to its installer:
+
+            ```bash
+            chmod +x ./install-no-cuda.sh
+            ```
+
+        3. If your server already has an earlier OPNIC release installed, run the uninstall script from the new release package to remove the existing installation. Skip this step for a new installation:
+
+            ```bash
+            sudo ./uninstall.sh
+            ```
+        4. Run the installer for your selected variant:
+
+            **CUDA variant:**
+
+            ```bash
+            sudo ./install.sh
+            ```
+
+            **No-CUDA variant:**
+
+            ```bash
+            sudo ./install-no-cuda.sh
+            ```
+
+            Wait for the installation to finish, then update the PCI device database:
+
+            ```bash
+            sudo update-pciids
+            ```
+        5. Verify the installation by running:
+
+            ```bash
+            opnic -vv version
+            ```
+            Example output should look like:
+
+            ```bash
+            Cli Version: x.x.x.x
+            SDK Version: x.x.x.x
+            Service version: x.x.x.x
+            Driver version: x.x.x.x
+            FPGA version [OPNIC-262xyz]: x.x.x.x
+            PLL version [OPNIC-262xyz]: x.x.x.x
+            ```
+            Where `OPNIC-262xyz` is the OPNIC's serial number, used to  identify it for pairing with the OPX1000.
+
+        6. Pair the OPNIC via the Admin Panel - select the correct OPNIC from "Available devices" according to its S/N found in step 5, and click "Connect":
+            ![OPNIC Pairing](assets/OPNIC_Pair_QOPA2.png)
+        7. Pairing and synchronization complete automatically after the cluster restarts:
+            ![OPNIC Connection](assets/OPNIC_Connected_QOPA2.png)
+
+    === "Release<=0.9"
         Starting from QOP 3.7.1 OPNIC is supported through QOPA2 and an automated service, enabling communication, synchronization and setup.
 
         1. Download the OPNIC software package [here](https://qmpublic.s3.amazonaws.com/OPNIC/opnic_releases_0.9.zip). Copy the directory into the server and unzip it.
@@ -200,60 +267,7 @@ If the system was previously configured, you can skip directly to step 4.
         12. Following system restart - the opnic pairing and sync will automate:
             ![OPNIC Connection](assets/OPNIC_Connected_QOPA2.png)
 
-        For manual pairing mode (in case AVAHI installation skipped):
 
-        13. Select 'pair by manual configuration' in QOPA and apply the S/N and IP address:
-            ![OPNIC Manual Pairing](assets/OPNIC_Manual_QOPA2.png)
-        14. Following system restart - the opnic pairing and sync will automate
-
-
-
-    === "QOP < 3.7.0"
-
-        1. Copy the OPNIC software package provided by Quantum Machines into the server
-        2. Add execute permissions:
-
-            ```bash
-            cd opnic-driver/scripts
-            chmod +x install.sh
-            chmod +x uninstall.sh
-            cd ../..
-            ```
-
-        3. Install Driver:
-
-            ```bash
-            cd opnic-driver
-            make
-            sudo make install
-            cd ..
-            ```
-
-        4. Install SDK:
-
-            ```bash
-            sudo apt install libssl-dev
-            cd opnic-sdk
-            cmake --preset cuda
-            sudo cmake --build build -- install
-            cd ..
-            ```
-
-        5. Verify installation of opnic libraries:
-
-            ```bash
-            ls -la /usr/local/lib
-            ```
-            And verify that the following files are present: `libopnic.so`, `libopnic-cuda.so`.
-
-        6. Install CLI:
-
-            ```bash
-            cd opnic-cli
-            cmake . -B build -G Ninja
-            sudo cmake --build build --target install
-            cd ..
-            ```
 
 ??? "Step 4: OPNIC Firmware Update"
 
@@ -310,13 +324,19 @@ If the system was previously configured, you can skip directly to step 4.
 
 
 ## Appendix 1: Server Installation
+
+### Minimum OPX1000 Configuration
+
+The OPX1000 requires both of the following minimum versions:
+
+* QOP: {{ requirement("QOP", "3.7.0") }} or later.
+* QOPA: {{ requirement("QOPA", "2.0.0") }} or later.
+
+### Minimum OPNIC Host Server Configuration
+
 OPNIC host server minimal configuration:
 
-* OS:
-
-    * Ubuntu Ver. 24.04
-    * Fedora CoreOS 42.2x with GNU compiler 15.2.1
-
+* OS: Ubuntu Ver. 24.04
 * GCC13
 * CMake ≥ 3.25.5
 * make

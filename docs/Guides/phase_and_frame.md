@@ -54,11 +54,10 @@ The two phase-reset commands differ both in scope and in when they take effect:
     Even for elements that are not using the MW-FEM, the two commands are not fully interchangeable.
     Do not treat {{f("qm.qua.reset_global_phase")}} as a drop-in replacement for {{f("qm.qua.reset_if_phase")}} inside loops.
 
-Another command that will change the global phase is {{f("qm.qua.update_frequency")}}. When using the flag
-`keep_phase=True`, the phase of the pulse will be continuous through the frequency change, as can be seen in figure 1 indicated by the first dashed black line. 
-The phase continuity results in a change to the global phase, $\phi_G$. 
-This change, however, is not tracked similarly to the phase change caused by {{f("qm.qua.reset_if_phase")}}, so if we update to the frequency with the flag `keep_phase=False` afterward, 
-the global phase will be reevaluated from the beginning of the sequence (or the last phase reset), as can be seen in figure 1 indicated by the second dashed black line.
+Another command that will change the global phase is {{f("qm.qua.update_frequency")}}. With the default flag `keep_phase=False`, the phase after the frequency change is evaluated as if the new frequency had been used
+from the beginning of the sequence (or the last phase reset), so the phase jumps at the update, as shown by the red trace in figure 1.
+When using the flag `keep_phase=True`, the phase of the pulse will be continuous through the frequency change, as shown by the blue trace in figure 1.
+The phase continuity results in a change to the global phase, $\phi_G$.
 
 !!! Note
     **Phase behavior of update_frequency**
@@ -81,7 +80,7 @@ the global phase will be reevaluated from the beginning of the sequence (or the 
 
 <figure markdown>
   ![update_frequency_keep_phase](assets/update_frequency_keep_phase.svg)
-  <figcaption>Fig. 1: The phase behavior when using update_frequency(), with the flag keep_phase = True and keep_phase = False. The black dashed line indicates when update_frequency() was used. The blue signal is the reference signal, and all operations are performed on the orange signal.</figcaption>
+  <figcaption>Fig. 1: The phase behavior when using update_frequency() to change the frequency from f<sub>1</sub> to f<sub>2</sub> at time t<sub>0</sub>, indicated by the black dashed line. Top: the output signal. Bottom: the accumulated phase. With keep_phase = True (blue), the phase is continuous. With keep_phase = False (red), the phase jumps by (f<sub>2</sub>−f<sub>1</sub>)·t<sub>0</sub>. The dashed gray and red lines show f<sub>1</sub> and f<sub>2</sub> applied from the beginning. Frequencies are exaggerated for visibility.</figcaption>
 </figure>
 
 ## Frame Phase

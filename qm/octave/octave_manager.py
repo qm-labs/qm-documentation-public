@@ -1,5 +1,4 @@
 import logging
-import warnings
 import contextlib
 import dataclasses
 from enum import Enum
@@ -7,6 +6,7 @@ from time import perf_counter
 from abc import abstractmethod
 from functools import lru_cache
 from collections import defaultdict
+from typing_extensions import deprecated
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -34,6 +34,7 @@ from qm.type_hinting.config_types import StandardPort
 from qm.octave._calibration_config import _prep_config
 from qm.api.models.server_details import ConnectionDetails
 from qm.program._dict_to_pb_converter import build_iw_sample
+from qm.utils.deprecation_utils import QmQuaDeprecationWarning
 from qm.api.models.capabilities import QopCaps, ServerCapabilities
 from qm.utils.protobuf_utils import update_map, serialized_on_wire
 from qm.octave._calibration_names import COMMON_OCTAVE_PREFIX, CalibrationElementsNames
@@ -109,7 +110,9 @@ class ControllerPorts(Generic[_PortType]):
     def _get_relevant_ports(
         self,
         controller_config: Union[
-            inc_qua_config_pb2.QuaConfig.ControllerDec, inc_qua_config_pb2.QuaConfig.OctoDacFemDec
+            inc_qua_config_pb2.QuaConfig.ControllerDec,
+            inc_qua_config_pb2.QuaConfig.OctoDacFemDec,
+            inc_qua_config_pb2.QuaConfig.LFLN08FemDec,
         ],
     ) -> Set[int]:
         pass
@@ -119,7 +122,9 @@ class _ControllerDACPorts(ControllerPorts[inc_qua_config_pb2.QuaConfig.DacPortRe
     def _get_relevant_ports(
         self,
         controller_config: Union[
-            inc_qua_config_pb2.QuaConfig.ControllerDec, inc_qua_config_pb2.QuaConfig.OctoDacFemDec
+            inc_qua_config_pb2.QuaConfig.ControllerDec,
+            inc_qua_config_pb2.QuaConfig.OctoDacFemDec,
+            inc_qua_config_pb2.QuaConfig.LFLN08FemDec,
         ],
     ) -> Set[int]:
         return set(controller_config.analogOutputs)
@@ -129,7 +134,9 @@ class _ControllerADCPorts(ControllerPorts[inc_qua_config_pb2.QuaConfig.AdcPortRe
     def _get_relevant_ports(
         self,
         controller_config: Union[
-            inc_qua_config_pb2.QuaConfig.ControllerDec, inc_qua_config_pb2.QuaConfig.OctoDacFemDec
+            inc_qua_config_pb2.QuaConfig.ControllerDec,
+            inc_qua_config_pb2.QuaConfig.OctoDacFemDec,
+            inc_qua_config_pb2.QuaConfig.LFLN08FemDec,
         ],
     ) -> Set[int]:
         return set(controller_config.analogInputs)
@@ -178,16 +185,16 @@ class OctaveManager:
             fan=self._octave_config.fan,
         )
 
+    @deprecated(
+        'get_output_port is deprecated since "1.1.6" and will be removed in "1.2.0"',
+        category=QmQuaDeprecationWarning,
+        stacklevel=1,
+    )
     def get_output_port(
         self,
         opx_i_port: StandardPort,
         opx_q_port: StandardPort,
     ) -> Optional[Tuple[str, int]]:
-        warnings.warn(
-            "This function is deprecated since 1.1.6 and will be removed in 1.2.0",
-            DeprecationWarning,
-            stacklevel=2,
-        )
         return self._octave_config.get_octave_input_port(opx_i_port, opx_q_port)
 
     def _get_client_from_port(self, octave_port: Tuple[str, int]) -> Octave:
