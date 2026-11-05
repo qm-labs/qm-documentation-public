@@ -17,6 +17,8 @@ Software on the server consists of three open-source software components that ar
 2. OPNIC SDK: A shared library that is used by user’s application on the server
 3. OPNIC CLI tool: A CLI interface for managing the OPNIC (for example, a one-time sync with QOP, updating card FW, etc.)
 
+For the changes in each OPNIC software release, see [OPNIC Releases](../Releases/opnic_releases.md).
+
 !!! Warning
     Avoid running `sudo apt upgrade` on the server, as it may trigger unintended driver updates that are incompatible with the provided OPNIC drivers.
 
@@ -67,7 +69,7 @@ If the system was previously configured, you can skip directly to step 4.
         Starting from OPNIC release 1.0.0, the package now includes an automatic installation script that installs all the necessary OPNIC drivers, services and components.
         Before installing, complete the server setup described in [Appendix 1](#appendix-1-server-installation).
 
-        1. Download the OPNIC software package, provided by QM, based on your server architecture and CUDA requirement. Copy the directory into the server and unzip it.
+        1. Download the OPNIC software package from [OPNIC Releases](../Releases/opnic_releases.md), based on your server architecture and CUDA GPU support requirement. Copy the directory into the server and unzip it.
 
         2. Enter the extracted release directory and add execute permissions to the scripts. Replace `<release_number>` with the downloaded release number:
 
@@ -130,7 +132,7 @@ If the system was previously configured, you can skip directly to step 4.
             ![OPNIC Connection](assets/OPNIC_Connected_QOPA2.png)
 
     === "Release<=0.9"
-        Starting from QOP 3.7.1 OPNIC is supported through QOPA2 and an automated service, enabling communication, synchronization and setup.
+        Starting from QOP 3.7 OPNIC is supported through QOPA2 and an automated service, enabling communication, synchronization and setup.
 
         1. Download the OPNIC software package [here](https://qmpublic.s3.amazonaws.com/OPNIC/opnic_releases_0.9.zip). Copy the directory into the server and unzip it.
 
@@ -329,7 +331,7 @@ If the system was previously configured, you can skip directly to step 4.
 
 The OPX1000 requires both of the following minimum versions:
 
-* QOP: {{ requirement("QOP", "3.7.0") }} or later.
+* QOP: {{ requirement("QOP", "3.7") }} or later.
 * QOPA: {{ requirement("QOPA", "2.0.0") }} or later.
 
 ### Minimum OPNIC Host Server Configuration
