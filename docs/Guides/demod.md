@@ -250,13 +250,13 @@ $$
 After the up-conversion to $\omega_{IF}$, the complex signal is upconverted (via an IQ mixer or, for MW-FEM, via the digital upconverter), producing the modulated signal
 
 $$
-\text{signal} = \tilde{I}\cos(\omega_{LO}t) + \tilde{Q}\sin(\omega_{LO}t)
+\text{signal} = \tilde{I}\cos(\omega_{LO}t) - \tilde{Q}\sin(\omega_{LO}t)
 $$
 
 This signal can also be realized as the real part of a complex signal
 
 $$
-\text{signal} = \Re\{(I+iQ)e^{i\omega_{IF}}e^{i\omega_{LO}}\} = \Re\{(I+iQ)e^{i\omega_{RF}}\}
+\text{signal} = \Re\{(I+iQ)e^{i\omega_{IF}t}e^{i\omega_{LO}t}\} = \Re\{(I+iQ)e^{i\omega_{RF}t}\}
 $$
 
 where $\omega_{RF}=\omega_{LO}+\omega_{IF}$ is the total signal frequency.
@@ -264,22 +264,17 @@ where $\omega_{RF}=\omega_{LO}+\omega_{IF}$ is the total signal frequency.
 Now, we wish to find the values of $I$ and $Q$, assuming for the sake of simplicity that the channel
 between the system output and system input is a simple loopback which does not change the signal, except for some arbitrary phase $\phi_D$.
 
-The received signal is down-converted and sampled by the ADC, after which the I and Q components are extracted
+The received signal is down-converted by mixing with $\cos(\omega_{LO}t)$ and $-\sin(\omega_{LO}t)$ (matching the definition of $Q$ in eq. $\eqref{eq:i_and_q}$) and sampled by the ADC, after which the I and Q components are extracted
 
 \begin{eqnarray}
-ADC1 &=& (\tilde{I}\cos(\omega_{LO}t+\phi_D) + \tilde{Q}\sin(\omega_{LO}t+\phi_D))\cos(\omega_{LO}t) \\
-      &=& \frac{1}{2}(\tilde{I}\cos(\phi_D) + \tilde{I}\cos(2\omega_{LO}t+\phi_D) + \tilde{Q}\sin(2\omega_{LO}t + \phi_D) - \tilde{Q}\sin(\phi_D)) \\ 
-ADC2 &=& (\tilde{I}\cos(\omega_{LO}t+\phi_D) + \tilde{Q}\sin(\omega_{LO}t+\phi_D))\sin(\omega_{LO}t) \\ 
-&=& \frac{1}{2}(\tilde{Q}\cos(\phi_D) - \tilde{Q}\cos(2\omega_{LO}t+\phi_D) + \tilde{I}\sin(2\omega_{LO}t + \phi_D) + \tilde{Q}\sin(\phi_D)) \\
+ADC1 &=& (\tilde{I}\cos(\omega_{LO}t+\phi_D) - \tilde{Q}\sin(\omega_{LO}t+\phi_D))\cos(\omega_{LO}t) \\
+      &=& \frac{1}{2}(\tilde{I}\cos(\phi_D) + \tilde{I}\cos(2\omega_{LO}t+\phi_D) - \tilde{Q}\sin(2\omega_{LO}t + \phi_D) - \tilde{Q}\sin(\phi_D)) \\ 
+ADC2 &=& -(\tilde{I}\cos(\omega_{LO}t+\phi_D) - \tilde{Q}\sin(\omega_{LO}t+\phi_D))\sin(\omega_{LO}t) \\ 
+&=& \frac{1}{2}(\tilde{Q}\cos(\phi_D) - \tilde{Q}\cos(2\omega_{LO}t+\phi_D) - \tilde{I}\sin(2\omega_{LO}t + \phi_D) + \tilde{I}\sin(\phi_D)) \\
 \end{eqnarray}
 
-!!! Note
-    The up and down conversion process (whether via IQ mixers or digital mixing) produces:
-    $\text{signal}=\tilde{I}\cos(\omega_{LO}t)-\tilde{Q}\sin(\omega_{LO}t)$
-
-Next, recall that the ADCs are fit with a low-pass filter (LPF) that nullifies any frequencies above 500 MHz, ensuring
-no aliasing occurs in the sampling process. Specifically, the LPF cancels out all the high-frequency components of the mixers'
-output, leaving us with
+Next, recall that the analog inputs are fit with an anti-aliasing low-pass filter (LPF) before the ADCs. The LPF
+removes the high-frequency $2\omega_{LO}$ components of the mixers' output, leaving us with
 
 \begin{eqnarray}
 ADC1 &= \frac{1}{2}(\tilde{I}\cos(\phi_D) - \tilde{Q}\sin(\phi_D)) \\ ADC2 &= \frac{1}{2}(\tilde{Q}\cos(\phi_D) + \tilde{I}\sin(\phi_D))  \\

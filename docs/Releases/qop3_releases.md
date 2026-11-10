@@ -14,7 +14,7 @@ Here you can find release notes and version files for the latest version of {{ r
 
 ## QOP 3.7.x
 
-- Latest version: **QOP 3.7.3**
+- Latest version: **QOP 3.7.4**
 - Please see [the release notes page](../../hidden_pages/QOP37x.md) for more information about this version and for the download link.
 - [QOPA](qopa_releases.md) 1.6.1 (or later) must be installed before installing QOP 3.7.x.
     - OPNIC requires QOPA 2.x.

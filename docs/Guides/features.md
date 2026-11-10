@@ -1131,6 +1131,9 @@ numbers, QUA variables and QUA functions (such as cos and sin).
         - When using a qua variable for the duration, using a value above the allowed range will result in an unexpected output.
         - When using a python literal for the duration, using a value above the allowed range will result in an error.
 
+For the supported `play()` and `wait()` duration ranges, see
+[Play and Wait Duration Range](timing_in_qua.md#play-and-wait-duration-range).
+
 ## Truncate Pulses
 
 Part of a pulse can be played by using the `truncate` parameter:

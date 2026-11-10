@@ -7,12 +7,54 @@ search:
 
 A QUA program defines not only the pulses that are played, but also specifies when they should be played.
 
-## Minimum Pulse and Wait Durations
+## Play and Wait Duration Range
 
-The minimum duration accepted by {{f("qm.qua.play")}} and {{f("qm.qua.wait")}} depends on the platform.
+The supported duration range depends on the platform, the command, and how the duration is specified. Values outside the ranges listed below may result in unexpected behavior.
 
-- OPX1000: the minimum pulse and wait duration is 4 ns if set in the configuration, or 8 ns if set from QUA.
-- OPX+: the minimum pulse and wait duration is 16 ns (4 clock cycles), both from the configuration and from QUA.
+### OPX1000
+
+#### `wait()` duration
+
+The duration passed to `wait()` is specified in clock cycles, where one clock cycle is 4 ns. The supported range depends on whether the duration is specified using a QUA or Python integer.
+
+| Duration type | Supported range (cycles) | Equivalent time range |
+| --- | --- | --- |
+| QUA `int` | $[2,\ 2^{24} - 1]$ | [8 ns, ~67 ms] |
+| Python `int` | $[1,\ 2^{31} - 1]$ | [4 ns, ~8.6 s] |
+
+#### `play()` duration
+
+A pulse duration can be specified either statically in the configuration or dynamically using the `duration` argument of `play()`.
+
+##### Static pulse duration
+
+For a pulse whose duration is defined in the configuration, the pulse length is specified in nanoseconds.
+
+| Waveform type | Supported time range |
+| --- | --- |
+| Constant | [4 ns, ~2.14 s] |
+| Arbitrary | [4 ns, ~67 ms] |
+
+##### Dynamic pulse duration
+
+When the `duration` argument of `play()` is used, the duration is specified in clock cycles. The supported range depends on both the waveform type and whether the duration is specified using a Python or QUA integer.
+
+| Waveform type | Duration type | Supported range (cycles) | Equivalent time range |
+| --- | --- | --- | --- |
+| Constant | Python `int` | `[1, 2^31 - 1]` | `[4 ns, ~8.6 s]` |
+| Arbitrary | Python `int` | `[1, < 2^24 - 1]` | `[4 ns, ~67 ms]` |
+| Constant | QUA `int` | `[2, 2^24 - 1]` | `[8 ns, ~67 ms]` |
+| Arbitrary | QUA `int` | `[2, < 2^24 - 1]` | `[8 ns, ~67 ms]` |
+
+Special care should be taken when approaching the upper limit of the dynamic duration for an arbitrary waveform, as out-of-range values may result in unexpected behavior that is not caught before runtime.
+
+For arbitrary waveforms, the dynamic duration cannot be shorter than the original pulse duration. The maximum duration of an arbitrary waveform is further limited by the available waveform memory and is subject to interpolation constraints.
+
+See [Dynamic Pulse Duration](features.md#dynamic-pulse-duration) for more information on using the `duration` argument of `play()`.
+
+### OPX+
+
+The minimum pulse and wait duration on the OPX+ is 16 ns (4 clock cycles), both when defined in the configuration and when specified from QUA.
 
 ## Pulse Dependency
 
