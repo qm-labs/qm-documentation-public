@@ -485,8 +485,9 @@ frame_rotation_2pi(phi, 'element_1')
 ```
 
 !!! Note
-    The phase is accumulated with a resolution of 16 bit.
-    Therefore, *N* changes to the phase can result in a phase inaccuracy of about $N \cdot 2^{-16}$.
+    The frame is accumulated with a resolution of 16 bit.
+    Therefore, *N* changes to the phase can result in a phase and amplitude inaccuracy of about $N \cdot 2^{-16}$.
+    Angles that are exactly representable in 16 bit (e.g. 1, 1/2, 1/4 in `frame_rotation_2pi` units) don't accumulate this error.
     To null out this accumulated error, it is recommended to use {{f("qm.qua.reset_frame")}} from time to time.
 
 ### Resetting the frame phase

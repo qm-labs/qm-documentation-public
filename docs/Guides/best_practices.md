@@ -41,13 +41,15 @@ Therefore, we would be happy to receive any comments or suggestions.
   combined signal within the port's output range — if the sum of the simultaneous amplitudes exceeds
   full scale, the output overflows and is clipped.
 
-- Beware of accumulated errors when using [sticky elements](features.md#sticky-element) and when using [frame rotations](../Introduction/qua_overview.md#updating-the-frame-phase). Make sure to reset the
+- Beware of accumulated errors when using [sticky elements](features.md#sticky-element) and when using [frame rotations](../Introduction/qua_overview.md#updating-the-frame-phase) (both phase and amplitude). Make sure to reset the
   values using {{f("qm.qua.ramp_to_zero")}} and {{f("qm.qua.reset_frame")}}.
 
 - Only define QUA variables for parameters you want to sweep or change in real-time. Otherwise, use Python variables.
 
 - Always simulate your program to make sure that you are getting the correct behavior. If added gaps are problematic,
   the simulator can also be used to check the exact timing of pulses.
+  
+- The key QUA commands ({{f("qm.qua.play")}}, {{f("qm.qua.measure")}}, {{f("qm.qua.wait")}} anchor auxiliary commands such as {{f("qm.qua.update_frequency")}} or {{f("qm.qua.reset_frame")}}. These auxiliary commands will only be applied upon e.g. {{f("qm.qua.play")}} and should not be used as standalone commands.
 
 - There are issues that can occur in real time and produce unexpected output from the OPX, for example:
 

@@ -1254,6 +1254,12 @@ play('pulse', 'aom_selector', target='row')
 ## Multiple Inputs
 
 When playing a pulse, it is possible to output it from multiple ports simultaneously.
+
+!!! note "Hardware scope"
+
+    On OPX1000, multiple inputs are available only on LF-FEM analog outputs. MW-FEM analog outputs do not support this feature.
+    On OPX+, multiple inputs are available on all analog outputs.
+
 This is done using the `multipleInputs` dictionary item:
 
 ```python
