@@ -175,44 +175,11 @@ For details about simulating different OPX+ hardware configurations, see the [QO
 
 #### Simulation of different OPX1000 hardware configurations
 
-When simulating the OPX1000, there is a default configuration of 5 OPX1000 with LF-FEMs in slots 1-4 and MW-FEMs in slots 5-8.
-It is possible to define a custom FEM configuration of the simulator instance. 
-This is done by creating a `ClusterConfig` object and adding the required controllers and FEMs to it. 
-Initially, a controller needs to be added to the configuration via `ClusterConfig.controller()`. 
-The FEMs can then be added to this controller object via the `lf_fems(*slots)` and `mw_fems(*slots)` methods. 
-Available slots are 1-8, and both LF-FEMs and MW-FEMs can be added. 
-Attempting to add two FEMs to a single slot will result in an error.
+To simulate an OPX1000 cluster, including multi-chassis clusters, call `qmm.simulate(config, prog, ...)` as usual.
+The simulated cluster is built from the controllers and FEMs defined in the QUA configuration.
+For details, see the [QOP simulator guide](simulator.md#simulating-multi-chassis-opx1000-clusters).
 
 !!! Note
-    Currently all OPX1000 must have the same FEM configuration. 
-    Therefore, a `ClusterConfig` with a single controller will create a cluster with 5 OPX1000s. 
-    There is no need for a `ClusterConfig` with multiple controllers.
-    It is enough only to provide one, and it will automatically apply to all other controllers in the cluster.
-
-!!! Warning
-    In QOP 3.x, the simulator does not support simulating programs that require data transfer between chassis.
-
-[//]: # (Multiple controllers can be added; they are automatically named `con1`, `con2`, etc., according to their creation order.)
-
-The `ClusterConfig` object is then passed to the `simulator` method to create an instance with the given configuration.
-
-```python
-from qm import QuantumMachinesManager, SimulationConfig
-from qm_saas import ClusterConfig, QOPVersion
-
-cluster_config = ClusterConfig()
-controller = cluster_config.controller()
-controller.lf_fems(1, 2, 3, 4)
-controller.mw_fems(5, 6, 7, 8)
-
-with client.simulator(QOPVersion("v3_8_1"), cluster_config) as instance:
-    # Use the instance object to simulate QUA programs on a config of 4 LF and 4 MW-FEMs
-    qmm = QuantumMachinesManager(**instance.qmm_connection_params)
-    # Continue as usual with opening a quantum machine and simulation of a qua program
-    job = qmm.simulate(qua_config, qua_program, SimulationConfig(int(1e4)))
-    job.wait_until("Done", timeout=10)
-    simulated_samples = job.get_simulated_samples()
-
-# Use the simulated samples to analyze the results.
-simulated_samples.con1.plot()
-```
+    An OPX1000 simulator instance has a default hardware setup of 5 OPX1000 chassis (`con1`–`con5`), each with LF-FEMs in slots 1-4 and MW-FEMs in slots 5-8.
+    `qmm.open_qm(config)` validates the configuration against this setup, so opening a quantum machine fails if the configuration uses other FEM slots or more than 5 controllers.
+    `qmm.simulate(config, prog, ...)` is not limited by this setup.

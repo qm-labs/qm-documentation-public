@@ -42,6 +42,7 @@ Using {{f("qm.qua.reset_global_phase")}} would also subtract the phase associate
 
 Unlike {{f("qm.qua.reset_if_phase")}}, {{f("qm.qua.reset_global_phase")}} is a standalone global instruction that affects all elements in the program.
 Starting from {{ requirement("QOP","3.6") }}, programs begin with an implicit {{f("qm.qua.reset_global_phase")}} by default.
+This implicit reset does not apply to the intermediate-frequency phase of [persistent elements](features.md#persistent-element).
 
 The two phase-reset commands differ both in scope and in when they take effect:
 

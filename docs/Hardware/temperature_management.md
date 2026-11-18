@@ -57,6 +57,8 @@ Choose the relevant hardware tab below.
 
     The system implements over-temperature shutdown logic to protect the hardware from permanent damage. Software alerts are raised before shutdown, allowing the user to correct the issue before the system reaches a protection limit.
 
+    You can query the controller temperatures and resource-usage metrics from the QMM API. See [Controller Monitoring](OPX1000_hardware.md#controller-monitoring).
+
     ### Scenarios that affect thermal performance
 
     #### Blocked airflow

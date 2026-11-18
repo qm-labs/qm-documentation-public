@@ -115,6 +115,42 @@ The following section details the back panel of the OPX1000 chassis.
 
     Upon completion, LED will be constant
 
+## Controller Monitoring
+
+You can query controller health data from Python through `qmm.get_devices()`. Each OPX1000 controller in the returned `controllers` mapping exposes temperature readings and resource-usage metrics.
+
+### Temperatures
+
+{{ requirement("QOP", "3.6") }} {{ requirement("QUA", "1.2.4") }}
+
+```python
+temperatures = qmm.get_devices().controllers["con1"].temperatures
+```
+
+`temperatures` is a dictionary of readings for the FEMs (1–8), the chassis, the chassis CPU, and the power supplies (CRPS 1–3). For thermal protection and airflow guidance, see [Temperature Management](temperature_management.md).
+
+### Resource Usage Metrics
+
+{{ requirement("QOP", "3.9") }} {{ requirement("QUA", "1.4.0") }}
+
+```python
+metrics = qmm.get_devices().controllers["con1"].metrics
+print(metrics.cpu_utilization_percent, metrics.disk_available_gb)
+```
+
+`metrics` returns the latest resource-usage snapshot of the controller:
+
+| Field | Description |
+|-------|-------------|
+| `cpu_utilization_percent` | CPU utilization of the whole controller, as a percentage of total CPU capacity (0–100). |
+| `memory_available_gb` | Memory (RAM) available on the controller, in GiB. |
+| `qop_cpu_percent` | Combined CPU utilization of the QOP services, as a percentage of total CPU capacity. |
+| `qop_memory_percent` | Combined memory usage of the QOP services, as a percentage of total controller memory (RAM). |
+| `disk_available_gb` | Free space on the controller's data partition, in GiB. |
+
+All values are aggregates; no per-process or per-thread breakdown is provided.
+If the connected QOP version does not support metrics, or metrics are not available for the controller, `metrics` returns `None` and a warning is logged.
+
 ---
 
 [Request the Full OPX1000 Spec Sheet](https://www.quantum-machines.co/request-the-full-opx1000-spec-sheet/)

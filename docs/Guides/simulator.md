@@ -94,7 +94,7 @@ qmm.simulate(config, prog, SimulationConfig(duration, simulation_interface=Loopb
 ### Simulating Multiple OPX+ Controllers
 
 This section applies to multi-controller OPX+ systems in QOP 2.x.
-It does not describe multi-chassis OPX1000 simulation.
+For OPX1000 clusters, see [Simulating Multi-Chassis OPX1000 Clusters](#simulating-multi-chassis-opx1000-clusters).
 
 To simulate a system of multiple OPX+ controllers, the inter-controller optical connectivity needs to be specified.
 This is important since the exact timing of multi-controller operations depends on that connectivity configuration.
@@ -102,8 +102,6 @@ The connectivity is passed to the `controller_connections` parameter of the {{f(
 
 To ease the configuration, we provide a [helper function](https://github.com/qua-platform/py-qua-tools/blob/main/qualang_tools/simulator_tools.py) as part of our tools' library.
 The helper function generates a controller connection object according to the [default optical connectivity](../Hardware/opx+installation.md#connectivity-scheme). 
-
-For OPX1000 simulator configuration, see the [QM SaaS guide](qm_saas_guide.md#simulation-of-different-opx1000-hardware-configurations).
 
 The following example demonstrates the usage for the case of 3 OPX+ controllers:
 
@@ -113,6 +111,16 @@ connections = create_simulator_controller_connections(3)
 job = qmm.simulate(config,prog,SimulationConfig(duration=1000, controller_connections=connections)
 
 ```
+
+### Simulating Multi-Chassis OPX1000 Clusters
+
+{{f("qm.quantum_machines_manager.QuantumMachinesManager.simulate")}} supports clusters with multiple OPX1000 chassis.
+Call it as usual, for example `qmm.simulate(config, prog, SimulationConfig(duration))`.
+The simulated cluster is built from the controllers and FEMs defined in the QUA configuration.
+The simulator applies the default inter-chassis connections, so no connectivity needs to be specified in the {{f("qm.simulate.interface.SimulationConfig")}} object.
+
+Use `qmm.simulate(config, prog, ...)` rather than opening a quantum machine and calling `qm.simulate(prog, ...)` ({{f("qm.api.v2.qm_api.QmApi.simulate")}}).
+It simulates the inter-chassis timing, such as the latency of feedback between chassis, more accurately.
 
 ## API
 

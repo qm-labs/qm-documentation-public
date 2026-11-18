@@ -210,6 +210,16 @@ Therefore, for a given waveform, its voltage-shape should be identical between t
     maximize the **sum** of the waveform amplitudes across all frequencies on that port while minimizing
     `full_scale_power_dbm`.
 
+!!! Note "Output power calibration"
+    The MW-FEM output power is calibrated at the upconverter frequency, that is, at an intermediate frequency of 0.
+    Pulses played with a large intermediate frequency may deviate slightly from the power set by `full_scale_power_dbm`,
+    especially near the edges of the band.
+
+    When elements on both upconverters of an output port are used in the same program, the power calibration for
+    upconverter 1's frequency is applied to the whole port. As a result, pulses played through upconverter 2 may have
+    a slightly different output power than when upconverter 2 is used on its own. Calibrate pulse amplitudes with the
+    same upconverter assignment and the same set of elements that the experiment uses.
+
 !!! Note
     To calculate the amplitude-voltage that will be seen on a scope set to 50 Ω, first convert the power to voltage:
 

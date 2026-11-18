@@ -782,6 +782,7 @@ This is useful, for example, for semiconductor qubits where one wants to avoid t
 An element can be defined as *sticky* by adding the `'sticky': {'analog': True }` dict to its configuration.
 Importantly, when an element is sticky, the values of the currently playing pulse will be **added** to the previously held value.
 A sticky element always ramps back to its DC offset value when the element has reached its final instruction of the program.
+The exception is a [persistent element](#persistent-element), which keeps playing between jobs.
 The duration of the ramp in ns can be set by configuring `'sticky': {'analog': True, 'duration': 50 }`. 
 This ramp can also be explicitly initiated by the {{f("qm.qua.ramp_to_zero")}} function.
 
@@ -885,6 +886,124 @@ with program() as prog:
 ![ramp to zero 2 example](assets/ramp_to_zero_2.png)
 
 Note the first pulse eases to zero at a double rate compared to the second one.
+
+## Persistent Element
+
+Starting from {{ requirement("QOP","3.9") }}, an element can be declared as *persistent* by adding `'persistent': True` to its configuration.
+A persistent element belongs to the quantum machine (QM) rather than to a single job.
+It is not stopped or reset when a job ends: its intermediate-frequency phase, its frame rotation and, if it is sticky, its output carry over to the next job until the QM is closed.
+
+The main use case for persistent elements is together with the [sticky](#sticky-element) property.
+A sticky, persistent element keeps playing its last output, at the same amplitude and frequency, between programs.
+Persistent elements also work without sticky, as described in the [lifecycle](#persistent-element-lifecycle) below.
+
+```python
+"persistent_el": {
+    "singleInput": {"port": ("con1", 1, 1)},
+    "intermediate_frequency": 100e6,
+    "persistent": True,
+    "sticky": {"analog": True},
+    "operations": {
+        "const": "idle_pulse",
+    },
+},
+```
+
+### Persistent Element Lifecycle
+
+Persistency becomes active when the first job that includes the element starts.
+This holds whether the element is declared in the logical configuration passed to the job or in the configuration given to `open_qm()`.
+It is maintained until the QM is closed:
+
+```python
+qm = qmm.open_qm(controller_config)
+
+job1 = qm.execute(start_tone, config=logical_config)  # persistent_el becomes persistent
+job1.wait_until("Done")
+# persistent_el keeps playing between the jobs
+
+job2 = qm.execute(other_program, config=logical_config)  # persistent_el must still be declared
+job2.wait_until("Done")
+
+qm.close()  # persistent_el is released
+```
+
+When the element is declared in the full configuration (controller and logical configuration combined) given to `open_qm()`, it is included in every job that is executed without a logical configuration:
+
+```python
+qm = qmm.open_qm(full_config)  # persistent_el is declared, but not active yet
+
+job1 = qm.execute(start_tone)  # persistent_el becomes persistent when the job starts
+job1.wait_until("Done")
+
+job2 = qm.execute(other_program)  # persistent_el is included automatically
+job2.wait_until("Done")
+
+qm.close()  # persistent_el is released
+```
+
+- At the end of a job, a persistent element is not stopped.
+  If it is sticky, it keeps outputting a continuous wave at its intermediate frequency, with the amplitude of its last played sample, instead of ramping back to its DC offset.
+- If the digital marker is also sticky (`'sticky': {'analog': True, 'digital': True}`), the digital marker holds its last state across jobs as well.
+- Without sticky, the phase state is still carried across jobs, but no output is played between programs.
+- At the start of a new job, the state of a persistent element is not reset.
+  This does not apply to the first job after the QM is opened, since there is no prior state yet.
+- New persistent elements can be added at any point during the QM session, including after several jobs have already been executed.
+- When a job is executed without a logical configuration, the QM reuses the logical configuration given to `open_qm()`.
+  Persistent elements declared there are therefore included in every job automatically.
+  A logical configuration passed to a job replaces the one given to `open_qm()`, so it must also declare every persistent element.
+
+### Changing Persistent Element Parameters
+
+The frequency, amplitude, and phase of a persistent element can only be changed from a QUA program, not through the configuration.
+For example:
+
+```python
+with program() as change_tone:
+    update_frequency("persistent_el", 50e6)  # The element now plays at 50 MHz
+    frame_rotation_2pi(0.25, "persistent_el")  # The frame is rotated by pi/2
+    play("const", "persistent_el")  # Only relevant for a sticky element: the amplitude set by the `const` operation is added to the existing amplitude
+```
+
+### Phase of Persistent Elements
+
+Programs begin with an implicit {{f("qm.qua.reset_global_phase")}} (see [Phase and Frame](phase_and_frame.md#global-phase)).
+This implicit reset does not apply to the intermediate-frequency phase of persistent elements, which keeps their phase coherent between jobs.
+Frame rotations applied to a persistent element are also kept between jobs.
+A {{f("qm.qua.reset_global_phase")}} called explicitly in the program does apply to persistent elements.
+
+!!! Warning
+    On the MW-FEM, the phase of a persistent element is not coherent between jobs.
+    The output phase of an MW-FEM element is the sum of its intermediate-frequency phase and its [upconverter](opx1000_fems.md#upconverters-and-downconverters) phase.
+    Only the intermediate-frequency phase is excluded from the implicit reset; the upconverter phase is still reset at the start of every job.
+    A sticky MW-FEM persistent element therefore keeps playing without a gap, but its phase at the start of each job is neither continuous nor deterministic.
+
+### Persistent Element Configuration Rules
+
+- A persistent element must be declared, with `'persistent': True`, in every job for as long as the QM is open.
+- The parameters of a persistent element cannot change between jobs.
+  This includes its port, the sampling rate of that port, the `singleInput`/`mixInput` type, digital inputs and outputs, intermediate frequency, and operations.
+- A persistent element cannot [share a core](#sharing-cores) with another element.
+- The ports of a persistent element cannot be modified after the QM is opened.
+  A controller configuration that includes any port used by a persistent element is rejected, even if the port values are unchanged.
+  This applies both to {{f("qm.api.v2.qm_api.QmApi.update_config")}} and to the controller part of a full configuration passed to a later job.
+  In later jobs, pass only the logical configuration.
+  To change the frequency, amplitude, or phase, see [Changing Persistent Element Parameters](#changing-persistent-element-parameters).
+- If a pulse, waveform, digital waveform, integration weight, or oscillator used by a persistent element is redefined in the logical configuration of a later job, the change is ignored for the persistent element and a warning is issued.
+  The change still applies to non-persistent elements that use the same resource, unless they share the resource name with the persistent element.
+
+!!! Tip
+    To avoid the warning on redefined resources, give each persistent element its own pulses, waveforms, and digital waveforms with distinct names, so they are never shared with another element.
+
+Violations are reported with the following messages:
+
+| Condition | Level | Message |
+| --- | --- | --- |
+| A persistent element is omitted from a job | Error | `Persistent element '<name>' was omitted from the job. Persistent elements must appear in every job.` |
+| A field of a persistent element is changed | Error | `Persistent element '<name>' cannot be modified between jobs. Field '<field>' was changed.` |
+| A resource used by a persistent element is redefined | Warning | `Modification to '<resource>' is ignored for persistent element '<name>'.` |
+| A persistent element shares a core | Error | `Core sharing is not supported for persistent element '<name>'.` |
+| A controller configuration (`update_config` or a full configuration passed to a job) includes a port used by a persistent element | Error | `Persistent element '<name>' cannot be modified via update_config after QM open. ...` |
 
 ## Ramp Pulse
 
@@ -1443,6 +1562,9 @@ Because "qe3" is on another core, it will start immediately with "qe1". See exam
 
 !!! Note
     Assigning a core to an element which requires several cores (Higher sampling rate, mixed input, etc.) will automatically assign the required number of cores.
+
+!!! Warning
+    A [persistent element](#persistent-element) cannot share a core with another element.
 
 ### Sharing Oscillators
 

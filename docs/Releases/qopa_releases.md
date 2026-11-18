@@ -3,6 +3,32 @@
 Here you can find release notes and version files for the latest version of QOP Admin (QOPA).
 Note that the admin was taken out of the QOP package and is a separate package starting from QOP 2.5 and QOP 3.3.
 
+## QOPA 2.2.0
+
+### Download
+
+[QOPA2.2.0.tar.gz.age](https://qmpublic.s3.amazonaws.com/QOPA/1793529747-0lxgv7/QOPA2.2.0.tar.gz.age)
+
+*SHA-256 checksum:* `b3c5050e75892d0d244c7f8d933864e35dc76ab402224d43cfd86cf92d64c642`
+
+### Release Notes
+
+**Added**
+
+- Added support for QOP3.9.x
+- Added a QOP upload progress indicator to an empty device.
+- Added a banner that shows running cluster operations.
+
+**Changed**
+
+- Actions are now disabled while a cluster operation is running. The topology page remains accessible during operations.
+- Minor UI improvements.
+
+**Fixed**
+
+- Fixed QOPA installation on OPX+, which did not work in QOPA 2.1.0.
+- Fixed the external clock frequency configuration not being displayed correctly for OPX+ clusters with Octave on QOP2.5.0 and later.
+
 ## QOPA 2.1.0
 
 ### Download
