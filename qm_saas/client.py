@@ -144,6 +144,15 @@ class FemType(Enum):
     """
     MW_FEM = "MW_FEM"
     LF_FEM = "LF_FEM"
+    LF_LN08_FEM = "LF_LN08_FEM"
+
+
+_CLUSTER_CONFIG_MIN_QOP_VERSION = QOPVersion("v3_1_0")
+_FEM_MIN_QOP_VERSION = {
+    FemType.LF_FEM.value: _CLUSTER_CONFIG_MIN_QOP_VERSION,
+    FemType.MW_FEM.value: _CLUSTER_CONFIG_MIN_QOP_VERSION,
+    FemType.LF_LN08_FEM.value: QOPVersion("v3_9_0"),
+}
 
 
 class ControllerConfig:
@@ -175,6 +184,19 @@ class ControllerConfig:
         self._validate_slots(slots)
         for slot in slots:
             self._add_slot(slot, FemType.MW_FEM)
+        return self
+
+    def lf_ln08_fems(self, *slots: int):
+        """
+        Add LF-LN08 FEMs to numbered slots in the cluster configuration.
+        Requires QOP version v3_9_0 or above.
+
+        Args:
+            *slots: The slots for the LF-LN08 FEMs.
+        """
+        self._validate_slots(slots)
+        for slot in slots:
+            self._add_slot(slot, FemType.LF_LN08_FEM)
         return self
 
     def _validate_slots(self, slots: tuple[int, ...]) -> None:
@@ -268,6 +290,49 @@ class ClusterConfig:
             "controllers": {k: {"slots": v.slots} for k, v in self._controllers.items()}
         }
 
+    def validate(self, version: QOPVersion) -> None:
+        """
+        Validate the cluster configuration against the given QOP version.
+        Mirrors the validation done by the QmSaaS server:
+
+        - Cluster configurations are not supported for QOP versions below v3_1_0
+        - Exactly one controller named 'con1' must be configured; for QOP v3_3_0 and above
+          its configuration applies to all controllers in the cluster
+        - Slot numbers must be in [1, 8]
+        - FEM types must be supported by the QOP version (LF LN08 and LF PW08 FEMs require v3_9_0 or above)
+
+        Args:
+            version (QOPVersion): The QOP version the configuration is used with.
+
+        Raises:
+            ValueError: If the configuration is not valid for the given version.
+        """
+        if _CLUSTER_CONFIG_MIN_QOP_VERSION > version:
+            raise ValueError(f"Cluster configuration is not supported for QOP version {version}, "
+                             f"requires {_CLUSTER_CONFIG_MIN_QOP_VERSION} or above")
+
+        if len(self._controllers) != 1:
+            raise ValueError(f"Cluster configuration must contain exactly one controller, "
+                             f"got {len(self._controllers)}. "
+                             "The remaining controllers will share the same FEM layout as the first controller.")
+
+        if "con1" not in self._controllers:
+            raise ValueError("First controller must be named 'con1'")
+
+        pattern = re.compile("^con(\\d+)$")
+        for con, controller in self._controllers.items():
+            if pattern.fullmatch(con) is None:
+                raise ValueError(f"Invalid controller name {con}")
+            for slot, fem_type in controller.slots.items():
+                if not slot.isnumeric() or not _FEM_MIN_SLOT <= int(slot) <= _FEM_MAX_SLOT:
+                    raise ValueError(f"Invalid slot number {slot}, must be [{_FEM_MIN_SLOT}, {_FEM_MAX_SLOT}]")
+                if fem_type not in _FEM_MIN_QOP_VERSION:
+                    raise ValueError(f"Unknown FEM type {fem_type}")
+                min_version = _FEM_MIN_QOP_VERSION[fem_type]
+                if min_version > version:
+                    raise ValueError(f"FEM type {fem_type} in {con} slot {slot} requires QOP version "
+                                     f"{min_version} or above, got {version}")
+
 
 class QmSaasInstance:
     """
@@ -294,6 +359,9 @@ class QmSaasInstance:
             raise ValueError("Parameter 'version' has invalid type")
 
         self._version = normalized_version
+
+        if cluster_config is not None:
+            cluster_config.validate(normalized_version)
 
         self._client = client
         self._cluster_config = cluster_config
